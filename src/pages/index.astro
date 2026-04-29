@@ -56,7 +56,7 @@ const narrowMask = (dir: 'right' | 'left') => {
     All values controlled via src/config/theme.ts
   -->
 
-  <!-- Tall scroll driver -->
+  <!-- Tall scroll driver (hidden on mobile snap mode) -->
   <div id="scroll-driver" style={`height: calc(${NUM_SLIDES} * 100vh);`}></div>
 
   <!-- Fixed slides container -->
@@ -70,36 +70,37 @@ const narrowMask = (dir: 'right' | 'left') => {
 
       <!-- B&W hands photo, desaturated + warm parchment wash -->
       <div
+        id="hero-photo"
         class="absolute inset-0"
         style={`background-image: url('${images.hero}'); background-size: cover; background-position: center 40%; filter: ${overlays.heroFilter};`}
       />
-      <div class="absolute inset-0" style={`background: ${overlays.heroParchment};`} />
+      <div id="hero-parchment" class="absolute inset-0" style={`background: ${overlays.heroParchment};`} />
 
       <!-- Bauhaus pattern, fades right -->
-      <div class="absolute inset-0" style={mBauhaus}>
+      <div id="hero-bauhaus" class="absolute inset-0" style={mBauhaus}>
         <BauhausPattern color={patterns.bauhaus.color} opacity={patterns.bauhaus.opacity} class="h-full w-full" />
       </div>
 
       <!-- Almohade pattern, fades left -->
-      <div class="absolute inset-0" style={mAlmohade}>
+      <div id="hero-almohade" class="absolute inset-0" style={mAlmohade}>
         <GeoPattern color={patterns.almohade.color} opacity={patterns.almohade.opacity} class="h-full w-full" />
       </div>
 
       <!-- content -->
       <div class="relative z-10 flex w-full max-w-5xl flex-col items-center px-8 text-center">
 
-        <div class="flex w-full items-center justify-center gap-6 md:gap-12">
+        <div id="hero-date" class="flex w-full items-center justify-center gap-6 md:gap-12">
           <span class="font-sans text-[0.65rem] uppercase tracking-[0.45em] text-ink/50">{t.event.dateShort}</span>
           <div class="h-px w-12 bg-clay/40" />
           <span class="font-display text-sm italic text-ink/50">{event.city}</span>
         </div>
 
-        <h1 class="mt-8 font-display text-[clamp(4rem,11vw,9rem)] font-light leading-none tracking-tight text-ink">
+        <h1 id="hero-tagline" class="mt-8 font-display text-[clamp(4rem,11vw,9rem)] font-light leading-none tracking-tight text-ink">
           {t.hero.tagline.split(' ')[0]}<br />
           <em class="not-italic font-semibold text-clay">{t.hero.tagline.split(' ').slice(1).join(' ')}</em>
         </h1>
 
-        <div class="mt-10 flex items-baseline gap-4">
+        <div id="hero-names" class="mt-10 flex items-baseline gap-4">
           <span class="font-sans text-sm font-light uppercase tracking-[0.4em] text-ink/60">{names.display}</span>
           <svg width="14" height="14" viewBox="0 0 14 14" class="shrink-0 text-clay" fill="currentColor">
             <polygon points="7,1 8.5,5 13,7 8.5,9 7,13 5.5,9 1,7 5.5,5" opacity="0.7"/>
@@ -107,7 +108,7 @@ const narrowMask = (dir: 'right' | 'left') => {
           <span class="font-display text-xl italic text-ink/60">{names.display2}</span>
         </div>
 
-        <div class="mt-16 flex flex-col items-center gap-3 text-ink/30">
+        <div id="hero-cue" class="mt-16 flex flex-col items-center gap-3 text-ink/30">
           <div class="h-8 w-px bg-ink/20" />
 <span class="font-sans text-[0.6rem] uppercase tracking-[0.4em]">{t.hero.scrollCue}</span>
         </div>
@@ -276,64 +277,131 @@ const narrowMask = (dir: 'right' | 'left') => {
        GSAP: scroll-driven slideshow
        Timing values from src/config/theme.ts → animation
   ═══════════════════════════════════════════════ -->
+  <style>
+    /* ── Mobile scroll-snap mode ───────────────────────────────────────
+       Applied when JS detects a touch/coarse-pointer device.
+       Overrides the GSAP fixed-panel layout with native snap scrolling.
+    ─────────────────────────────────────────────────────────────────── */
+    html.snap-mode #scroll-driver {
+      display: none;
+    }
+    html.snap-mode #slides-wrap {
+      position: fixed;
+      inset: 0;
+      overflow-y: scroll;
+      overflow-x: hidden;
+      scroll-snap-type: y mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+    html.snap-mode .slide {
+      position: relative;
+      width: 100%;
+      height: 100dvh;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      /* Undo the opacity:0 that GSAP would normally set */
+      opacity: 1 !important;
+      visibility: visible !important;
+      transform: none !important;
+    }
+    /* Hide the hero scroll-cue nudge on snap mode (irrelevant UX) */
+    html.snap-mode .slide:first-child [class*='mt-16'] {
+      display: none;
+    }
+  </style>
+
   <script>
     import gsap from 'gsap';
     import { ScrollTrigger } from 'gsap/ScrollTrigger';
     import { animation } from '../config/theme';
 
-    gsap.registerPlugin(ScrollTrigger);
+    // ── Detect touch / coarse-pointer devices (iOS Safari, Android) ──
+    const isTouch = window.matchMedia('(pointer: coarse)').matches;
 
-    const slides = gsap.utils.toArray<HTMLElement>('.slide');
-    const N = slides.length;
+    if (isTouch) {
+      // Activate native scroll-snap layout
+      document.documentElement.classList.add('snap-mode');
+    } else {
+      // ── Desktop: GSAP scroll-driven slideshow ──────────────────────
+      gsap.registerPlugin(ScrollTrigger);
 
-    gsap.set(slides, { autoAlpha: 0, scale: 1.03 });
-    gsap.set(slides[0], { autoAlpha: 1, scale: 1 });
+      const slides = gsap.utils.toArray<HTMLElement>('.slide');
+      const N = slides.length;
 
-    const ease   = 'power2.inOut';
-    const master = gsap.timeline({ paused: true });
+      gsap.set(slides, { autoAlpha: 0, scale: 1.03 });
+      gsap.set(slides[0], { autoAlpha: 1, scale: 1 });
 
-    slides.forEach((slide, i) => {
-      master.to({}, { duration: animation.hold });
-      if (i < N - 1) {
-        master
-          .to(slide, { autoAlpha: 0, scale: 0.97, duration: animation.xfade, ease }, `>`)
-          .fromTo(slides[i + 1],
-            { autoAlpha: 0, scale: 1.03 },
-            { autoAlpha: 1, scale: 1,   duration: animation.xfade, ease },
-            `<`);
-      }
-    });
+      const ease   = 'power2.inOut';
+      const master = gsap.timeline({ paused: true });
 
-    ScrollTrigger.create({
-      trigger: '#scroll-driver',
-      start: 'top top',
-      end: 'bottom bottom',
-      scrub: animation.scrub,
-      animation: master,
-    });
+      slides.forEach((slide, i) => {
+        master.to({}, { duration: animation.hold });
+        if (i < N - 1) {
+          master
+            .to(slide, { autoAlpha: 0, scale: 0.97, duration: animation.xfade, ease }, `>`)
+            .fromTo(slides[i + 1],
+              { autoAlpha: 0, scale: 1.03 },
+              { autoAlpha: 1, scale: 1,   duration: animation.xfade, ease },
+              `<`);
+        }
+      });
 
-    // Hero entrance
-    gsap.from(
-      slides[0].querySelectorAll('h1, [class*="font-sans"], [class*="font-display"], [class*="mt-16"]'),
-      { opacity: 0, y: 22, duration: 1.1, stagger: 0.15, ease: 'power3.out', delay: animation.heroDelay }
-    );
-
-    // Per-slide content entrance
-    slides.slice(1).forEach((slide) => {
-      const els = slide.querySelectorAll('.slide-label, .slide-title, .slide-body, .slide-right');
-      gsap.set(els, { opacity: 0, y: 18 });
       ScrollTrigger.create({
         trigger: '#scroll-driver',
         start: 'top top',
         end: 'bottom bottom',
-        onUpdate() {
-          const vis = parseFloat(gsap.getProperty(slide, 'autoAlpha') as string);
-          if (vis > 0.5) {
-            gsap.to(els, { opacity: 1, y: 0, duration: 0.7, stagger: 0.1, ease: 'power2.out', overwrite: 'auto' });
-          }
-        },
+        scrub: animation.scrub,
+        animation: master,
       });
-    });
+
+      // ── Hero entrance: multi-step reveal ─────────────────────────────────
+      //
+      // Step 0 · initial state — everything invisible, patterns offset
+      gsap.set(['#hero-photo', '#hero-parchment'], { autoAlpha: 0 });
+      gsap.set('#hero-bauhaus',  { autoAlpha: 0, x: '-18%' });
+      gsap.set('#hero-almohade', { autoAlpha: 0, x:  '18%' });
+      gsap.set(['#hero-date', '#hero-names', '#hero-tagline', '#hero-cue'],
+               { autoAlpha: 0, y: 20 });
+
+      const heroTl = gsap.timeline({ delay: animation.heroDelay });
+
+      heroTl
+        // Step 1 · patterns draw in from the edges toward centre
+        .to('#hero-bauhaus',  { autoAlpha: 1, x: 0, duration: 1.4, ease: 'power3.out' })
+        .to('#hero-almohade', { autoAlpha: 1, x: 0, duration: 1.4, ease: 'power3.out' }, '<0.08')
+
+        // Step 2 · our names
+        .to('#hero-names', { autoAlpha: 1, y: 0, duration: 0.85, ease: 'power2.out' }, '-=0.5')
+
+        // Step 3 · date + city
+        .to('#hero-date', { autoAlpha: 1, y: 0, duration: 0.75, ease: 'power2.out' }, '-=0.4')
+
+        // Step 4 · background photo + parchment wash fade in…
+        .to('#hero-parchment', { autoAlpha: 1, duration: 1.2, ease: 'power2.inOut' }, '+=0.1')
+        .to('#hero-photo',     { autoAlpha: 1, duration: 1.4, ease: 'power2.inOut' }, '<')
+        //   …and the main tagline rises in at the same time
+        .to('#hero-tagline', { autoAlpha: 1, y: 0, duration: 1.0, ease: 'power3.out' }, '<0.15')
+
+        // Step 5 · scroll cue
+        .to('#hero-cue', { autoAlpha: 1, y: 0, duration: 0.6, ease: 'power2.out' }, '-=0.2');
+
+      // Per-slide content entrance
+      slides.slice(1).forEach((slide) => {
+        const els = slide.querySelectorAll('.slide-label, .slide-title, .slide-body, .slide-right');
+        gsap.set(els, { opacity: 0, y: 18 });
+        ScrollTrigger.create({
+          trigger: '#scroll-driver',
+          start: 'top top',
+          end: 'bottom bottom',
+          onUpdate() {
+            const vis = parseFloat(gsap.getProperty(slide, 'autoAlpha') as string);
+            if (vis > 0.5) {
+              gsap.to(els, { opacity: 1, y: 0, duration: 0.7, stagger: 0.1, ease: 'power2.out', overwrite: 'auto' });
+            }
+          },
+        });
+      });
+    }
   </script>
 
 </BaseLayout>
