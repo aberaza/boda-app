@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+@theme {
+  /* Colours */
+  --color-paper: #fcfaf6;
+  --color-ink: #1a1208;
+  --color-sand: #ede4d0;
+  --color-clay: #bc6c4d;
+
+  /* Shadows */
+  --shadow-soft: 0 2px 20px 0 rgba(26, 18, 8, 0.07);
+
+  /* Typography */
+  --font-sans: 'DM Sans', system-ui, sans-serif;
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    @apply bg-paper text-ink antialiased;
+    /* hide scrollbar — scroll is driven by GSAP */
+    scrollbar-width: none;
+    overflow-x: hidden;
+  }
+
+  html::-webkit-scrollbar {
+    display: none;
+  }
+
+  body {
+    @apply font-sans;
+    /* tall scroll driver lives inside body — no bg needed here */
+    background: transparent;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-semibold tracking-tight text-ink;
+  }
+
+  h1 {
+    @apply text-5xl md:text-7xl;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl;
+  }
+
+  a {
+    @apply text-inherit;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}

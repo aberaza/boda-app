@@ -1,0 +1,85 @@
+---
+interface Props {
+  color?: string;
+  opacity?: number;
+  class?: string;
+}
+const { color = 'currentColor', opacity = 1, class: className = '' } = Astro.props;
+---
+
+<!--
+  Almohade / Mozárabe 8-pointed star tessellation.
+  Based on the classic Andalusian "sebka" geometric lattice —
+  two interlocked squares rotated 45° produce the 8-fold star.
+  Tile size: 80×80 units.
+-->
+<svg
+  aria-hidden="true"
+  xmlns="http://www.w3.org/2000/svg"
+  class={`pointer-events-none select-none ${className}`}
+  width="100%"
+  height="100%"
+>
+  <defs>
+    <pattern id="almohade" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+      <!-- ── 8-pointed star (centre of tile) ── -->
+      <polygon
+        points="
+          40,12  47,26  62,22  54,36
+          68,40  54,44  62,58  47,54
+          40,68  33,54  18,58  26,44
+          12,40  26,36  18,22  33,26"
+        fill={color}
+        opacity={opacity * 0.22}
+      />
+      <!-- ── Square frame rotated 45° ── -->
+      <rect
+        x="18" y="18" width="44" height="44"
+        fill="none"
+        stroke={color}
+        stroke-width="0.8"
+        opacity={opacity * 0.12}
+        transform="rotate(45 40 40)"
+      />
+      <!-- ── Upright square ── -->
+      <rect
+        x="18" y="18" width="44" height="44"
+        fill="none"
+        stroke={color}
+        stroke-width="0.8"
+        opacity={opacity * 0.12}
+      />
+      <!-- ── Four corner quarter-stars (shared with adjacent tiles) ── -->
+      <polygon
+        points="0,-28  7,-14  22,-18  14,-4  28,0  14,4  22,18  7,14  0,28  -7,14  -22,18  -14,4  -28,0  -14,-4  -22,-18  -7,-14"
+        fill={color}
+        opacity={opacity * 0.22}
+        transform="translate(0,0)"
+      />
+      <polygon
+        points="0,-28  7,-14  22,-18  14,-4  28,0  14,4  22,18  7,14  0,28  -7,14  -22,18  -14,4  -28,0  -14,-4  -22,-18  -7,-14"
+        fill={color}
+        opacity={opacity * 0.22}
+        transform="translate(80,0)"
+      />
+      <polygon
+        points="0,-28  7,-14  22,-18  14,-4  28,0  14,4  22,18  7,14  0,28  -7,14  -22,18  -14,4  -28,0  -14,-4  -22,-18  -7,-14"
+        fill={color}
+        opacity={opacity * 0.22}
+        transform="translate(0,80)"
+      />
+      <polygon
+        points="0,-28  7,-14  22,-18  14,-4  28,0  14,4  22,18  7,14  0,28  -7,14  -22,18  -14,4  -28,0  -14,-4  -22,-18  -7,-14"
+        fill={color}
+        opacity={opacity * 0.22}
+        transform="translate(80,80)"
+      />
+      <!-- ── Mid-edge diamonds ── -->
+      <polygon points="40,0  46,10  40,20  34,10" fill={color} opacity={opacity * 0.14} />
+      <polygon points="40,60 46,70  40,80  34,70" fill={color} opacity={opacity * 0.14} />
+      <polygon points="0,40  10,46  20,40  10,34" fill={color} opacity={opacity * 0.14} />
+      <polygon points="60,40 70,46  80,40  70,34" fill={color} opacity={opacity * 0.14} />
+    </pattern>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#almohade)" />
+</svg>
