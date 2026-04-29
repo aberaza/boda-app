@@ -57,6 +57,12 @@ const es = {
   lang: {
     switcher: { es: "ES", fr: "FR", en: "EN" },
   },
+  nav: {
+    hero:   "Inicio",
+    cuando: "Cuándo",
+    finca:  "El lugar",
+    pronto: "Info",
+  },
 } as const;
 
 // ─── French ──────────────────────────────────────────────────────────────────
@@ -109,6 +115,12 @@ const fr = {
   lang: {
     switcher: { es: "ES", fr: "FR", en: "EN" },
   },
+  nav: {
+    hero:   "Accueil",
+    cuando: "Quand",
+    finca:  "Le lieu",
+    pronto: "Info",
+  },
 } as const;
 
 // ─── English ─────────────────────────────────────────────────────────────────
@@ -159,6 +171,12 @@ const en = {
 
   lang: {
     switcher: { es: "ES", fr: "FR", en: "EN" },
+  },
+  nav: {
+    hero:   "Home",
+    cuando: "When",
+    finca:  "The venue",
+    pronto: "Info",
   },
 } as const;
 

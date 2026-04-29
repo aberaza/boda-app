@@ -40,8 +40,35 @@ const narrowMask = (dir: 'right' | 'left') => {
     ))}
   </nav>
 
-  <!--
-    ARCHITECTURE
+  <!-- ── Section dot navigation ────────────────────────────────────────────
+       Fixed right-center. Each button targets a slide index.
+       Active state set by JS via [data-active] attribute.
+  ─────────────────────────────────────────────────────────────────── -->
+  <nav
+    id="slide-nav"
+    aria-label="Section navigation"
+    class="fixed right-5 top-1/2 z-50 flex -translate-y-1/2 flex-col items-end gap-[18px]"
+  >
+    {[
+      { label: t.nav.hero,   index: 0 },
+      { label: t.nav.cuando, index: 1 },
+      { label: t.nav.finca,  index: 2 },
+      { label: t.nav.pronto, index: 3 },
+    ].map(({ label, index }) => (
+      <button
+        data-slide-btn={index}
+        aria-label={label}
+        class="group flex items-center gap-2.5 outline-none"
+      >
+        {/* label — slides in from right on hover */}
+        <span class="pointer-events-none translate-x-1 font-sans text-[0.52rem] uppercase tracking-[0.4em] text-ink/0 opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100 group-hover:text-ink/50 group-[[data-active]]:text-clay/60">
+          {label}
+        </span>
+        {/* dot */}
+        <span class="block h-[7px] w-[7px] rounded-full bg-ink/20 ring-1 ring-transparent transition-all duration-200 group-hover:bg-ink/50 group-hover:scale-110 group-[[data-active]]:bg-clay group-[[data-active]]:ring-clay/30 group-[[data-active]]:scale-125" />
+      </button>
+    ))}
+  </nav>
     ────────────
     #scroll-driver  – tall invisible div; its scroll range drives GSAP
     #slides-wrap    – position:fixed, inset-0; contains all slides
@@ -321,6 +348,31 @@ const narrowMask = (dir: 'right' | 'left') => {
     if (isTouch) {
       // Activate native scroll-snap layout
       document.documentElement.classList.add('snap-mode');
+
+      // ── Dot nav (mobile snap) ─────────────────────────────────────────
+      const mNavBtns = Array.from(
+        document.querySelectorAll<HTMLButtonElement>('[data-slide-btn]')
+      );
+      const wrap = document.getElementById('slides-wrap')!;
+
+      function setMobileActive(index: number) {
+        mNavBtns.forEach((btn, i) => btn.toggleAttribute('data-active', i === index));
+      }
+      setMobileActive(0);
+
+      mNavBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          wrap.scrollTo({ top: Number(btn.dataset.slideBtn) * window.innerHeight, behavior: 'smooth' });
+        });
+      });
+
+      wrap.addEventListener('scroll', () => {
+        setMobileActive(Math.min(
+          Math.round(wrap.scrollTop / window.innerHeight),
+          mNavBtns.length - 1
+        ));
+      }, { passive: true });
+
     } else {
       // ── Desktop: GSAP scroll-driven slideshow ──────────────────────
       gsap.registerPlugin(ScrollTrigger);
@@ -401,6 +453,33 @@ const narrowMask = (dir: 'right' | 'left') => {
           },
         });
       });
+
+      // ── Dot nav (desktop) ─────────────────────────────────────────────
+      const dNavBtns = Array.from(
+        document.querySelectorAll<HTMLButtonElement>('[data-slide-btn]')
+      );
+
+      function setDesktopActive(index: number) {
+        dNavBtns.forEach((btn, i) => btn.toggleAttribute('data-active', i === index));
+      }
+      setDesktopActive(0);
+
+      dNavBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          window.scrollTo({
+            top: Number(btn.dataset.slideBtn) * window.innerHeight,
+            behavior: 'smooth',
+          });
+        });
+      });
+
+      window.addEventListener('scroll', () => {
+        setDesktopActive(Math.min(
+          Math.round(window.scrollY / window.innerHeight),
+          dNavBtns.length - 1
+        ));
+      }, { passive: true });
+
     }
   </script>
 
