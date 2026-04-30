@@ -33,6 +33,12 @@ export const event = {
   region: "Cádiz",
   venue: "Finca La Carreña",
   venueUrl: "https://lacarrena.com",
+  venueAddress: "Ctra. de Trebujena, Km 6,5, 11405 Jerez de la Frontera, Cádiz",
+  /** Coordinates verified against Google Maps. */
+  venueLat: 36.75303816857168,
+  venueLng: -6.170034182773936,
+  venueMapsUrl:
+    "https://maps.google.com/?q=Finca+La+Carre%C3%B1a+Jerez+de+la+Frontera",
   venueDescription:
     "Viña histórica en las afueras de Jerez. Arquitectura de cortijo andaluz, " +
     "jardines, capilla, caballerizas y una gran sala de celebraciones.",
