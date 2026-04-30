@@ -55,8 +55,8 @@ export const images = {
   /** "La Finca" slide — inset photo panel. */
   finca:
     "https://lacarrena.com/wp-content/uploads/2018/09/la-carre%C3%B1a-acceso-iluminado-boda.jpg",
-  /** "Pronto más" slide — closing image. */
-  boda: "https://lacarrena.com/wp-content/uploads/2018/09/la-carre%C3%B1a-bodas-unicas-jerez.jpg",
+  /** "Pronto más" slide — closing image (La Carreña, locally hosted). */
+  boda: "/images/pronto.jpg",
 } as const;
 
 // ─── Slide copy ──────────────────────────────────────────────────────────────
