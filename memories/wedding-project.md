@@ -66,3 +66,9 @@ Single-page scroll, 4 full-viewport sections:
 - QR generation approach (Node script in project?)
 - Content management (edit files directly vs CMS)
 - Replace hotlinked lacarrena.com images with locally hosted assets when available
+
+## Latest Work
+- Added a new "Jerez" overlay opened from the city name in the "Cuándo" slide. It contains a 3-panel horizontal slideshow (overview + map with labels, getting there + routes map, where to stay).
+- Placeholder copy added for Jerez overview, history, highlights, airports/airlines, and hotel agreements in ES/FR/EN translations.
+- Routes map shows Barcelona → Jerez, Paris → Jerez, Pamplona → Jerez (flights), and Madrid → Jerez (train). Dates note: MotoGP in late April and Feria around 8 May (approximate placeholders).
+

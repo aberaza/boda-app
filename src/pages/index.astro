@@ -185,7 +185,20 @@ const narrowMask = (dir: 'right' | 'left') => {
               <div class="mt-1 h-px w-6 shrink-0 bg-clay/50" />
               <div>
                 <dt class="font-sans text-[0.6rem] uppercase tracking-[0.4em] text-ink/35">{t.cuando.labels.city}</dt>
-                <dd class="mt-1 font-sans text-lg text-ink/80">{event.city}, {event.region}</dd>
+                <dd class="mt-1">
+                  <button
+                    data-open-overlay="jerez"
+                    class="inline-flex flex-wrap items-center gap-3 font-sans text-lg text-ink/80 underline decoration-clay/40 underline-offset-4 transition-colors hover:text-ink/95"
+                  >
+                    <span>{event.city}, {event.region}</span>
+                    <span class="rounded-full border border-clay/40 bg-clay/10 px-2.5 py-1 text-[0.5rem] uppercase tracking-[0.4em] text-clay/80 no-underline">
+                      {t.jerez.openLabel}
+                    </span>
+                    <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" class="text-clay/70">
+                      <path d="M1 11L11 1M11 1H4M11 1v7"/>
+                    </svg>
+                  </button>
+                </dd>
               </div>
             </div>
           </dl>
@@ -448,6 +461,182 @@ const narrowMask = (dir: 'right' | 'left') => {
 
 
   <!-- ═══════════════════════════════════════════════
+       JEREZ DETAIL OVERLAY
+       Fixed full-screen panel; GSAP-animated in/out.
+       Contains: city overview, getting there, where to stay.
+  ═══════════════════════════════════════════════ -->
+  <div
+    id="jerez-detail"
+    data-overlay-key="jerez"
+    class="fixed inset-0 z-[60] overflow-hidden bg-paper"
+    aria-modal="true"
+    role="dialog"
+    aria-label={t.jerez.eyebrow}
+  >
+    <!-- Pattern accents -->
+    <div class="pointer-events-none absolute inset-0" style={mBauhaus}>
+      <BauhausPattern color={patterns.bauhaus.color} opacity={0.5} class="h-full w-full" />
+    </div>
+    <div class="pointer-events-none absolute inset-0" style={mAlmohade}>
+      <GeoPattern color={patterns.almohade.color} opacity={0.5} class="h-full w-full" />
+    </div>
+
+    <!-- Close button -->
+    <button
+      id="close-jerez-detail"
+      data-close-overlay
+      class="fixed right-5 top-5 z-10 flex items-center gap-2 font-sans text-[0.6rem] uppercase tracking-[0.35em] text-ink/40 transition-colors hover:text-ink/70"
+      aria-label={t.eventDetail.close}
+    >
+      {t.eventDetail.close}
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M1 1l12 12M13 1L1 13"/>
+      </svg>
+    </button>
+
+    <!-- Slides container -->
+    <div id="jerez-slides" class="relative z-[1] flex h-full w-full overflow-hidden">
+      <!-- Slide 1: Overview -->
+      <section class="jerez-slide flex h-full w-full shrink-0 flex-col justify-center px-8 py-24 md:px-16">
+        <div class="mx-auto w-full max-w-5xl">
+          <p class="font-sans text-[0.65rem] uppercase tracking-[0.5em] text-clay/70">{t.jerez.eyebrow}</p>
+          <h2 class="mt-4 font-display text-[clamp(2.6rem,6vw,5rem)] font-light leading-none tracking-tight text-ink">
+            {t.jerez.title}<br />
+            <em class="not-italic font-semibold text-clay">{t.jerez.titleSub}</em>
+          </h2>
+          <div class="mt-10 grid gap-10 md:grid-cols-[1.1fr_0.9fr]">
+            <div class="space-y-6">
+              <p class="font-sans text-base leading-7 text-ink/70">{t.jerez.overview}</p>
+              <p class="font-sans text-base leading-7 text-ink/70">{t.jerez.history}</p>
+              <p class="font-sans text-base leading-7 text-ink/70">{t.jerez.highlights}</p>
+              <p class="font-display text-lg italic text-clay/80">{t.jerez.festivals}</p>
+            </div>
+            <div class="flex flex-col gap-4">
+              <div class="w-full overflow-hidden rounded-2xl shadow-soft" style="height: 260px;">
+                <div
+                  id="jerez-city-map"
+                  data-city-lat={t.jerez.map.cityLat}
+                  data-city-lng={t.jerez.map.cityLng}
+                  data-sevilla-lat={t.jerez.map.sevillaLat}
+                  data-sevilla-lng={t.jerez.map.sevillaLng}
+                  data-cadiz-lat={t.jerez.map.cadizLat}
+                  data-cadiz-lng={t.jerez.map.cadizLng}
+                  class="h-full w-full"
+                  aria-label={t.jerez.map.label}
+                />
+              </div>
+              <p class="font-sans text-sm text-ink/45">{t.jerez.map.caption}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 2: Getting there -->
+      <section class="jerez-slide flex h-full w-full shrink-0 flex-col justify-center px-8 py-24 md:px-16">
+        <div class="mx-auto w-full max-w-5xl">
+          <p class="font-sans text-[0.65rem] uppercase tracking-[0.5em] text-clay/70">{t.jerez.gettingThere.eyebrow}</p>
+          <h2 class="mt-4 font-display text-[clamp(2.4rem,5vw,4.6rem)] font-light leading-none tracking-tight text-ink">
+            {t.jerez.gettingThere.title}
+          </h2>
+          <div class="mt-10 grid gap-10 md:grid-cols-[1.05fr_0.95fr]">
+            <div class="space-y-6">
+              <p class="font-sans text-base leading-7 text-ink/70">{t.jerez.gettingThere.airports}</p>
+              <p class="font-sans text-base leading-7 text-ink/70">{t.jerez.gettingThere.airlines}</p>
+              <div>
+                <p class="font-sans text-[0.6rem] uppercase tracking-[0.4em] text-ink/35">{t.jerez.gettingThere.routesTitle}</p>
+                <ul class="mt-4 space-y-3">
+                  {t.jerez.gettingThere.routes.map((route) => (
+                    <li class="flex items-start gap-3 font-sans text-base text-ink/70">
+                      <span class="mt-[0.6rem] h-px w-6 shrink-0 bg-clay/40" />
+                      <span>{route}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            <div class="flex flex-col gap-4">
+              <div class="w-full overflow-hidden rounded-2xl shadow-soft" style="height: 260px;">
+                <div
+                  id="jerez-routes-map"
+                  data-jerez-lat={t.jerez.routesMap.jerezLat}
+                  data-jerez-lng={t.jerez.routesMap.jerezLng}
+                  data-barcelona-lat={t.jerez.routesMap.barcelonaLat}
+                  data-barcelona-lng={t.jerez.routesMap.barcelonaLng}
+                  data-paris-lat={t.jerez.routesMap.parisLat}
+                  data-paris-lng={t.jerez.routesMap.parisLng}
+                  data-pamplona-lat={t.jerez.routesMap.pamplonaLat}
+                  data-pamplona-lng={t.jerez.routesMap.pamplonaLng}
+                  data-madrid-lat={t.jerez.routesMap.madridLat}
+                  data-madrid-lng={t.jerez.routesMap.madridLng}
+                  class="h-full w-full"
+                  aria-label={t.jerez.routesMap.label}
+                />
+              </div>
+              <p class="font-sans text-sm text-ink/45">{t.jerez.routesMap.caption}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 3: Where to stay -->
+      <section class="jerez-slide flex h-full w-full shrink-0 flex-col justify-center px-8 py-24 md:px-16">
+        <div class="mx-auto w-full max-w-5xl">
+          <p class="font-sans text-[0.65rem] uppercase tracking-[0.5em] text-clay/70">{t.jerez.stay.eyebrow}</p>
+          <h2 class="mt-4 font-display text-[clamp(2.4rem,5vw,4.6rem)] font-light leading-none tracking-tight text-ink">
+            {t.jerez.stay.title}
+          </h2>
+          <div class="mt-10 grid gap-10 md:grid-cols-[1.1fr_0.9fr]">
+            <div class="space-y-6">
+              <p class="font-sans text-base leading-7 text-ink/70">{t.jerez.stay.intro}</p>
+              <ul class="space-y-4">
+                {t.jerez.stay.hotels.map((hotel) => (
+                  <li class="rounded-2xl border border-clay/15 bg-white/60 p-5 shadow-soft">
+                    <p class="font-sans text-lg text-ink/80">{hotel.name}</p>
+                    <p class="mt-2 font-sans text-sm text-ink/60">{hotel.details}</p>
+                    <a
+                      href={hotel.url}
+                      target="_blank"
+                      rel="noopener"
+                      class="mt-3 inline-flex items-center gap-1.5 font-sans text-sm text-clay/70 underline-offset-4 hover:underline"
+                    >
+                      {t.jerez.stay.linkLabel}
+                      <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M1 11L11 1M11 1H4M11 1v7"/>
+                      </svg>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div class="rounded-2xl border border-clay/15 bg-white/60 p-6 shadow-soft">
+              <p class="font-sans text-[0.6rem] uppercase tracking-[0.4em] text-ink/35">{t.jerez.stay.bookingTitle}</p>
+              <p class="mt-4 font-sans text-base leading-7 text-ink/70">{t.jerez.stay.bookingInfo}</p>
+              <p class="mt-4 font-display text-lg italic text-clay/80">{t.jerez.stay.bookingNote}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Slide nav -->
+    <div class="absolute bottom-10 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2">
+      {t.jerez.nav.map((label, index) => (
+        <button
+          data-jerez-nav={index}
+          class="group flex items-center gap-2.5 px-2 py-1"
+          aria-label={label}
+        >
+          <span class="pointer-events-none font-sans text-[0.55rem] uppercase tracking-[0.4em] text-ink/35 transition-colors group-hover:text-ink/60">
+            {label}
+          </span>
+          <span class="block h-[6px] w-[6px] rounded-full bg-ink/20 transition-all group-[[data-active]]:bg-clay group-[[data-active]]:scale-125" />
+        </button>
+      ))}
+    </div>
+  </div>{/* /#jerez-detail */}
+
+
+  <!-- ═══════════════════════════════════════════════
        GSAP + Leaflet: animations & map
        Timing values from src/config/theme.ts → animation
   ═══════════════════════════════════════════════ -->
@@ -482,6 +671,29 @@ const narrowMask = (dir: 'right' | 'left') => {
     html.snap-mode .slide:first-child [class*='mt-16'] {
       display: none;
     }
+
+    /* ── Jerez overlay ─────────────────────────────────────────────── */
+    #jerez-slides {
+      scroll-snap-type: x mandatory;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+    }
+    #jerez-slides::-webkit-scrollbar {
+      display: none;
+    }
+    .jerez-slide {
+      scroll-snap-align: start;
+    }
+    .jerez-city-label,
+    .jerez-routes-label {
+      position: absolute;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(26, 18, 8, 0.55);
+      pointer-events: none;
+    }
   </style>
 
   <script>
@@ -515,6 +727,7 @@ const narrowMask = (dir: 'right' | 'left') => {
     // Per-overlay callbacks — called once after the open animation ends
     const overlayOnOpen: Record<string, () => void> = {
       finca: initFincaMap,
+      jerez: initJerezOverlay,
     };
 
     let currentOverlay: HTMLElement | null = null;
@@ -708,9 +921,18 @@ const narrowMask = (dir: 'right' | 'left') => {
       </svg>`,
       className: '', iconSize: [12,12], iconAnchor: [6,6],
     });
+    const routePin = L.divIcon({
+      html: `<svg width="10" height="10" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="5" cy="5" r="4" fill="#bc6c4d" opacity="0.5"/>
+      </svg>`,
+      className: '', iconSize: [10,10], iconAnchor: [5,5],
+    });
 
     let leafletMap: ReturnType<typeof L.map> | null = null;
     let mapInited = false;
+    let jerezCityMap: ReturnType<typeof L.map> | null = null;
+    let jerezRoutesMap: ReturnType<typeof L.map> | null = null;
+    let jerezInited = false;
 
     function initFincaMap() {
       if (mapInited) return;
@@ -748,6 +970,116 @@ const narrowMask = (dir: 'right' | 'left') => {
       });
 
       leafletMap.invalidateSize();
+    }
+
+    function initJerezOverlay() {
+      if (!jerezInited) {
+        jerezInited = true;
+        initJerezSlides();
+        initJerezMaps();
+      }
+      requestAnimationFrame(() => {
+        jerezCityMap?.invalidateSize();
+        jerezRoutesMap?.invalidateSize();
+      });
+    }
+
+    function initJerezSlides() {
+      const wrap = document.getElementById('jerez-slides');
+      if (!wrap) return;
+      const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-jerez-nav]'));
+      const slides = Array.from(document.querySelectorAll<HTMLElement>('.jerez-slide'));
+
+      function setActive(index: number) {
+        buttons.forEach((btn, i) => btn.toggleAttribute('data-active', i === index));
+      }
+
+      setActive(0);
+
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const index = Number(btn.dataset.jerezNav);
+          wrap.scrollTo({ left: index * wrap.clientWidth, behavior: 'smooth' });
+          setActive(index);
+        });
+      });
+
+      wrap.addEventListener('scroll', () => {
+        const index = Math.round(wrap.scrollLeft / wrap.clientWidth);
+        setActive(Math.min(index, slides.length - 1));
+      }, { passive: true });
+    }
+
+    function initJerezMaps() {
+      const cityEl = document.getElementById('jerez-city-map') as HTMLElement | null;
+      const routesEl = document.getElementById('jerez-routes-map') as HTMLElement | null;
+      if (!cityEl || !routesEl) return;
+
+      const CLAT = parseFloat(cityEl.dataset.cityLat!);
+      const CLNG = parseFloat(cityEl.dataset.cityLng!);
+      const SEVLAT = parseFloat(cityEl.dataset.sevillaLat!);
+      const SEVLNG = parseFloat(cityEl.dataset.sevillaLng!);
+      const CADLAT = parseFloat(cityEl.dataset.cadizLat!);
+      const CADLNG = parseFloat(cityEl.dataset.cadizLng!);
+
+      jerezCityMap = L.map('jerez-city-map', {
+        center: [CLAT, CLNG], zoom: 9,
+        zoomControl: false, dragging: false, scrollWheelZoom: false,
+        doubleClickZoom: false, touchZoom: false, keyboard: false,
+        attributionControl: true,
+      });
+
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd', maxZoom: 19,
+      }).addTo(jerezCityMap);
+
+      L.marker([CLAT, CLNG], { icon: clayPin }).addTo(jerezCityMap).bindPopup('Jerez de la Frontera');
+      L.marker([SEVLAT, SEVLNG], { icon: cityPin }).addTo(jerezCityMap).bindPopup('Sevilla');
+      L.marker([CADLAT, CADLNG], { icon: cityPin }).addTo(jerezCityMap).bindPopup('Cádiz');
+
+      jerezCityMap.fitBounds(L.latLngBounds([
+        [SEVLAT, SEVLNG],
+        [CADLAT, CADLNG],
+        [CLAT, CLNG],
+      ]), { padding: [30, 30] });
+
+      const JLAT = parseFloat(routesEl.dataset.jerezLat!);
+      const JLNG = parseFloat(routesEl.dataset.jerezLng!);
+      const BLAT = parseFloat(routesEl.dataset.barcelonaLat!);
+      const BLNG = parseFloat(routesEl.dataset.barcelonaLng!);
+      const PLAT = parseFloat(routesEl.dataset.parisLat!);
+      const PLNG = parseFloat(routesEl.dataset.parisLng!);
+      const PAMLat = parseFloat(routesEl.dataset.pamplonaLat!);
+      const PAMLNG = parseFloat(routesEl.dataset.pamplonaLng!);
+      const MADLAT = parseFloat(routesEl.dataset.madridLat!);
+      const MADLNG = parseFloat(routesEl.dataset.madridLng!);
+
+      jerezRoutesMap = L.map('jerez-routes-map', {
+        center: [JLAT, JLNG], zoom: 5,
+        zoomControl: false, dragging: false, scrollWheelZoom: false,
+        doubleClickZoom: false, touchZoom: false, keyboard: false,
+        attributionControl: true,
+      });
+
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd', maxZoom: 19,
+      }).addTo(jerezRoutesMap);
+
+      const routeCities = [
+        { name: 'Jerez', lat: JLAT, lng: JLNG, icon: clayPin },
+        { name: 'Barcelona', lat: BLAT, lng: BLNG, icon: routePin },
+        { name: 'Paris', lat: PLAT, lng: PLNG, icon: routePin },
+        { name: 'Pamplona', lat: PAMLat, lng: PAMLNG, icon: routePin },
+        { name: 'Madrid', lat: MADLAT, lng: MADLNG, icon: routePin },
+      ];
+
+      routeCities.forEach(city => {
+        L.marker([city.lat, city.lng], { icon: city.icon }).addTo(jerezRoutesMap).bindPopup(city.name);
+      });
+
+      jerezRoutesMap.fitBounds(L.latLngBounds(routeCities.map(c => [c.lat, c.lng])), { padding: [30, 30] });
     }
 
     // ── Restore overlay state from URL ────────────────────────────────
