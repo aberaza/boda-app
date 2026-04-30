@@ -239,6 +239,18 @@ const narrowMask = (dir: 'right' | 'left') => {
               <path d="M1 11L11 1M11 1H4M11 1v7"/>
             </svg>
           </a>
+
+          <!-- Event detail trigger -->
+          <button
+            id="open-finca-detail"
+            class="slide-body mt-5 inline-flex items-center gap-2 self-start rounded-full border border-clay/40 bg-clay/8 px-4 py-2 font-sans text-[0.7rem] uppercase tracking-[0.35em] text-clay transition-colors hover:bg-clay/15"
+          >
+            {t.eventDetail.open}
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M6 1v10M11 6H1" transform="rotate(45 6 6)"/>
+              <circle cx="6" cy="6" r="5"/>
+            </svg>
+          </button>
         </div>
 
         <!-- RIGHT — Almohade: photo panel + classical text -->
@@ -301,7 +313,158 @@ const narrowMask = (dir: 'right' | 'left') => {
 
 
   <!-- ═══════════════════════════════════════════════
-       GSAP: scroll-driven slideshow
+       FINCA DETAIL OVERLAY
+       Fixed full-screen panel; GSAP-animated in/out.
+       Contains: date/time, event programme, dress code, address + themed map.
+  ═══════════════════════════════════════════════ -->
+  <div
+    id="finca-detail"
+    class="fixed inset-0 z-[60] overflow-y-auto bg-paper"
+    aria-modal="true"
+    role="dialog"
+    aria-label={t.finca.eyebrow}
+  >
+    <!-- Pattern accents -->
+    <div class="pointer-events-none absolute inset-0" style={mBauhaus}>
+      <BauhausPattern color={patterns.bauhaus.color} opacity={0.5} class="h-full w-full" />
+    </div>
+    <div class="pointer-events-none absolute inset-0" style={mAlmohade}>
+      <GeoPattern color={patterns.almohade.color} opacity={0.5} class="h-full w-full" />
+    </div>
+
+    <!-- Close button -->
+    <button
+      id="close-finca-detail"
+      class="fixed right-5 top-5 z-10 flex items-center gap-2 font-sans text-[0.6rem] uppercase tracking-[0.35em] text-ink/40 transition-colors hover:text-ink/70"
+      aria-label={t.eventDetail.close}
+    >
+      {t.eventDetail.close}
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M1 1l12 12M13 1L1 13"/>
+      </svg>
+    </button>
+
+    <!-- Content -->
+    <div class="relative z-[1] mx-auto flex min-h-screen max-w-5xl flex-col justify-center px-8 py-24 md:py-20">
+
+      <!-- Eyebrow -->
+      <p class="font-sans text-[0.65rem] uppercase tracking-[0.5em] text-clay/70">
+        {t.eventDetail.eyebrow}
+      </p>
+
+      <!-- Main heading -->
+      <h2 class="mt-4 font-display text-[clamp(2.6rem,6vw,5rem)] font-light leading-none tracking-tight text-ink">
+        {t.eventDetail.lead}<br />
+        <em class="not-italic font-semibold text-clay">{t.eventDetail.leadSub}</em>
+      </h2>
+
+      <div class="mt-12 grid gap-12 md:grid-cols-2">
+
+        <!-- LEFT — Programme + dress code -->
+        <div class="flex flex-col gap-10">
+
+          <div>
+            <p class="font-sans text-[0.6rem] uppercase tracking-[0.45em] text-ink/35">
+              {t.eventDetail.scheduleTitle}
+            </p>
+            <dl class="mt-6 space-y-5">
+              {[
+                { time: t.eventDetail.s1time, label: t.eventDetail.s1label },
+                { time: t.eventDetail.s2time, label: t.eventDetail.s2label },
+                { time: t.eventDetail.s3time, label: t.eventDetail.s3label },
+              ].map(({ time, label }) => (
+                <div class="flex items-start gap-4">
+                  <div class="mt-[0.6rem] h-px w-6 shrink-0 bg-clay/40" />
+                  <div>
+                    <dt class="font-sans text-[0.58rem] uppercase tracking-[0.4em] text-ink/35">{time}</dt>
+                    <dd class="mt-0.5 font-sans text-base text-ink/80">{label}</dd>
+                  </div>
+                </div>
+              ))}
+            </dl>
+          </div>
+
+          <!-- Dress code -->
+          <div class="flex items-center gap-4">
+            <svg width="20" height="20" viewBox="0 0 20 20" class="shrink-0 text-clay/50" fill="currentColor">
+              <polygon points="10,1 12,7 18,10 12,13 10,19 8,13 2,10 8,7" opacity="0.7"/>
+            </svg>
+            <div>
+              <p class="font-sans text-[0.58rem] uppercase tracking-[0.4em] text-ink/35">
+                {t.eventDetail.dressCodeLabel}
+              </p>
+              <p class="mt-0.5 font-display text-lg italic text-ink/70">
+                {t.eventDetail.dressCodeValue}
+              </p>
+            </div>
+          </div>
+
+          <!-- Logistics -->
+          <div class="space-y-3 border-t border-ink/10 pt-6">
+            <div class="flex items-start gap-3 font-sans text-[0.75rem] leading-snug text-ink/50">
+              <svg width="14" height="14" viewBox="0 0 16 16" class="mt-0.5 shrink-0 text-clay/50" fill="none" stroke="currentColor" stroke-width="1.4">
+                <circle cx="8" cy="8" r="6.5"/>
+                <path d="M8 5v3.5l2 2"/>
+              </svg>
+              {t.eventDetail.parkingNote}
+            </div>
+            <div class="flex items-start gap-3 font-sans text-[0.75rem] leading-snug text-ink/50">
+              <svg width="14" height="14" viewBox="0 0 16 16" class="mt-0.5 shrink-0 text-clay/50" fill="none" stroke="currentColor" stroke-width="1.4">
+                <path d="M1 11h14M3 11V7l2-4h6l2 4v4M6 11V9h4v2"/>
+                <circle cx="4" cy="12.5" r="1.2" fill="currentColor" stroke="none"/>
+                <circle cx="12" cy="12.5" r="1.2" fill="currentColor" stroke="none"/>
+              </svg>
+              {t.eventDetail.transportNote}
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT — Address + map -->
+        <div class="flex flex-col gap-6">
+
+          <div>
+            <p class="font-sans text-[0.6rem] uppercase tracking-[0.45em] text-ink/35">
+              {t.eventDetail.addressLabel}
+            </p>
+            <p class="mt-3 font-sans text-base leading-7 text-ink/75">
+              {event.venue}<br />
+              {event.venueAddress}
+            </p>
+            <a
+              href={event.venueMapsUrl}
+              target="_blank"
+              rel="noopener"
+              class="mt-3 inline-flex items-center gap-1.5 font-sans text-sm text-clay/70 underline-offset-4 hover:underline"
+            >
+              {t.eventDetail.mapsLabel}
+              <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M1 11L11 1M11 1H4M11 1v7"/>
+              </svg>
+            </a>
+          </div>
+
+          <!-- Leaflet map — initialised by client JS -->
+          <div
+          id="venue-map"
+            data-lat={event.venueLat}
+            data-lng={event.venueLng}
+            data-name={event.venue}
+            data-city-lat={36.68762537447789}
+            data-city-lng={-6.136780790369877}
+            class="w-full overflow-hidden rounded-2xl shadow-soft"
+            style="height: 260px;"
+            aria-label="Mapa Finca La Carreña"
+          />
+
+        </div>
+      </div>
+    </div>
+  </div>{/* /#finca-detail */}
+
+
+  <!-- ═══════════════════════════════════════════════
+       GSAP + Leaflet: animations & map
        Timing values from src/config/theme.ts → animation
   ═══════════════════════════════════════════════ -->
   <style>
@@ -481,7 +644,126 @@ const narrowMask = (dir: 'right' | 'left') => {
       }, { passive: true });
 
     }
+
+
+    // ═══════════════════════════════════════════════════════════
+    // FINCA DETAIL OVERLAY — open / close / map
+    // ═══════════════════════════════════════════════════════════
+    import 'leaflet/dist/leaflet.css';
+    import L from 'leaflet';
+
+    const overlay    = document.getElementById('finca-detail')!;
+    const openBtn    = document.getElementById('open-finca-detail')!;
+    const closeBtn   = document.getElementById('close-finca-detail')!;
+    let   mapInited  = false;
+
+    // Custom clay-coloured SVG marker for La Carreña
+    const clayPin = L.divIcon({
+      html: `<svg width="28" height="36" viewBox="0 0 28 36" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14 0C6.27 0 0 6.27 0 14c0 9.94 14 22 14 22S28 23.94 28 14C28 6.27 21.73 0 14 0z" fill="#bc6c4d"/>
+        <circle cx="14" cy="14" r="5.5" fill="#f5f0e8" opacity="0.92"/>
+      </svg>`,
+      className:   '',
+      iconSize:    [28, 36],
+      iconAnchor:  [14, 36],
+      popupAnchor: [0, -38],
+    });
+
+    // Smaller ink-coloured dot for Jerez city centre reference
+    const cityPin = L.divIcon({
+      html: `<svg width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="6" cy="6" r="5" fill="#1a1208" opacity="0.35"/>
+        <circle cx="6" cy="6" r="3" fill="#1a1208" opacity="0.6"/>
+      </svg>`,
+      className:  '',
+      iconSize:   [12, 12],
+      iconAnchor: [6, 6],
+    });
+
+    let leafletMap: ReturnType<typeof L.map> | null = null;
+
+    function initMap() {
+      if (mapInited) return;
+      mapInited = true;
+
+      const mapEl   = document.getElementById('venue-map') as HTMLElement;
+      const LAT     = parseFloat(mapEl.dataset.lat!);
+      const LNG     = parseFloat(mapEl.dataset.lng!);
+      const NAME    = mapEl.dataset.name ?? 'La Carreña';
+      const CLAT    = parseFloat(mapEl.dataset.cityLat!);
+      const CLNG    = parseFloat(mapEl.dataset.cityLng!);
+
+      // Centre map between the two points
+      const midLat = (LAT + CLAT) / 2;
+      const midLng = (LNG + CLNG) / 2;
+
+      leafletMap = L.map('venue-map', {
+        center:             [midLat, midLng],
+        zoom:               11,
+        zoomControl:        false,
+        dragging:           false,
+        scrollWheelZoom:    false,
+        doubleClickZoom:    false,
+        touchZoom:          false,
+        keyboard:           false,
+        attributionControl: true,
+      });
+
+      L.tileLayer(
+        'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',
+        {
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+          subdomains: 'abcd',
+          maxZoom: 19,
+        }
+      ).addTo(leafletMap);
+
+      // Venue pin (clay, full marker)
+      L.marker([LAT, LNG], { icon: clayPin })
+        .addTo(leafletMap)
+        .bindPopup(NAME);
+
+      // Jerez city reference dot
+      L.marker([CLAT, CLNG], { icon: cityPin }).addTo(leafletMap);
+
+      // Custom HTML label positioned by map projection (no Leaflet tooltip chrome)
+      leafletMap.whenReady(() => {
+        const pt = leafletMap!.latLngToContainerPoint(L.latLng(CLAT, CLNG));
+        const label = document.createElement('div');
+        label.textContent = 'Jerez';
+        label.className = 'jerez-city-label';
+        label.style.left = (pt.x + 10) + 'px';
+        label.style.top  = (pt.y - 8) + 'px';
+        leafletMap!.getContainer().appendChild(label);
+      });
+    }
+
+    function openOverlay() {
+      overlay.classList.add('is-open');
+      gsap.fromTo(overlay,
+        { autoAlpha: 0, y: 30 },
+        { autoAlpha: 1, y: 0, duration: 0.55, ease: 'power3.out',
+          onComplete: () => leafletMap?.invalidateSize() }
+      );
+      document.body.style.overflow = 'hidden';
+      initMap();
+    }
+
+    function closeOverlay() {
+      gsap.to(overlay, {
+        autoAlpha: 0, y: 20, duration: 0.4, ease: 'power2.in',
+        onComplete: () => overlay.classList.remove('is-open'),
+      });
+      document.body.style.overflow = '';
+    }
+
+    openBtn.addEventListener('click',  openOverlay);
+    closeBtn.addEventListener('click', closeOverlay);
+
+    // Close on Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && overlay.classList.contains('is-open')) closeOverlay();
+    });
   </script>
 
 </BaseLayout>
-

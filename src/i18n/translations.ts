@@ -63,6 +63,23 @@ const es = {
     finca:  "El lugar",
     pronto: "Info",
   },
+  eventDetail: {
+    open:           "Ver detalles del evento",
+    close:          "Volver",
+    eyebrow:        "1 mayo 2027",
+    lead:           "Únete a nosotros",
+    leadSub:        "en nuestra boda",
+    scheduleTitle:  "El día",
+    s1time: "Mediodía",    s1label: "Ceremonia civil",
+    s2time: "Tarde",       s2label: "Cóctel & almuerzo",
+    s3time: "Tarde-noche",  s3label: "Baile y fiesta",
+    dressCodeLabel: "Dress code",
+    dressCodeValue: "Etiqueta formal",
+    addressLabel:   "Cómo llegar",
+    mapsLabel:        "Abrir en Google Maps",
+    parkingNote:      "Aparcamiento disponible en la finca.",
+    transportNote:    "Estamos valorando ofrecer transporte entre Jerez y la finca — más detalles próximamente.",
+  },
 } as const;
 
 // ─── French ──────────────────────────────────────────────────────────────────
@@ -121,6 +138,23 @@ const fr = {
     finca:  "Le lieu",
     pronto: "Info",
   },
+  eventDetail: {
+    open:           "Voir les détails",
+    close:          "Retour",
+    eyebrow:        "1er mai 2027",
+    lead:           "Rejoignez-nous",
+    leadSub:        "pour notre mariage",
+    scheduleTitle:  "Le programme",
+    s1time: "Midi",        s1label: "Cérémonie civile",
+    s2time: "Après-midi",  s2label: "Cocktail & déjeuner",
+    s3time: "Soirée",      s3label: "Bal et fête",
+    dressCodeLabel: "Dress code",
+    dressCodeValue: "Tenue de soirée",
+    addressLabel:   "Comment venir",
+    mapsLabel:        "Ouvrir dans Google Maps",
+    parkingNote:      "Parking disponible sur place.",
+    transportNote:    "Nous étudions la mise en place d'un transport entre Jerez et la finca — plus de détails bientôt.",
+  },
 } as const;
 
 // ─── English ─────────────────────────────────────────────────────────────────
@@ -177,6 +211,23 @@ const en = {
     cuando: "When",
     finca:  "The venue",
     pronto: "Info",
+  },
+  eventDetail: {
+    open:           "View event details",
+    close:          "Back",
+    eyebrow:        "1 May 2027",
+    lead:           "Join us",
+    leadSub:        "on our wedding day",
+    scheduleTitle:  "The day",
+    s1time: "Midday",     s1label: "Civil ceremony",
+    s2time: "Afternoon",  s2label: "Cocktail & seated lunch",
+    s3time: "Evening",    s3label: "Dancing & celebrations",
+    dressCodeLabel: "Dress code",
+    dressCodeValue: "Formal attire",
+    addressLabel:   "Getting there",
+    mapsLabel:        "Open in Google Maps",
+    parkingNote:      "Parking available at the venue.",
+    transportNote:    "We are looking into providing transport between Jerez and the venue — details to follow.",
   },
 } as const;
 
