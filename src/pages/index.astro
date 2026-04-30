@@ -242,7 +242,8 @@ const narrowMask = (dir: 'right' | 'left') => {
 
           <!-- Event detail trigger -->
           <button
-            id="open-finca-detail"
+          id="open-finca-detail"
+            data-open-overlay="finca"
             class="slide-body mt-5 inline-flex items-center gap-2 self-start rounded-full border border-clay/40 bg-clay/8 px-4 py-2 font-sans text-[0.7rem] uppercase tracking-[0.35em] text-clay transition-colors hover:bg-clay/15"
           >
             {t.eventDetail.open}
@@ -319,6 +320,7 @@ const narrowMask = (dir: 'right' | 'left') => {
   ═══════════════════════════════════════════════ -->
   <div
     id="finca-detail"
+    data-overlay-key="finca"
     class="fixed inset-0 z-[60] overflow-y-auto bg-paper"
     aria-modal="true"
     role="dialog"
@@ -335,6 +337,7 @@ const narrowMask = (dir: 'right' | 'left') => {
     <!-- Close button -->
     <button
       id="close-finca-detail"
+      data-close-overlay
       class="fixed right-5 top-5 z-10 flex items-center gap-2 font-sans text-[0.6rem] uppercase tracking-[0.35em] text-ink/40 transition-colors hover:text-ink/70"
       aria-label={t.eventDetail.close}
     >
@@ -396,25 +399,6 @@ const narrowMask = (dir: 'right' | 'left') => {
               <p class="mt-0.5 font-display text-lg italic text-ink/70">
                 {t.eventDetail.dressCodeValue}
               </p>
-            </div>
-          </div>
-
-          <!-- Logistics -->
-          <div class="space-y-3 border-t border-ink/10 pt-6">
-            <div class="flex items-start gap-3 font-sans text-[0.75rem] leading-snug text-ink/50">
-              <svg width="14" height="14" viewBox="0 0 16 16" class="mt-0.5 shrink-0 text-clay/50" fill="none" stroke="currentColor" stroke-width="1.4">
-                <circle cx="8" cy="8" r="6.5"/>
-                <path d="M8 5v3.5l2 2"/>
-              </svg>
-              {t.eventDetail.parkingNote}
-            </div>
-            <div class="flex items-start gap-3 font-sans text-[0.75rem] leading-snug text-ink/50">
-              <svg width="14" height="14" viewBox="0 0 16 16" class="mt-0.5 shrink-0 text-clay/50" fill="none" stroke="currentColor" stroke-width="1.4">
-                <path d="M1 11h14M3 11V7l2-4h6l2 4v4M6 11V9h4v2"/>
-                <circle cx="4" cy="12.5" r="1.2" fill="currentColor" stroke="none"/>
-                <circle cx="12" cy="12.5" r="1.2" fill="currentColor" stroke="none"/>
-              </svg>
-              {t.eventDetail.transportNote}
             </div>
           </div>
 
@@ -504,15 +488,90 @@ const narrowMask = (dir: 'right' | 'left') => {
     import gsap from 'gsap';
     import { ScrollTrigger } from 'gsap/ScrollTrigger';
     import { animation } from '../config/theme';
+    import 'leaflet/dist/leaflet.css';
+    import L from 'leaflet';
+
+    // ── URL state helpers ─────────────────────────────────────────────
+    // ?slide=N      restores scroll position (0–3)
+    // ?detail=<key> re-opens the named overlay
+    const _urlP     = new URLSearchParams(window.location.search);
+    const initSlide  = Math.min(Math.max(parseInt(_urlP.get('slide') ?? '0', 10) || 0, 0), 3);
+    const initDetail = _urlP.get('detail');
+
+    function setUrlParam(key: string, value: string | null) {
+      const p = new URLSearchParams(window.location.search);
+      if (value === null) p.delete(key); else p.set(key, value);
+      const qs = p.toString();
+      history.replaceState(null, '', qs ? `?${qs}` : window.location.pathname);
+    }
+
+    // ══════════════════════════════════════════════════════════════════
+    // GENERIC OVERLAY SYSTEM
+    // Trigger:  data-open-overlay="<key>"  on any clickable element
+    // Dismiss:  data-close-overlay          on any button inside overlay
+    // Overlay:  data-overlay-key="<key>"    on the full-screen panel
+    // ══════════════════════════════════════════════════════════════════
+
+    // Per-overlay callbacks — called once after the open animation ends
+    const overlayOnOpen: Record<string, () => void> = {
+      finca: initFincaMap,
+    };
+
+    let currentOverlay: HTMLElement | null = null;
+
+    function openOverlay(key: string) {
+      const el = document.querySelector<HTMLElement>(`[data-overlay-key="${key}"]`);
+      if (!el || currentOverlay === el) return;
+      // Close any already-open overlay instantly
+      if (currentOverlay) {
+        gsap.set(currentOverlay, { autoAlpha: 0 });
+        currentOverlay.classList.remove('is-open');
+      }
+      currentOverlay = el;
+      el.classList.add('is-open');
+      gsap.fromTo(el,
+        { autoAlpha: 0, y: 30 },
+        { autoAlpha: 1, y: 0, duration: 0.55, ease: 'power3.out',
+          onComplete: () => overlayOnOpen[key]?.() }
+      );
+      document.body.style.overflow = 'hidden';
+      setUrlParam('detail', key);
+    }
+
+    function closeOverlay() {
+      if (!currentOverlay) return;
+      const el = currentOverlay;
+      currentOverlay = null;
+      gsap.to(el, {
+        autoAlpha: 0, y: 20, duration: 0.4, ease: 'power2.in',
+        onComplete: () => el.classList.remove('is-open'),
+      });
+      document.body.style.overflow = '';
+      setUrlParam('detail', null);
+    }
+
+    // Wire all trigger / close buttons globally
+    document.querySelectorAll<HTMLElement>('[data-open-overlay]').forEach(btn => {
+      btn.addEventListener('click', () => openOverlay(btn.dataset.openOverlay!));
+    });
+    document.querySelectorAll<HTMLElement>('[data-close-overlay]').forEach(btn => {
+      btn.addEventListener('click', closeOverlay);
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && currentOverlay) closeOverlay();
+    });
+
+    // Guarantee all overlays hidden on load
+    document.querySelectorAll<HTMLElement>('[data-overlay-key]').forEach(el => {
+      gsap.set(el, { autoAlpha: 0 });
+    });
 
     // ── Detect touch / coarse-pointer devices (iOS Safari, Android) ──
     const isTouch = window.matchMedia('(pointer: coarse)').matches;
 
     if (isTouch) {
-      // Activate native scroll-snap layout
       document.documentElement.classList.add('snap-mode');
 
-      // ── Dot nav (mobile snap) ─────────────────────────────────────────
       const mNavBtns = Array.from(
         document.querySelectorAll<HTMLButtonElement>('[data-slide-btn]')
       );
@@ -520,21 +579,24 @@ const narrowMask = (dir: 'right' | 'left') => {
 
       function setMobileActive(index: number) {
         mNavBtns.forEach((btn, i) => btn.toggleAttribute('data-active', i === index));
+        setUrlParam('slide', index === 0 ? null : String(index));
       }
-      setMobileActive(0);
 
-      mNavBtns.forEach((btn) => {
+      mNavBtns.forEach(btn => {
         btn.addEventListener('click', () => {
           wrap.scrollTo({ top: Number(btn.dataset.slideBtn) * window.innerHeight, behavior: 'smooth' });
         });
       });
-
       wrap.addEventListener('scroll', () => {
-        setMobileActive(Math.min(
-          Math.round(wrap.scrollTop / window.innerHeight),
-          mNavBtns.length - 1
-        ));
+        setMobileActive(Math.min(Math.round(wrap.scrollTop / window.innerHeight), mNavBtns.length - 1));
       }, { passive: true });
+
+      if (initSlide > 0) {
+        wrap.scrollTo({ top: initSlide * window.innerHeight });
+        setMobileActive(initSlide);
+      } else {
+        setMobileActive(0);
+      }
 
     } else {
       // ── Desktop: GSAP scroll-driven slideshow ──────────────────────
@@ -553,11 +615,11 @@ const narrowMask = (dir: 'right' | 'left') => {
         master.to({}, { duration: animation.hold });
         if (i < N - 1) {
           master
-            .to(slide, { autoAlpha: 0, scale: 0.97, duration: animation.xfade, ease }, `>`)
+            .to(slide, { autoAlpha: 0, scale: 0.97, duration: animation.xfade, ease }, '>')
             .fromTo(slides[i + 1],
               { autoAlpha: 0, scale: 1.03 },
               { autoAlpha: 1, scale: 1,   duration: animation.xfade, ease },
-              `<`);
+              '<');
         }
       });
 
@@ -569,39 +631,26 @@ const narrowMask = (dir: 'right' | 'left') => {
         animation: master,
       });
 
-      // ── Hero entrance: multi-step reveal ─────────────────────────────────
-      //
-      // Step 0 · initial state — everything invisible, patterns offset
-      gsap.set(['#hero-photo', '#hero-parchment'], { autoAlpha: 0 });
-      gsap.set('#hero-bauhaus',  { autoAlpha: 0, x: '-18%' });
-      gsap.set('#hero-almohade', { autoAlpha: 0, x:  '18%' });
-      gsap.set(['#hero-date', '#hero-names', '#hero-tagline', '#hero-cue'],
-               { autoAlpha: 0, y: 20 });
+      // Hero entrance — only on a clean first load at slide 0
+      if (initSlide === 0 && !initDetail) {
+        gsap.set(['#hero-photo', '#hero-parchment'], { autoAlpha: 0 });
+        gsap.set('#hero-bauhaus',  { autoAlpha: 0, x: '-18%' });
+        gsap.set('#hero-almohade', { autoAlpha: 0, x:  '18%' });
+        gsap.set(['#hero-date', '#hero-names', '#hero-tagline', '#hero-cue'], { autoAlpha: 0, y: 20 });
 
-      const heroTl = gsap.timeline({ delay: animation.heroDelay });
-
-      heroTl
-        // Step 1 · patterns draw in from the edges toward centre
-        .to('#hero-bauhaus',  { autoAlpha: 1, x: 0, duration: 1.4, ease: 'power3.out' })
-        .to('#hero-almohade', { autoAlpha: 1, x: 0, duration: 1.4, ease: 'power3.out' }, '<0.08')
-
-        // Step 2 · our names
-        .to('#hero-names', { autoAlpha: 1, y: 0, duration: 0.85, ease: 'power2.out' }, '-=0.5')
-
-        // Step 3 · date + city
-        .to('#hero-date', { autoAlpha: 1, y: 0, duration: 0.75, ease: 'power2.out' }, '-=0.4')
-
-        // Step 4 · background photo + parchment wash fade in…
-        .to('#hero-parchment', { autoAlpha: 1, duration: 1.2, ease: 'power2.inOut' }, '+=0.1')
-        .to('#hero-photo',     { autoAlpha: 1, duration: 1.4, ease: 'power2.inOut' }, '<')
-        //   …and the main tagline rises in at the same time
-        .to('#hero-tagline', { autoAlpha: 1, y: 0, duration: 1.0, ease: 'power3.out' }, '<0.15')
-
-        // Step 5 · scroll cue
-        .to('#hero-cue', { autoAlpha: 1, y: 0, duration: 0.6, ease: 'power2.out' }, '-=0.2');
+        gsap.timeline({ delay: animation.heroDelay })
+          .to('#hero-bauhaus',   { autoAlpha: 1, x: 0, duration: 1.4, ease: 'power3.out' })
+          .to('#hero-almohade',  { autoAlpha: 1, x: 0, duration: 1.4, ease: 'power3.out' }, '<0.08')
+          .to('#hero-names',     { autoAlpha: 1, y: 0, duration: 0.85, ease: 'power2.out' }, '-=0.5')
+          .to('#hero-date',      { autoAlpha: 1, y: 0, duration: 0.75, ease: 'power2.out' }, '-=0.4')
+          .to('#hero-parchment', { autoAlpha: 1, duration: 1.2, ease: 'power2.inOut' }, '+=0.1')
+          .to('#hero-photo',     { autoAlpha: 1, duration: 1.4, ease: 'power2.inOut' }, '<')
+          .to('#hero-tagline',   { autoAlpha: 1, y: 0, duration: 1.0, ease: 'power3.out' }, '<0.15')
+          .to('#hero-cue',       { autoAlpha: 1, y: 0, duration: 0.6, ease: 'power2.out' }, '-=0.2');
+      }
 
       // Per-slide content entrance
-      slides.slice(1).forEach((slide) => {
+      slides.slice(1).forEach(slide => {
         const els = slide.querySelectorAll('.slide-label, .slide-title, .slide-body, .slide-right');
         gsap.set(els, { opacity: 0, y: 18 });
         ScrollTrigger.create({
@@ -617,153 +666,92 @@ const narrowMask = (dir: 'right' | 'left') => {
         });
       });
 
-      // ── Dot nav (desktop) ─────────────────────────────────────────────
+      // Dot nav
       const dNavBtns = Array.from(
         document.querySelectorAll<HTMLButtonElement>('[data-slide-btn]')
       );
 
       function setDesktopActive(index: number) {
         dNavBtns.forEach((btn, i) => btn.toggleAttribute('data-active', i === index));
+        setUrlParam('slide', index === 0 ? null : String(index));
       }
-      setDesktopActive(0);
 
-      dNavBtns.forEach((btn) => {
+      dNavBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-          window.scrollTo({
-            top: Number(btn.dataset.slideBtn) * window.innerHeight,
-            behavior: 'smooth',
-          });
+          window.scrollTo({ top: Number(btn.dataset.slideBtn) * window.innerHeight, behavior: 'smooth' });
         });
       });
-
       window.addEventListener('scroll', () => {
-        setDesktopActive(Math.min(
-          Math.round(window.scrollY / window.innerHeight),
-          dNavBtns.length - 1
-        ));
+        setDesktopActive(Math.min(Math.round(window.scrollY / window.innerHeight), dNavBtns.length - 1));
       }, { passive: true });
 
+      if (initSlide > 0) {
+        window.scrollTo({ top: initSlide * window.innerHeight });
+        setDesktopActive(initSlide);
+      } else {
+        setDesktopActive(0);
+      }
     }
 
-
-    // ═══════════════════════════════════════════════════════════
-    // FINCA DETAIL OVERLAY — open / close / map
-    // ═══════════════════════════════════════════════════════════
-    import 'leaflet/dist/leaflet.css';
-    import L from 'leaflet';
-
-    const overlay    = document.getElementById('finca-detail')!;
-    const openBtn    = document.getElementById('open-finca-detail')!;
-    const closeBtn   = document.getElementById('close-finca-detail')!;
-    let   mapInited  = false;
-
-    // Custom clay-coloured SVG marker for La Carreña
+    // ── FINCA overlay: Leaflet map ────────────────────────────────────
     const clayPin = L.divIcon({
       html: `<svg width="28" height="36" viewBox="0 0 28 36" xmlns="http://www.w3.org/2000/svg">
         <path d="M14 0C6.27 0 0 6.27 0 14c0 9.94 14 22 14 22S28 23.94 28 14C28 6.27 21.73 0 14 0z" fill="#bc6c4d"/>
         <circle cx="14" cy="14" r="5.5" fill="#f5f0e8" opacity="0.92"/>
       </svg>`,
-      className:   '',
-      iconSize:    [28, 36],
-      iconAnchor:  [14, 36],
-      popupAnchor: [0, -38],
+      className: '', iconSize: [28,36], iconAnchor: [14,36], popupAnchor: [0,-38],
     });
-
-    // Smaller ink-coloured dot for Jerez city centre reference
     const cityPin = L.divIcon({
       html: `<svg width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
         <circle cx="6" cy="6" r="5" fill="#1a1208" opacity="0.35"/>
         <circle cx="6" cy="6" r="3" fill="#1a1208" opacity="0.6"/>
       </svg>`,
-      className:  '',
-      iconSize:   [12, 12],
-      iconAnchor: [6, 6],
+      className: '', iconSize: [12,12], iconAnchor: [6,6],
     });
 
     let leafletMap: ReturnType<typeof L.map> | null = null;
+    let mapInited = false;
 
-    function initMap() {
+    function initFincaMap() {
       if (mapInited) return;
       mapInited = true;
-
-      const mapEl   = document.getElementById('venue-map') as HTMLElement;
-      const LAT     = parseFloat(mapEl.dataset.lat!);
-      const LNG     = parseFloat(mapEl.dataset.lng!);
-      const NAME    = mapEl.dataset.name ?? 'La Carreña';
-      const CLAT    = parseFloat(mapEl.dataset.cityLat!);
-      const CLNG    = parseFloat(mapEl.dataset.cityLng!);
-
-      // Centre map between the two points
-      const midLat = (LAT + CLAT) / 2;
-      const midLng = (LNG + CLNG) / 2;
+      const mapEl = document.getElementById('venue-map') as HTMLElement;
+      const LAT   = parseFloat(mapEl.dataset.lat!);
+      const LNG   = parseFloat(mapEl.dataset.lng!);
+      const NAME  = mapEl.dataset.name ?? 'La Carreña';
+      const CLAT  = parseFloat(mapEl.dataset.cityLat!);
+      const CLNG  = parseFloat(mapEl.dataset.cityLng!);
 
       leafletMap = L.map('venue-map', {
-        center:             [midLat, midLng],
-        zoom:               11,
-        zoomControl:        false,
-        dragging:           false,
-        scrollWheelZoom:    false,
-        doubleClickZoom:    false,
-        touchZoom:          false,
-        keyboard:           false,
+        center: [(LAT+CLAT)/2, (LNG+CLNG)/2], zoom: 11,
+        zoomControl: false, dragging: false, scrollWheelZoom: false,
+        doubleClickZoom: false, touchZoom: false, keyboard: false,
         attributionControl: true,
       });
 
-      L.tileLayer(
-        'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',
-        {
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-          subdomains: 'abcd',
-          maxZoom: 19,
-        }
-      ).addTo(leafletMap);
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd', maxZoom: 19,
+      }).addTo(leafletMap);
 
-      // Venue pin (clay, full marker)
-      L.marker([LAT, LNG], { icon: clayPin })
-        .addTo(leafletMap)
-        .bindPopup(NAME);
-
-      // Jerez city reference dot
+      L.marker([LAT, LNG], { icon: clayPin }).addTo(leafletMap).bindPopup(NAME);
       L.marker([CLAT, CLNG], { icon: cityPin }).addTo(leafletMap);
 
-      // Custom HTML label positioned by map projection (no Leaflet tooltip chrome)
       leafletMap.whenReady(() => {
         const pt = leafletMap!.latLngToContainerPoint(L.latLng(CLAT, CLNG));
         const label = document.createElement('div');
         label.textContent = 'Jerez';
         label.className = 'jerez-city-label';
         label.style.left = (pt.x + 10) + 'px';
-        label.style.top  = (pt.y - 8) + 'px';
+        label.style.top  = (pt.y - 8)  + 'px';
         leafletMap!.getContainer().appendChild(label);
       });
+
+      leafletMap.invalidateSize();
     }
 
-    function openOverlay() {
-      overlay.classList.add('is-open');
-      gsap.fromTo(overlay,
-        { autoAlpha: 0, y: 30 },
-        { autoAlpha: 1, y: 0, duration: 0.55, ease: 'power3.out',
-          onComplete: () => leafletMap?.invalidateSize() }
-      );
-      document.body.style.overflow = 'hidden';
-      initMap();
-    }
-
-    function closeOverlay() {
-      gsap.to(overlay, {
-        autoAlpha: 0, y: 20, duration: 0.4, ease: 'power2.in',
-        onComplete: () => overlay.classList.remove('is-open'),
-      });
-      document.body.style.overflow = '';
-    }
-
-    openBtn.addEventListener('click',  openOverlay);
-    closeBtn.addEventListener('click', closeOverlay);
-
-    // Close on Escape
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && overlay.classList.contains('is-open')) closeOverlay();
-    });
+    // ── Restore overlay state from URL ────────────────────────────────
+    if (initDetail) openOverlay(initDetail);
   </script>
 
 </BaseLayout>
