@@ -4,9 +4,11 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "astro dev",
+    "routes": "node scripts/build-routes.mjs",
+    "routes:dry": "node scripts/build-routes.mjs --dry-run",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "dev": "astro dev"
   },
   "dependencies": {
     "@astrojs/netlify": "^7.0.0",

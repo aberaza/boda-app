@@ -5,12 +5,52 @@ import BauhausPattern from '../components/BauhausPattern.astro';
 import { couple, event, images, names } from '../config/content';
 import { getLang, getT, langUrl, locales } from '../i18n';
 import { patterns, masks, overlays, slideBg, animation } from '../config/theme';
+import '../styles/page-home.css';
 
 const NUM_SLIDES = 4;
+
+import flightRoutes from '../data/flight-routes.json';
 
 const lang = getLang(Astro.url);
 const t    = getT(lang);
 const copy = t; // alias so template references stay the same shape
+
+// --- Process flight routes for Slide 2 ---
+const suggestedCities = ['Barcelona', 'París', 'Pamplona', 'Madrid', 'Granada', 'Valencia'];
+const processedRoutes = suggestedCities.map(cityName => {
+  const origin = flightRoutes.origins.find(o => o.city === cityName);
+  if (!origin) return null;
+
+  // Shortest route by steps (segments count)
+  const shortestBySteps = origin.routes.reduce((min, r) =>
+    r.segments.length < min.segments.length ? r : min
+  , origin.routes[0]);
+
+  // Fastest route (totalDuration)
+  const fastest = origin.routes.reduce((min, r) =>
+    r.totalDuration < min.totalDuration ? r : min
+  , origin.routes[0]);
+
+  // Cheapest route (price)
+  const cheapest = origin.routes.reduce((min, r) =>
+    r.price < min.price ? r : min
+  , origin.routes[0]);
+
+  // Average price for the "shortest by steps" category (if multiple)
+  // But usually we just want stats from these.
+  const sameStepsRoutes = origin.routes.filter(r => r.segments.length === shortestBySteps.segments.length);
+  const avgPriceShortest = Math.round(sameStepsRoutes.reduce((sum, r) => sum + r.price, 0) / sameStepsRoutes.length);
+
+  return {
+    city: cityName,
+    steps: shortestBySteps.segments.length,
+    isDirect: shortestBySteps.type === 'direct',
+    fastestDuration: fastest.totalDuration,
+    cheapestPrice: cheapest.price,
+    avgPriceShortest: avgPriceShortest,
+    airlines: Array.from(new Map(origin.routes.flatMap(r => r.segments.map(s => [s.airline, s.logo]))).entries()).map(([name, logo]) => ({ name, logo })),
+  };
+}).filter(Boolean);
 
 // Pre-build webkit-prefixed mask style strings
 const mBauhaus  = `mask-image: ${masks.bauhaus}; -webkit-mask-image: ${masks.bauhaus};`;
@@ -541,21 +581,54 @@ const narrowMask = (dir: 'right' | 'left') => {
           <div class="mt-10 grid gap-10 md:grid-cols-[1.05fr_0.95fr]">
             <div class="space-y-6">
               <p class="font-sans text-base leading-7 text-ink/70">{t.jerez.gettingThere.airports}</p>
-              <p class="font-sans text-base leading-7 text-ink/70">{t.jerez.gettingThere.airlines}</p>
               <div>
                 <p class="font-sans text-[0.6rem] uppercase tracking-[0.4em] text-ink/35">{t.jerez.gettingThere.routesTitle}</p>
-                <ul class="mt-4 space-y-3">
-                  {t.jerez.gettingThere.routes.map((route) => (
-                    <li class="flex items-start gap-3 font-sans text-base text-ink/70">
-                      <span class="mt-[0.6rem] h-px w-6 shrink-0 bg-clay/40" />
-                      <span>{route}</span>
-                    </li>
+                <div class="mt-6 grid gap-4 sm:grid-cols-2">
+                  {processedRoutes.map((route) => (
+                    <button
+                      data-route-city={route.city}
+                      class="text-left rounded-xl border border-clay/15 bg-white/40 p-4 shadow-sm transition-all hover:border-clay/40 hover:bg-white/60 group"
+                    >
+                      <div class="flex items-center justify-between">
+                        <span class="font-sans text-sm font-medium text-ink/80 group-hover:text-clay transition-colors">{route.city} → Jerez</span>
+                        <span class="text-[0.6rem] uppercase tracking-wider text-clay/70">
+                          {route.isDirect ? t.jerez.gettingThere.direct : `${route.steps} ${t.jerez.gettingThere.steps}`}
+                        </span>
+                      </div>
+                      <div class="mt-3 grid grid-cols-2 gap-2 border-t border-clay/5 pt-3">
+                        <div>
+                          <p class="text-[0.55rem] uppercase tracking-wider text-ink/30">{t.jerez.gettingThere.fastest}</p>
+                          <p class="mt-0.5 font-sans text-xs text-ink/60">{Math.floor(route.fastestDuration / 60)}h {route.fastestDuration % 60}min</p>
+                        </div>
+                        <div>
+                          <p class="text-[0.55rem] uppercase tracking-wider text-ink/30">{t.jerez.gettingThere.cheapest}</p>
+                          <p class="mt-0.5 font-sans text-xs text-ink/60">{route.cheapestPrice}€</p>
+                        </div>
+                      </div>
+                      <div class="mt-3 flex flex-wrap gap-2">
+                        {route.airlines.map(airline => (
+                          <div class="group/logo relative flex items-center gap-1.5 rounded border border-clay/15 bg-white/80 px-1.5 py-0.5 shadow-sm">
+                            {airline.logo ? (
+                              <img src={airline.logo} alt={airline.name} class="h-3 w-auto object-contain grayscale transition-all group-hover/logo:grayscale-0" />
+                            ) : (
+                              <span class="font-sans text-[0.55rem] text-clay/70">{airline.name}</span>
+                            )}
+                            <span class="absolute -top-6 left-1/2 -translate-x-1/2 rounded bg-ink px-1.5 py-0.5 text-[0.5rem] text-white opacity-0 transition-opacity group-hover/logo:opacity-100 whitespace-nowrap z-10">
+                              {airline.name}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                      <p class="mt-2 text-[0.55rem] italic text-ink/25">
+                        {t.jerez.gettingThere.avgShortest}: {route.avgPriceShortest}€
+                      </p>
+                    </button>
                   ))}
-                </ul>
+                </div>
               </div>
             </div>
             <div class="flex flex-col gap-4">
-              <div class="w-full overflow-hidden rounded-2xl shadow-soft" style="height: 260px;">
+              <div class="w-full overflow-hidden rounded-2xl shadow-soft" style="height: 420px;">
                 <div
                   id="jerez-routes-map"
                   data-jerez-lat={t.jerez.routesMap.jerezLat}
@@ -568,6 +641,10 @@ const narrowMask = (dir: 'right' | 'left') => {
                   data-pamplona-lng={t.jerez.routesMap.pamplonaLng}
                   data-madrid-lat={t.jerez.routesMap.madridLat}
                   data-madrid-lng={t.jerez.routesMap.madridLng}
+                  data-granada-lat={t.jerez.routesMap.granadaLat}
+                  data-granada-lng={t.jerez.routesMap.granadaLng}
+                  data-valencia-lat={t.jerez.routesMap.valenciaLat}
+                  data-valencia-lng={t.jerez.routesMap.valenciaLng}
                   class="h-full w-full"
                   aria-label={t.jerez.routesMap.label}
                 />
@@ -636,65 +713,11 @@ const narrowMask = (dir: 'right' | 'left') => {
   </div>{/* /#jerez-detail */}
 
 
-  <!-- ═══════════════════════════════════════════════
-       GSAP + Leaflet: animations & map
-       Timing values from src/config/theme.ts → animation
-  ═══════════════════════════════════════════════ -->
-  <style>
-    /* ── Mobile scroll-snap mode ───────────────────────────────────────
-       Applied when JS detects a touch/coarse-pointer device.
-       Overrides the GSAP fixed-panel layout with native snap scrolling.
-    ─────────────────────────────────────────────────────────────────── */
-    html.snap-mode #scroll-driver {
-      display: none;
-    }
-    html.snap-mode #slides-wrap {
-      position: fixed;
-      inset: 0;
-      overflow-y: scroll;
-      overflow-x: hidden;
-      scroll-snap-type: y mandatory;
-      -webkit-overflow-scrolling: touch;
-    }
-    html.snap-mode .slide {
-      position: relative;
-      width: 100%;
-      height: 100dvh;
-      scroll-snap-align: start;
-      scroll-snap-stop: always;
-      /* Undo the opacity:0 that GSAP would normally set */
-      opacity: 1 !important;
-      visibility: visible !important;
-      transform: none !important;
-    }
-    /* Hide the hero scroll-cue nudge on snap mode (irrelevant UX) */
-    html.snap-mode .slide:first-child [class*='mt-16'] {
-      display: none;
-    }
+  <!-- CSS for this page is in src/styles/page-home.css -->
 
-    /* ── Jerez overlay ─────────────────────────────────────────────── */
-    #jerez-slides {
-      scroll-snap-type: x mandatory;
-      overflow-x: auto;
-      scroll-behavior: smooth;
-    }
-    #jerez-slides::-webkit-scrollbar {
-      display: none;
-    }
-    .jerez-slide {
-      scroll-snap-align: start;
-    }
-    .jerez-city-label,
-    .jerez-routes-label {
-      position: absolute;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.65rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: rgba(26, 18, 8, 0.55);
-      pointer-events: none;
-    }
-  </style>
+  <!-- <script id="flight-data" type="application/json"> -->
+  <!--   {JSON.stringify(flightRoutes)} -->
+  <!-- </script> -->
 
   <script>
     import gsap from 'gsap';
@@ -702,6 +725,7 @@ const narrowMask = (dir: 'right' | 'left') => {
     import { animation } from '../config/theme';
     import 'leaflet/dist/leaflet.css';
     import L from 'leaflet';
+    import flightRoutes from '../data/flight-routes.json';
 
     // ── URL state helpers ─────────────────────────────────────────────
     // ?slide=N      restores scroll position (0–3)
@@ -948,7 +972,7 @@ const narrowMask = (dir: 'right' | 'left') => {
         center: [(LAT+CLAT)/2, (LNG+CLNG)/2], zoom: 11,
         zoomControl: false, dragging: false, scrollWheelZoom: false,
         doubleClickZoom: false, touchZoom: false, keyboard: false,
-        attributionControl: true,
+        attributionControl: false,
       });
 
       L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
@@ -1026,7 +1050,7 @@ const narrowMask = (dir: 'right' | 'left') => {
         center: [CLAT, CLNG], zoom: 9,
         zoomControl: false, dragging: false, scrollWheelZoom: false,
         doubleClickZoom: false, touchZoom: false, keyboard: false,
-        attributionControl: true,
+        attributionControl: false,
       });
 
       L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
@@ -1054,14 +1078,19 @@ const narrowMask = (dir: 'right' | 'left') => {
       const PAMLNG = parseFloat(routesEl.dataset.pamplonaLng!);
       const MADLAT = parseFloat(routesEl.dataset.madridLat!);
       const MADLNG = parseFloat(routesEl.dataset.madridLng!);
+      const GRXLAT = parseFloat(routesEl.dataset.granadaLat!);
+      const GRXLNG = parseFloat(routesEl.dataset.granadaLng!);
+      const VLCLAT = parseFloat(routesEl.dataset.valenciaLat!);
+      const VLCLNG = parseFloat(routesEl.dataset.valenciaLng!);
 
       jerezRoutesMap = L.map('jerez-routes-map', {
-        center: [JLAT, JLNG], zoom: 5,
+        center: [JLAT, JLNG], zoom: 3,
         zoomControl: false, dragging: false, scrollWheelZoom: false,
         doubleClickZoom: false, touchZoom: false, keyboard: false,
-        attributionControl: true,
+        attributionControl: false,
       });
 
+      // Use a different tile layer for routes map that works better with the larger height
       L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
         subdomains: 'abcd', maxZoom: 19,
@@ -1073,13 +1102,106 @@ const narrowMask = (dir: 'right' | 'left') => {
         { name: 'Paris', lat: PLAT, lng: PLNG, icon: routePin },
         { name: 'Pamplona', lat: PAMLat, lng: PAMLNG, icon: routePin },
         { name: 'Madrid', lat: MADLAT, lng: MADLNG, icon: routePin },
+        { name: 'Granada', lat: GRXLAT, lng: GRXLNG, icon: routePin },
+        { name: 'Valencia', lat: VLCLAT, lng: VLCLNG, icon: routePin },
       ];
 
+      let activePolylines: L.Polyline[] = [];
+      let activeMarkers: L.Marker[] = [];
+      
+      const flightData = flightRoutes;
+
       routeCities.forEach(city => {
-        L.marker([city.lat, city.lng], { icon: city.icon }).addTo(jerezRoutesMap).bindPopup(city.name);
+        const marker = L.marker([city.lat, city.lng], { icon: city.icon }).addTo(jerezRoutesMap!);
+        
+        // Tooltip minimalista: fondo transparente, sin borde, solo texto
+        marker.bindTooltip(`${city.name}`, {
+          permanent: false,
+          direction: 'top',
+          className: 'minimal-tooltip',
+          offset: [0, -5]
+        });
+
+        // Eventos nativos de Leaflet (on) para interacción
+        marker.on('mouseover', () => showRoute(city.name));
+        marker.on('click', () => showRoute(city.name));
       });
 
-      jerezRoutesMap.fitBounds(L.latLngBounds(routeCities.map(c => [c.lat, c.lng])), { padding: [30, 30] });
+      jerezRoutesMap.fitBounds(L.latLngBounds(routeCities.map(c => [c.lat, c.lng])), { padding: [10, 10] });
+
+      // --- Interactive Routes Logic ---
+      function showRoute(cityName: string) {
+        if (!jerezRoutesMap) return;
+
+        // Clear previous polylines and markers
+        activePolylines.forEach(p => jerezRoutesMap!.removeLayer(p));
+        activePolylines = [];
+        activeMarkers.forEach(m => jerezRoutesMap!.removeLayer(m));
+        activeMarkers = [];
+
+        const origin = flightData.origins.find((o: any) => 
+          o.city.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "") === 
+          cityName.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        );
+        if (!origin || !origin.routes.length) return;
+
+        const shortest = origin.routes.reduce((min: any, r: any) =>
+          r.segments.length < min.segments.length ? r : min
+        , origin.routes[0]);
+        
+        function getParabolicPoints(start: L.LatLng, end: L.LatLng, pointsCount = 50) {
+          const pts = [];
+          for (let i = 0; i <= pointsCount; i++) {
+            const t = i / pointsCount;
+            const lat = start.lat + (end.lat - start.lat) * t;
+            const lng = start.lng + (end.lng - start.lng) * t;
+            const offset = Math.sin(Math.PI * t) * (Math.abs(start.lng - end.lng) * 0.15);
+            pts.push(L.latLng(lat + offset, lng));
+          }
+          return pts;
+        }
+
+        // Draw each segment as a parabolic arc with different colors
+        shortest.segments.forEach((segment: any, index: number) => {
+          const arcPoints = getParabolicPoints(
+            L.latLng(segment.from.lat, segment.from.lng),
+            L.latLng(segment.to.lat, segment.to.lng)
+          );
+
+          // Generate different colors or shades for each segment
+          const colors = [
+            '#bc6c4d',      // original clay
+            '#d4845e',      // lighter
+            '#a55840',      // darker
+            '#c97d5f',      // medium-light
+            '#9d4f38',      // dark
+          ];
+          const color = colors[index % colors.length];
+          const opacity = 1 - (index * 0.1); // slightly decrease opacity for later segments
+
+          const polyline = L.polyline(arcPoints, {
+            color: color,
+            weight: 2.5 + (index * 0.3), // slightly increase weight for each segment
+            opacity: Math.max(0.6, opacity),
+            smoothFactor: 1,
+            lineCap: 'round',
+            dashArray: index > 0 ? '5, 5' : undefined, // dashed lines for segments after first
+          }).addTo(jerezRoutesMap!);
+          
+          activePolylines.push(polyline);
+        });
+
+        // Add markers for layovers if any
+        if (shortest.segments.length > 1) {
+          shortest.segments.slice(0, -1).forEach((seg: any) => {
+            const m = L.marker([seg.to.lat, seg.to.lng], { icon: routePin })
+              .addTo(jerezRoutesMap!)
+              .bindTooltip(seg.to.city, { direction: 'top' });
+            activeMarkers.push(m);
+          });
+        }
+
+      }
     }
 
     // ── Restore overlay state from URL ────────────────────────────────

@@ -58,27 +58,31 @@ const es = {
     switcher: { es: "ES", fr: "FR", en: "EN" },
   },
   nav: {
-    hero:   "Inicio",
+    hero: "Inicio",
     cuando: "Cuándo",
-    finca:  "El lugar",
+    finca: "El lugar",
     pronto: "Info",
   },
   eventDetail: {
-    open:           "Ver detalles del evento",
-    close:          "Volver",
-    eyebrow:        "1 mayo 2027",
-    lead:           "Únete a nosotros",
-    leadSub:        "en nuestra boda",
-    scheduleTitle:  "El día",
-    s1time: "Mediodía",    s1label: "Ceremonia civil",
-    s2time: "Tarde",       s2label: "Cóctel & almuerzo",
-    s3time: "Tarde-noche",  s3label: "Baile y fiesta",
+    open: "Ver detalles del evento",
+    close: "Volver",
+    eyebrow: "1 mayo 2027",
+    lead: "Únete a nosotros",
+    leadSub: "en nuestra boda",
+    scheduleTitle: "El día",
+    s1time: "Mediodía",
+    s1label: "Ceremonia civil",
+    s2time: "Tarde",
+    s2label: "Cóctel & almuerzo",
+    s3time: "Tarde-noche",
+    s3label: "Baile y fiesta",
     dressCodeLabel: "Dress code",
     dressCodeValue: "Etiqueta formal",
-    addressLabel:   "Cómo llegar",
-    mapsLabel:        "Abrir en Google Maps",
-    parkingNote:      "Aparcamiento disponible en la finca.",
-    transportNote:    "Estamos valorando ofrecer transporte entre Jerez y la finca — más detalles próximamente.",
+    addressLabel: "Cómo llegar",
+    mapsLabel: "Abrir en Google Maps",
+    parkingNote: "Aparcamiento disponible en la finca.",
+    transportNote:
+      "Estamos valorando ofrecer transporte entre Jerez y la finca — más detalles próximamente.",
   },
   jerez: {
     eyebrow: "Jerez de la Frontera",
@@ -106,10 +110,13 @@ const es = {
       eyebrow: "Cómo llegar",
       title: "Llegar a Jerez",
       airports:
-        "Aeropuerto más cercano: Jerez (XRY). Alternativas: Sevilla (SVQ) y Málaga (AGP). Sustituir con información final.",
-      airlines:
-        "Aerolíneas: lista provisional de compañías que vuelan a XRY/SVQ/AGP.",
+        "Aeropuerto más cercano: Jerez (XRY). Alternativas: Sevilla (SVQ) y Málaga (AGP). ",
       routesTitle: "Rutas sugeridas",
+      direct: "Directo",
+      steps: "escalas",
+      fastest: "Más rápido",
+      cheapest: "Más barato",
+      avgShortest: "Precio medio (ruta corta)",
       routes: [
         "Barcelona → Jerez (vuelo directo o vía Madrid).",
         "París → Jerez (vuelo directo o vía Sevilla).",
@@ -130,6 +137,10 @@ const es = {
       pamplonaLng: -1.644,
       madridLat: 40.416,
       madridLng: -3.703,
+      granadaLat: 37.1887,
+      granadaLng: -3.7774,
+      valenciaLat: 39.4893,
+      valenciaLng: -0.4816,
     },
     stay: {
       eyebrow: "Dónde dormir",
@@ -140,17 +151,20 @@ const es = {
       hotels: [
         {
           name: "Hotel Placeholder 01",
-          details: "Tarifa especial disponible. Sustituye por detalles y código.",
+          details:
+            "Tarifa especial disponible. Sustituye por detalles y código.",
           url: "https://example.com",
         },
         {
           name: "Hotel Placeholder 02",
-          details: "Tarifa especial disponible. Sustituye por detalles y código.",
+          details:
+            "Tarifa especial disponible. Sustituye por detalles y código.",
           url: "https://example.com",
         },
         {
           name: "Hotel Placeholder 03",
-          details: "Tarifa especial disponible. Sustituye por detalles y código.",
+          details:
+            "Tarifa especial disponible. Sustituye por detalles y código.",
           url: "https://example.com",
         },
       ],
@@ -215,27 +229,31 @@ const fr = {
     switcher: { es: "ES", fr: "FR", en: "EN" },
   },
   nav: {
-    hero:   "Accueil",
+    hero: "Accueil",
     cuando: "Quand",
-    finca:  "Le lieu",
+    finca: "Le lieu",
     pronto: "Info",
   },
   eventDetail: {
-    open:           "Voir les détails",
-    close:          "Retour",
-    eyebrow:        "1er mai 2027",
-    lead:           "Rejoignez-nous",
-    leadSub:        "pour notre mariage",
-    scheduleTitle:  "Le programme",
-    s1time: "Midi",        s1label: "Cérémonie civile",
-    s2time: "Après-midi",  s2label: "Cocktail & déjeuner",
-    s3time: "Soirée",      s3label: "Bal et fête",
+    open: "Voir les détails",
+    close: "Retour",
+    eyebrow: "1er mai 2027",
+    lead: "Rejoignez-nous",
+    leadSub: "pour notre mariage",
+    scheduleTitle: "Le programme",
+    s1time: "Midi",
+    s1label: "Cérémonie civile",
+    s2time: "Après-midi",
+    s2label: "Cocktail & déjeuner",
+    s3time: "Soirée",
+    s3label: "Bal et fête",
     dressCodeLabel: "Dress code",
     dressCodeValue: "Tenue de soirée",
-    addressLabel:   "Comment venir",
-    mapsLabel:        "Ouvrir dans Google Maps",
-    parkingNote:      "Parking disponible sur place.",
-    transportNote:    "Nous étudions la mise en place d'un transport entre Jerez et la finca — plus de détails bientôt.",
+    addressLabel: "Comment venir",
+    mapsLabel: "Ouvrir dans Google Maps",
+    parkingNote: "Parking disponible sur place.",
+    transportNote:
+      "Nous étudions la mise en place d'un transport entre Jerez et la finca — plus de détails bientôt.",
   },
   jerez: {
     eyebrow: "Jerez de la Frontera",
@@ -263,10 +281,13 @@ const fr = {
       eyebrow: "Comment venir",
       title: "Aller à Jerez",
       airports:
-        "Aéroport le plus proche : Jerez (XRY). Alternatives : Séville (SVQ) et Malaga (AGP). Remplacer par les infos finales.",
-      airlines:
-        "Compagnies : liste provisoire des compagnies desservant XRY/SVQ/AGP.",
+        "Aéroport le plus proche : Jerez (XRY). Alternatives : Séville (SVQ) et Malaga (AGP).",
       routesTitle: "Itinéraires suggérés",
+      direct: "Direct",
+      steps: "escales",
+      fastest: "Le plus rapide",
+      cheapest: "Le moins cher",
+      avgShortest: "Prix moyen (route courte)",
       routes: [
         "Barcelone → Jerez (vol direct ou via Madrid).",
         "Paris → Jerez (vol direct ou via Séville).",
@@ -287,6 +308,10 @@ const fr = {
       pamplonaLng: -1.644,
       madridLat: 40.416,
       madridLng: -3.703,
+      granadaLat: 37.1887,
+      granadaLng: -3.7774,
+      valenciaLat: 39.4893,
+      valenciaLng: -0.4816,
     },
     stay: {
       eyebrow: "Où dormir",
@@ -297,17 +322,20 @@ const fr = {
       hotels: [
         {
           name: "Hotel Placeholder 01",
-          details: "Tarif spécial disponible. Remplacer par les détails et code.",
+          details:
+            "Tarif spécial disponible. Remplacer par les détails et code.",
           url: "https://example.com",
         },
         {
           name: "Hotel Placeholder 02",
-          details: "Tarif spécial disponible. Remplacer par les détails et code.",
+          details:
+            "Tarif spécial disponible. Remplacer par les détails et code.",
           url: "https://example.com",
         },
         {
           name: "Hotel Placeholder 03",
-          details: "Tarif spécial disponible. Remplacer par les détails et code.",
+          details:
+            "Tarif spécial disponible. Remplacer par les détails et code.",
           url: "https://example.com",
         },
       ],
@@ -371,27 +399,31 @@ const en = {
     switcher: { es: "ES", fr: "FR", en: "EN" },
   },
   nav: {
-    hero:   "Home",
+    hero: "Home",
     cuando: "When",
-    finca:  "The venue",
+    finca: "The venue",
     pronto: "Info",
   },
   eventDetail: {
-    open:           "View event details",
-    close:          "Back",
-    eyebrow:        "1 May 2027",
-    lead:           "Join us",
-    leadSub:        "on our wedding day",
-    scheduleTitle:  "The day",
-    s1time: "Midday",     s1label: "Civil ceremony",
-    s2time: "Afternoon",  s2label: "Cocktail & seated lunch",
-    s3time: "Evening",    s3label: "Dancing & celebrations",
+    open: "View event details",
+    close: "Back",
+    eyebrow: "1 May 2027",
+    lead: "Join us",
+    leadSub: "on our wedding day",
+    scheduleTitle: "The day",
+    s1time: "Midday",
+    s1label: "Civil ceremony",
+    s2time: "Afternoon",
+    s2label: "Cocktail & seated lunch",
+    s3time: "Evening",
+    s3label: "Dancing & celebrations",
     dressCodeLabel: "Dress code",
     dressCodeValue: "Formal attire",
-    addressLabel:   "Getting there",
-    mapsLabel:        "Open in Google Maps",
-    parkingNote:      "Parking available at the venue.",
-    transportNote:    "We are looking into providing transport between Jerez and the venue — details to follow.",
+    addressLabel: "Getting there",
+    mapsLabel: "Open in Google Maps",
+    parkingNote: "Parking available at the venue.",
+    transportNote:
+      "We are looking into providing transport between Jerez and the venue — details to follow.",
   },
   jerez: {
     eyebrow: "Jerez de la Frontera",
@@ -419,10 +451,13 @@ const en = {
       eyebrow: "Cómo llegar",
       title: "Llegar a Jerez",
       airports:
-        "Nearest airport: Jerez (XRY). Alternatives include Sevilla (SVQ) and Málaga (AGP). Replace with final travel guidance.",
-      airlines:
-        "Airlines: placeholder list of carriers flying to XRY/SVQ/AGP from Spain and Europe.",
-      routesTitle: "Rutas sugeridas",
+        "Nearest airport: Jerez (XRY). Alternatives include Sevilla (SVQ) and Málaga (AGP).",
+      routesTitle: "Suggested routes",
+      direct: "Direct",
+      steps: "steps",
+      fastest: "Fastest",
+      cheapest: "Cheapest",
+      avgShortest: "Avg price (short route)",
       routes: [
         "Barcelona → Jerez (vuelo directo o vía Madrid).",
         "Paris → Jerez (vuelo directo o vía Sevilla).",
@@ -432,7 +467,7 @@ const en = {
     },
     routesMap: {
       label: "Mapa de rutas a Jerez",
-      caption: "Rutas desde Barcelona, París, Pamplona y Madrid.",
+      caption: "Rutas desde Barcelona, Párís, Pamplona y Madrid.",
       jerezLat: 36.685,
       jerezLng: -6.126,
       barcelonaLat: 41.385,
@@ -443,6 +478,10 @@ const en = {
       pamplonaLng: -1.644,
       madridLat: 40.416,
       madridLng: -3.703,
+      granadaLat: 37.1887,
+      granadaLng: -3.7774,
+      valenciaLat: 39.4893,
+      valenciaLng: -0.4816,
     },
     stay: {
       eyebrow: "Where to stay",
@@ -453,17 +492,20 @@ const en = {
       hotels: [
         {
           name: "Hotel Placeholder 01",
-          details: "Special rate available. Replace with final details and booking code.",
+          details:
+            "Special rate available. Replace with final details and booking code.",
           url: "https://example.com",
         },
         {
           name: "Hotel Placeholder 02",
-          details: "Special rate available. Replace with final details and booking code.",
+          details:
+            "Special rate available. Replace with final details and booking code.",
           url: "https://example.com",
         },
         {
           name: "Hotel Placeholder 03",
-          details: "Special rate available. Replace with final details and booking code.",
+          details:
+            "Special rate available. Replace with final details and booking code.",
           url: "https://example.com",
         },
       ],
@@ -476,7 +518,6 @@ const en = {
     openLabel: "Details",
   },
 } as const;
-
 
 // Defined after all locale consts to avoid "cannot access before initialization"
 export const translations: Record<Locale, typeof en> = { es, fr, en };

@@ -1,0 +1,84 @@
+/* ── Mobile scroll-snap mode ───────────────────────────────────────
+   Applied when JS detects a touch/coarse-pointer device.
+   Overrides the GSAP fixed-panel layout with native snap scrolling.
+─────────────────────────────────────────────────────────────────── */
+
+html.snap-mode #scroll-driver {
+  display: none;
+}
+
+html.snap-mode #slides-wrap {
+  position: fixed;
+  inset: 0;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  scroll-snap-type: y mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+html.snap-mode .slide {
+  position: relative;
+  width: 100%;
+  height: 100dvh;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  /* Undo the opacity:0 that GSAP would normally set */
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+}
+
+/* Hide the hero scroll-cue nudge on snap mode (irrelevant UX) */
+html.snap-mode .slide:first-child [class*="mt-16"] {
+  display: none;
+}
+
+/* ── Jerez overlay ─────────────────────────────────────────────── */
+
+#jerez-slides {
+  scroll-snap-type: x mandatory;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+}
+
+#jerez-slides::-webkit-scrollbar {
+  display: none;
+}
+
+.jerez-slide {
+  scroll-snap-align: start;
+}
+
+.jerez-city-label,
+.jerez-routes-label {
+  position: absolute;
+  font-family: "DM Sans", sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(26, 18, 8, 0.55);
+  pointer-events: none;
+}
+
+.minimal-tooltip {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  font-family: "DM Sans", sans-serif;
+  font-size: 0.55rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #bc6c4d !important;
+  padding: 0 !important;
+}
+
+.minimal-tooltip::before {
+  display: none !important;
+}
+
+.leaflet-tooltip {
+  /* display: none; */
+  background-color: transparent;
+  border: 0px;
+  box-shadow: none;
+}
