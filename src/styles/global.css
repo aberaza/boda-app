@@ -11,8 +11,8 @@
   --shadow-soft: 0 2px 20px 0 rgba(26, 18, 8, 0.07);
 
   /* Typography */
-  --font-sans: 'DM Sans', system-ui, sans-serif;
-  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: "DM Sans", system-ui, sans-serif;
+  --font-display: "Cormorant Garamond", Georgia, serif;
 }
 
 @layer base {
@@ -60,4 +60,12 @@
   .text-balance {
     text-wrap: balance;
   }
+}
+
+/* leaflet styling */
+
+.leaflet-tooltip {
+  background-color: transparent;
+  border: 0px;
+  box-shadow: none;
 }
