@@ -26,8 +26,8 @@ export const names = {
 
 // ─── Event details ───────────────────────────────────────────────────────────
 export const event = {
-  date: "1 de mayo de 2026",
-  dateShort: "1 mayo 2026",
+  date: "9 de mayo de 2027",
+  dateShort: "9 mayo 2027",
   time: "12:00 – 01:00 h",
   city: "Jerez de la Frontera",
   region: "Cádiz",

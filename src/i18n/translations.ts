@@ -11,14 +11,14 @@ export type Locale = (typeof locales)[number];
 // ─── Spanish (default) ───────────────────────────────────────────────────────
 const es = {
   meta: {
-    title: "Aritz & Sandra · 1 mayo 2027",
+    title: "Aritz & Sandra · 8 mayo 2027",
     description:
-      "Boda de Aritz Beraza Garayalde y Sandra Vargas Benavente. 1 de mayo de 2026, Finca La Carreña, Jerez de la Frontera.",
+      "Boda de Aritz Beraza Garayalde y Sandra Vargas Benavente. 8 de mayo de 2027, Finca La Carreña, Jerez de la Frontera.",
   },
 
   event: {
-    date: "1 de mayo de 2027",
-    dateShort: "1 mayo 2027",
+    date: "8 de mayo de 2027",
+    dateShort: "8 mayo 2027",
     venueDescription:
       "Viña histórica en las afueras de Jerez. Arquitectura de cortijo andaluz, " +
       "jardines, capilla, caballerizas y una gran sala de celebraciones.",
@@ -66,7 +66,7 @@ const es = {
   eventDetail: {
     open: "Ver detalles del evento",
     close: "Volver",
-    eyebrow: "1 mayo 2027",
+    eyebrow: "8 mayo 2027",
     lead: "Únete a nosotros",
     leadSub: "en nuestra boda",
     scheduleTitle: "El día",
@@ -78,6 +78,9 @@ const es = {
     s3label: "Baile y fiesta",
     dressCodeLabel: "Dress code",
     dressCodeValue: "Etiqueta formal",
+    adultsOnlyLabel: "Sobre niños",
+    adultsOnlyNote:
+      "Con mucho cariño, os pedimos que esta celebración sea solo para adultos (sin niños). Gracias por comprenderlo.",
     addressLabel: "Cómo llegar",
     mapsLabel: "Abrir en Google Maps",
     parkingNote: "Aparcamiento disponible en la finca.",
@@ -173,7 +176,38 @@ const es = {
         "Instrucciones provisionales para reservas con tarifa acordada. Sustituye por email, ventanas de reserva y cómo aplicar el descuento.",
       bookingNote: "Si necesitas ayuda, avísanos y te ayudaremos.",
     },
-    nav: ["Ciudad", "Llegar", "Dormir"],
+    surroundings: {
+      eyebrow: "Alrededores",
+      title: "Alargar la estancia",
+      alternativesTitle:
+        "Si te interesa quedarte más días, estas ciudades también son una gran alternativa:",
+      alternatives: [
+        "Jerez de la Frontera",
+        "Sanlúcar de Barrameda",
+        "El Puerto de Santa María",
+        "Sevilla",
+      ],
+      map: {
+        label: "Mapa de alrededores",
+        caption: "Tiempos orientativos en coche hasta Jerez de la Frontera.",
+        jerezLabel: "Jerez de la Frontera",
+        jerezLat: 36.685,
+        jerezLng: -6.126,
+        sevillaLabel: "Sevilla",
+        sevillaLat: 37.389,
+        sevillaLng: -5.984,
+        sevillaDrive: "1 h 05 min hasta Jerez",
+        puertoLabel: "El Puerto de Santa María",
+        puertoLat: 36.602,
+        puertoLng: -6.228,
+        puertoDrive: "25 min hasta Jerez",
+        sanlucarLabel: "Sanlúcar de Barrameda",
+        sanlucarLat: 36.779,
+        sanlucarLng: -6.354,
+        sanlucarDrive: "35 min hasta Jerez",
+      },
+    },
+    nav: ["Ciudad", "Llegar", "Dormir", "Alrededores"],
     openLabel: "Detalles",
   },
 } as const;
@@ -181,14 +215,14 @@ const es = {
 // ─── French ──────────────────────────────────────────────────────────────────
 const fr = {
   meta: {
-    title: "Aritz & Sandra · 1er mai 2027",
+    title: "Aritz & Sandra · 8 mai 2027",
     description:
-      "Mariage d'Aritz Beraza Garayalde et Sandra Vargas Benavente. 1er mai 2027, Finca La Carreña, Jerez de la Frontera.",
+      "Mariage d'Aritz Beraza Garayalde et Sandra Vargas Benavente. 8 mai 2027, Finca La Carreña, Jerez de la Frontera.",
   },
 
   event: {
-    date: "1er mai 2027",
-    dateShort: "1 mai 2027",
+    date: "8 mai 2027",
+    dateShort: "8 mai 2027",
     venueDescription:
       "Vignoble historique aux portes de Jerez. Architecture de cortijo andalou, " +
       "jardins, chapelle, écuries et une grande salle de réception.",
@@ -237,7 +271,7 @@ const fr = {
   eventDetail: {
     open: "Voir les détails",
     close: "Retour",
-    eyebrow: "1er mai 2027",
+    eyebrow: "8 mai 2027",
     lead: "Rejoignez-nous",
     leadSub: "pour notre mariage",
     scheduleTitle: "Le programme",
@@ -249,6 +283,9 @@ const fr = {
     s3label: "Bal et fête",
     dressCodeLabel: "Dress code",
     dressCodeValue: "Tenue de soirée",
+    adultsOnlyLabel: "À propos des enfants",
+    adultsOnlyNote:
+      "Avec toute notre affection, nous vous demandons que cette célébration soit réservée aux adultes (sans enfants). Merci de votre compréhension.",
     addressLabel: "Comment venir",
     mapsLabel: "Ouvrir dans Google Maps",
     parkingNote: "Parking disponible sur place.",
@@ -344,7 +381,38 @@ const fr = {
         "Instructions provisoires pour réserver au tarif négocié. Remplacer par l’email, les dates et la marche à suivre.",
       bookingNote: "Si vous avez besoin d’aide, dites-le-nous.",
     },
-    nav: ["Ville", "Venir", "Dormir"],
+    surroundings: {
+      eyebrow: "Alentours",
+      title: "Prolonger le séjour",
+      alternativesTitle:
+        "Si vous souhaitez rester plus longtemps, vous pouvez aussi envisager :",
+      alternatives: [
+        "Jerez de la Frontera",
+        "Sanlúcar de Barrameda",
+        "El Puerto de Santa María",
+        "Séville",
+      ],
+      map: {
+        label: "Carte des alentours",
+        caption: "Temps de trajet indicatifs en voiture vers Jerez de la Frontera.",
+        jerezLabel: "Jerez de la Frontera",
+        jerezLat: 36.685,
+        jerezLng: -6.126,
+        sevillaLabel: "Séville",
+        sevillaLat: 37.389,
+        sevillaLng: -5.984,
+        sevillaDrive: "1 h 05 min jusqu’à Jerez",
+        puertoLabel: "El Puerto de Santa María",
+        puertoLat: 36.602,
+        puertoLng: -6.228,
+        puertoDrive: "25 min jusqu’à Jerez",
+        sanlucarLabel: "Sanlúcar de Barrameda",
+        sanlucarLat: 36.779,
+        sanlucarLng: -6.354,
+        sanlucarDrive: "35 min jusqu’à Jerez",
+      },
+    },
+    nav: ["Ville", "Venir", "Dormir", "Alentours"],
     openLabel: "Détails",
   },
 } as const;
@@ -352,14 +420,14 @@ const fr = {
 // ─── English ─────────────────────────────────────────────────────────────────
 const en = {
   meta: {
-    title: "Aritz & Sandra · 1 May 2027",
+    title: "Aritz & Sandra · 8 May 2027",
     description:
-      "Wedding of Aritz Beraza Garayalde and Sandra Vargas Benavente. 1 May 2027, Finca La Carreña, Jerez de la Frontera.",
+      "Wedding of Aritz Beraza Garayalde and Sandra Vargas Benavente. 8 May 2027, Finca La Carreña, Jerez de la Frontera.",
   },
 
   event: {
-    date: "1 May 2027",
-    dateShort: "1 May 2027",
+    date: "8 May 2027",
+    dateShort: "8 May 2027",
     venueDescription:
       "A historic vineyard on the outskirts of Jerez. Andalusian cortijo architecture, " +
       "gardens, chapel, stables and a grand celebration hall.",
@@ -407,7 +475,7 @@ const en = {
   eventDetail: {
     open: "View event details",
     close: "Back",
-    eyebrow: "1 May 2027",
+    eyebrow: "8 May 2027",
     lead: "Join us",
     leadSub: "on our wedding day",
     scheduleTitle: "The day",
@@ -419,6 +487,9 @@ const en = {
     s3label: "Dancing & celebrations",
     dressCodeLabel: "Dress code",
     dressCodeValue: "Formal attire",
+    adultsOnlyLabel: "About kids",
+    adultsOnlyNote:
+      "With lots of love, we kindly ask that this celebration be adults-only (no children). Thank you for understanding.",
     addressLabel: "Getting there",
     mapsLabel: "Open in Google Maps",
     parkingNote: "Parking available at the venue.",
@@ -514,7 +585,38 @@ const en = {
         "Placeholder instructions for booking with negotiated rates. Replace with contact emails, booking windows, and how to claim the discount.",
       bookingNote: "If you need help, let us know and we will assist.",
     },
-    nav: ["City", "Getting there", "Stay"],
+    surroundings: {
+      eyebrow: "Surroundings",
+      title: "Extending your stay",
+      alternativesTitle:
+        "If you are interested in staying longer, these cities are also a great option:",
+      alternatives: [
+        "Jerez de la Frontera",
+        "Sanlúcar de Barrameda",
+        "El Puerto de Santa María",
+        "Seville",
+      ],
+      map: {
+        label: "Surroundings map",
+        caption: "Estimated driving times to Jerez de la Frontera.",
+        jerezLabel: "Jerez de la Frontera",
+        jerezLat: 36.685,
+        jerezLng: -6.126,
+        sevillaLabel: "Seville",
+        sevillaLat: 37.389,
+        sevillaLng: -5.984,
+        sevillaDrive: "1h 05m to Jerez",
+        puertoLabel: "El Puerto de Santa María",
+        puertoLat: 36.602,
+        puertoLng: -6.228,
+        puertoDrive: "25m to Jerez",
+        sanlucarLabel: "Sanlúcar de Barrameda",
+        sanlucarLat: 36.779,
+        sanlucarLng: -6.354,
+        sanlucarDrive: "35m to Jerez",
+      },
+    },
+    nav: ["City", "Getting there", "Stay", "Surroundings"],
     openLabel: "Details",
   },
 } as const;
