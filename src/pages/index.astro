@@ -7,13 +7,18 @@ import { getLang, getT, langUrl, locales } from '../i18n';
 import { patterns, masks, overlays, slideBg, animation } from '../config/theme';
 import '../styles/page-home.css';
 
-const NUM_SLIDES = 4;
-
 import flightRoutes from '../data/flight-routes.json';
 
 const lang = getLang(Astro.url);
 const t    = getT(lang);
 const copy = t; // alias so template references stay the same shape
+const slideNav = [
+  { key: 'inicio', label: t.nav.hero },
+  { key: 'cuando', label: t.nav.cuando },
+  { key: 'donde', label: t.nav.finca },
+  { key: 'info', label: t.nav.pronto },
+] as const;
+const NUM_SLIDES = slideNav.length;
 
 // --- Process flight routes for Slide 2 ---
 const suggestedCities = ['Barcelona', 'París', 'Pamplona', 'Madrid', 'Granada', 'Valencia'];
@@ -89,14 +94,10 @@ const narrowMask = (dir: 'right' | 'left') => {
     aria-label="Section navigation"
     class="fixed right-5 top-1/2 z-50 flex -translate-y-1/2 flex-col items-end gap-[18px]"
   >
-    {[
-      { label: t.nav.hero,   index: 0 },
-      { label: t.nav.cuando, index: 1 },
-      { label: t.nav.finca,  index: 2 },
-      { label: t.nav.pronto, index: 3 },
-    ].map(({ label, index }) => (
+    {slideNav.map(({ key, label }, index) => (
       <button
         data-slide-btn={index}
+        data-slide-key={key}
         aria-label={label}
         class="group flex items-center gap-2.5 outline-none"
       >
@@ -455,6 +456,20 @@ const narrowMask = (dir: 'right' | 'left') => {
             </div>
           </div>
 
+          <div class="flex items-center gap-4">
+            <svg width="20" height="20" viewBox="0 0 20 20" class="shrink-0 text-clay/50" fill="currentColor">
+              <polygon points="10,1 12,7 18,10 12,13 10,19 8,13 2,10 8,7" opacity="0.7"/>
+            </svg>
+            <div>
+              <p class="font-sans text-[0.58rem] uppercase tracking-[0.4em] text-ink/35">
+                {t.eventDetail.adultsOnlyLabel}
+              </p>
+              <p class="mt-0.5 font-display text-lg italic text-ink/70">
+                {t.eventDetail.adultsOnlyNote}
+              </p>
+            </div>
+          </div>
+
         </div>
 
         <!-- RIGHT — Address + map -->
@@ -503,7 +518,7 @@ const narrowMask = (dir: 'right' | 'left') => {
   <!-- ═══════════════════════════════════════════════
        JEREZ DETAIL OVERLAY
        Fixed full-screen panel; GSAP-animated in/out.
-       Contains: city overview, getting there, where to stay.
+       Contains: city overview, getting there, where to stay, surroundings.
   ═══════════════════════════════════════════════ -->
   <div
     id="jerez-detail"
@@ -693,6 +708,52 @@ const narrowMask = (dir: 'right' | 'left') => {
           </div>
         </div>
       </section>
+
+      <!-- Slide 4: Surroundings -->
+      <section class="jerez-slide flex h-full w-full shrink-0 flex-col justify-center px-8 py-24 md:px-16">
+        <div class="mx-auto w-full max-w-5xl">
+          <p class="font-sans text-[0.65rem] uppercase tracking-[0.5em] text-clay/70">{t.jerez.surroundings.eyebrow}</p>
+          <h2 class="mt-4 font-display text-[clamp(2.4rem,5vw,4.6rem)] font-light leading-none tracking-tight text-ink">
+            {t.jerez.surroundings.title}
+          </h2>
+          <div class="mt-10 grid gap-10 md:grid-cols-[0.95fr_1.05fr]">
+            <div class="rounded-2xl border border-clay/15 bg-white/60 p-6 shadow-soft">
+              <p class="font-sans text-[0.6rem] uppercase tracking-[0.4em] text-ink/35">
+                {t.jerez.surroundings.alternativesTitle}
+              </p>
+              <ul class="mt-5 space-y-3">
+                {t.jerez.surroundings.alternatives.map((city) => (
+                  <li class="flex items-center gap-3 font-sans text-base text-ink/75">
+                    <span class="inline-block h-1.5 w-1.5 rounded-full bg-clay/60" />
+                    <span>{city}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div class="flex flex-col gap-4">
+              <div class="w-full overflow-hidden rounded-2xl shadow-soft" style="height: 320px;">
+                <div
+                  id="jerez-surroundings-map"
+                  data-jerez-lat={t.jerez.surroundings.map.jerezLat}
+                  data-jerez-lng={t.jerez.surroundings.map.jerezLng}
+                  data-sevilla-lat={t.jerez.surroundings.map.sevillaLat}
+                  data-sevilla-lng={t.jerez.surroundings.map.sevillaLng}
+                  data-sevilla-drive={t.jerez.surroundings.map.sevillaDrive}
+                  data-puerto-lat={t.jerez.surroundings.map.puertoLat}
+                  data-puerto-lng={t.jerez.surroundings.map.puertoLng}
+                  data-puerto-drive={t.jerez.surroundings.map.puertoDrive}
+                  data-sanlucar-lat={t.jerez.surroundings.map.sanlucarLat}
+                  data-sanlucar-lng={t.jerez.surroundings.map.sanlucarLng}
+                  data-sanlucar-drive={t.jerez.surroundings.map.sanlucarDrive}
+                  class="h-full w-full"
+                  aria-label={t.jerez.surroundings.map.label}
+                />
+              </div>
+              <p class="font-sans text-sm text-ink/45">{t.jerez.surroundings.map.caption}</p>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
 
     <!-- Slide nav -->
@@ -728,10 +789,11 @@ const narrowMask = (dir: 'right' | 'left') => {
     import flightRoutes from '../data/flight-routes.json';
 
     // ── URL state helpers ─────────────────────────────────────────────
-    // ?slide=N      restores scroll position (0–3)
+    // ?slide=<name> restores scroll position (stable by slide key)
+    // ?slide=N      legacy support for old numeric links
     // ?detail=<key> re-opens the named overlay
     const _urlP     = new URLSearchParams(window.location.search);
-    const initSlide  = Math.min(Math.max(parseInt(_urlP.get('slide') ?? '0', 10) || 0, 0), 3);
+    const initSlideRaw = _urlP.get('slide');
     const initDetail = _urlP.get('detail');
 
     function setUrlParam(key: string, value: string | null) {
@@ -740,6 +802,32 @@ const narrowMask = (dir: 'right' | 'left') => {
       const qs = p.toString();
       history.replaceState(null, '', qs ? `?${qs}` : window.location.pathname);
     }
+
+    const navBtns = Array.from(
+      document.querySelectorAll<HTMLButtonElement>('[data-slide-btn]')
+    );
+    const slideKeys = navBtns.map(btn => (btn.dataset.slideKey ?? '').toLowerCase());
+    const maxSlideIndex = Math.max(navBtns.length - 1, 0);
+
+    function clampSlide(index: number) {
+      return Math.min(Math.max(index, 0), maxSlideIndex);
+    }
+
+    function getSlideParamValue(index: number) {
+      return index === 0 ? null : (slideKeys[index] ?? String(index));
+    }
+
+    function resolveInitSlide(raw: string | null) {
+      if (!raw) return 0;
+      const normalized = raw.trim().toLowerCase();
+      const keyIndex = slideKeys.indexOf(normalized);
+      if (keyIndex !== -1) return keyIndex;
+      const parsed = parseInt(normalized, 10);
+      if (Number.isNaN(parsed)) return 0;
+      return clampSlide(parsed);
+    }
+
+    const initSlide = resolveInitSlide(initSlideRaw);
 
     // ══════════════════════════════════════════════════════════════════
     // GENERIC OVERLAY SYSTEM
@@ -809,14 +897,12 @@ const narrowMask = (dir: 'right' | 'left') => {
     if (isTouch) {
       document.documentElement.classList.add('snap-mode');
 
-      const mNavBtns = Array.from(
-        document.querySelectorAll<HTMLButtonElement>('[data-slide-btn]')
-      );
+      const mNavBtns = navBtns;
       const wrap = document.getElementById('slides-wrap')!;
 
       function setMobileActive(index: number) {
         mNavBtns.forEach((btn, i) => btn.toggleAttribute('data-active', i === index));
-        setUrlParam('slide', index === 0 ? null : String(index));
+        setUrlParam('slide', getSlideParamValue(index));
       }
 
       mNavBtns.forEach(btn => {
@@ -904,13 +990,11 @@ const narrowMask = (dir: 'right' | 'left') => {
       });
 
       // Dot nav
-      const dNavBtns = Array.from(
-        document.querySelectorAll<HTMLButtonElement>('[data-slide-btn]')
-      );
+      const dNavBtns = navBtns;
 
       function setDesktopActive(index: number) {
         dNavBtns.forEach((btn, i) => btn.toggleAttribute('data-active', i === index));
-        setUrlParam('slide', index === 0 ? null : String(index));
+        setUrlParam('slide', getSlideParamValue(index));
       }
 
       dNavBtns.forEach(btn => {
@@ -956,6 +1040,7 @@ const narrowMask = (dir: 'right' | 'left') => {
     let mapInited = false;
     let jerezCityMap: ReturnType<typeof L.map> | null = null;
     let jerezRoutesMap: ReturnType<typeof L.map> | null = null;
+    let jerezSurroundingsMap: ReturnType<typeof L.map> | null = null;
     let jerezInited = false;
 
     function initFincaMap() {
@@ -1005,6 +1090,7 @@ const narrowMask = (dir: 'right' | 'left') => {
       requestAnimationFrame(() => {
         jerezCityMap?.invalidateSize();
         jerezRoutesMap?.invalidateSize();
+        jerezSurroundingsMap?.invalidateSize();
       });
     }
 
@@ -1037,7 +1123,8 @@ const narrowMask = (dir: 'right' | 'left') => {
     function initJerezMaps() {
       const cityEl = document.getElementById('jerez-city-map') as HTMLElement | null;
       const routesEl = document.getElementById('jerez-routes-map') as HTMLElement | null;
-      if (!cityEl || !routesEl) return;
+      const surroundingsEl = document.getElementById('jerez-surroundings-map') as HTMLElement | null;
+      if (!cityEl || !routesEl || !surroundingsEl) return;
 
       const CLAT = parseFloat(cityEl.dataset.cityLat!);
       const CLNG = parseFloat(cityEl.dataset.cityLng!);
@@ -1202,6 +1289,60 @@ const narrowMask = (dir: 'right' | 'left') => {
         }
 
       }
+
+      const SJLAT = parseFloat(surroundingsEl.dataset.jerezLat!);
+      const SJLNG = parseFloat(surroundingsEl.dataset.jerezLng!);
+      const SURSEVLAT = parseFloat(surroundingsEl.dataset.sevillaLat!);
+      const SURSEVLNG = parseFloat(surroundingsEl.dataset.sevillaLng!);
+      const PRTLAT = parseFloat(surroundingsEl.dataset.puertoLat!);
+      const PRTLNG = parseFloat(surroundingsEl.dataset.puertoLng!);
+      const SNLLAT = parseFloat(surroundingsEl.dataset.sanlucarLat!);
+      const SNLLNG = parseFloat(surroundingsEl.dataset.sanlucarLng!);
+
+      const sevillaDrive = surroundingsEl.dataset.sevillaDrive ?? '';
+      const puertoDrive = surroundingsEl.dataset.puertoDrive ?? '';
+      const sanlucarDrive = surroundingsEl.dataset.sanlucarDrive ?? '';
+
+      jerezSurroundingsMap = L.map('jerez-surroundings-map', {
+        center: [SJLAT, SJLNG], zoom: 10,
+        zoomControl: false, dragging: false, scrollWheelZoom: false,
+        doubleClickZoom: false, touchZoom: false, keyboard: false,
+        attributionControl: false,
+      });
+
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd', maxZoom: 19,
+      }).addTo(jerezSurroundingsMap);
+
+      L.marker([SJLAT, SJLNG], { icon: clayPin }).addTo(jerezSurroundingsMap);
+
+      [
+        { drive: sevillaDrive, lat: SURSEVLAT, lng: SURSEVLNG },
+        { drive: puertoDrive, lat: PRTLAT, lng: PRTLNG },
+        { drive: sanlucarDrive, lat: SNLLAT, lng: SNLLNG },
+      ].forEach((city) => {
+        const marker = L.marker([city.lat, city.lng], { icon: cityPin }).addTo(jerezSurroundingsMap!);
+        marker.bindTooltip(city.drive, {
+          permanent: false,
+          direction: 'top',
+          className: 'minimal-tooltip',
+          offset: [0, -5],
+        });
+        L.polyline([[SJLAT, SJLNG], [city.lat, city.lng]], {
+          color: '#bc6c4d',
+          weight: 1.5,
+          opacity: 0.35,
+          dashArray: '4, 6',
+        }).addTo(jerezSurroundingsMap!);
+      });
+
+      jerezSurroundingsMap.fitBounds(L.latLngBounds([
+        [SJLAT, SJLNG],
+        [SURSEVLAT, SURSEVLNG],
+        [PRTLAT, PRTLNG],
+        [SNLLAT, SNLLNG],
+      ]), { padding: [30, 30] });
     }
 
     // ── Restore overlay state from URL ────────────────────────────────
