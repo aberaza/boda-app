@@ -6,14 +6,19 @@
  *
  * Usage:
  *   SERPAPI_KEY=<key> node scripts/build-routes.mjs
- *   SERPAPI_KEY=<key> node scripts/build-routes.mjs --date 2026-05-01
- *   node scripts/build-routes.mjs --dry-run   (uses MOCK_DATA, no API calls)
+ *   SERPAPI_KEY=<key> node scripts/build-routes.mjs --date 2027-05-08
+ *   node scripts/build-routes.mjs --dry-run [--date YYYY-MM-DD] [--output path]
+ *   node scripts/build-routes.mjs --allow-partial
+ *
+ * By default the search date is the wedding date. Use --date to query a
+ * different future date explicitly. The output is written atomically and is
+ * not replaced when a real API request fails, unless --allow-partial is used.
  *
  * Output:
  *   src/data/flight-routes.json
  */
 
-import { writeFileSync, readFileSync, existsSync } from "fs";
+import { writeFileSync, existsSync, mkdirSync, renameSync } from "fs";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 
@@ -24,16 +29,34 @@ const OUT_PATH = resolve(ROOT, "src/data/flight-routes.json");
 // ─── CLI args ────────────────────────────────────────────────────────────────
 const args = process.argv.slice(2);
 const DRY_RUN = args.includes("--dry-run");
+const ALLOW_PARTIAL = args.includes("--allow-partial");
 const dateArgIdx = args.indexOf("--date");
 const dateArg = dateArgIdx !== -1 ? args[dateArgIdx + 1] : undefined;
+const outputArgIdx = args.indexOf("--output");
+const outputArg = outputArgIdx !== -1 ? args[outputArgIdx + 1] : undefined;
+const hasValue = (value) => typeof value === "string" && !value.startsWith("-");
+const WEDDING_DATE = "2027-05-08";
 
-// Default search date: 30 days from now (must be in the future for Google Flights)
-function defaultDate() {
-  const d = new Date();
-  d.setDate(d.getDate() + 30);
-  return d.toISOString().slice(0, 10);
+function isValidDate(value) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const date = new Date(value + "T00:00:00Z");
+  return !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === value;
 }
-const SEARCH_DATE = dateArg ?? defaultDate();
+
+if (dateArgIdx !== -1 && !hasValue(dateArg)) {
+  console.error("❌  --date requires a value in YYYY-MM-DD format.");
+  process.exit(1);
+}
+if (outputArgIdx !== -1 && !hasValue(outputArg)) {
+  console.error("❌  --output requires a file path.");
+  process.exit(1);
+}
+const SEARCH_DATE = dateArg ?? WEDDING_DATE;
+if (!isValidDate(SEARCH_DATE)) {
+  console.error(`❌  Invalid date: ${SEARCH_DATE}. Use --date YYYY-MM-DD.`);
+  process.exit(1);
+}
+const TARGET_PATH = outputArg ? resolve(ROOT, outputArg) : OUT_PATH;
 
 const SERPAPI_KEY = process.env.SERPAPI_KEY;
 if (!DRY_RUN && !SERPAPI_KEY) {
@@ -142,12 +165,29 @@ async function fetchFlights(fromCode, toCode) {
   const url = `https://serpapi.com/search.json?${params}`;
   console.log(`  → GET ${fromCode} → ${toCode}`);
 
-  const res = await fetch(url);
-  if (!res.ok) {
-    console.warn(`    ⚠️  HTTP ${res.status} for ${fromCode}→${toCode}`);
-    return null;
+  let res;
+  try {
+    res = await fetch(url, { signal: AbortSignal.timeout(30000) });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    const errorMessage = `Network error: ${message}`;
+    console.warn(`    ⚠️  ${errorMessage} for ${fromCode}→${toCode}`);
+    return { data: null, error: errorMessage };
   }
-  return res.json();
+  let data;
+  try {
+    data = await res.json();
+  } catch {
+    const errorMessage = `Invalid JSON response (HTTP ${res.status})`;
+    console.warn(`    ⚠️  ${errorMessage} for ${fromCode}→${toCode}`);
+    return { data: null, error: errorMessage };
+  }
+  if (!res.ok || data.error) {
+    const errorMessage = data.error ?? `HTTP ${res.status}`;
+    console.warn(`    ⚠️  SerpApi error for ${fromCode}→${toCode}: ${errorMessage}`);
+    return { data: null, error: errorMessage };
+  }
+  return { data, error: null };
 }
 
 /** Sleep helper for rate-limiting */
@@ -168,9 +208,9 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
  *   price: number
  * }
  */
-function parseOption(option, originCoords, destCoords) {
+function parseOption(option) {
   const { flights = [], layovers = [], total_duration, price } = option;
-  if (!flights.length) return null;
+  if (!flights.length || typeof price !== "number" || !Number.isFinite(price)) return null;
 
   const isConnecting = flights.length > 1;
 
@@ -239,6 +279,7 @@ function parseOption(option, originCoords, destCoords) {
  */
 async function getRoutes(origin, dest) {
   let data = null;
+  let error = null;
 
   if (DRY_RUN) {
     data = MOCK_DATA[`${origin.airport}-${dest.airport}`] ?? null;
@@ -246,27 +287,28 @@ async function getRoutes(origin, dest) {
       `  [dry-run] ${origin.airport} → ${dest.airport}: ${data ? "mock hit" : "no mock"}`,
     );
   } else {
-    data = await fetchFlights(origin.airport, dest.airport);
+    const response = await fetchFlights(origin.airport, dest.airport);
     await sleep(1200); // stay well under SerpAPI rate limit
+    data = response.data;
+    error = response.error;
   }
 
-  if (!data) return [];
+  if (error) return { routes: [], error };
+  if (!data) return { routes: [], error: null };
 
   const allOptions = [
-    ...(data.best_flights ?? []),
-    ...(data.other_flights ?? []),
+    ...(Array.isArray(data.best_flights) ? data.best_flights : []),
+    ...(Array.isArray(data.other_flights) ? data.other_flights : []),
   ];
 
-  if (!allOptions.length) return [];
+  if (!allOptions.length) return { routes: [], error: null };
 
-  const originCoords = { lat: origin.lat, lng: origin.lng };
-  const destCoords = { lat: dest.lat, lng: dest.lng };
-
-  // Keep up to 3 options (best + a connecting alt if available)
-  return allOptions
+  // Keep up to 3 options (best + a connecting alt if available).
+  const routes = allOptions
     .slice(0, 3)
-    .map((opt) => parseOption(opt, originCoords, destCoords))
+    .map((opt) => parseOption(opt))
     .filter(Boolean);
+  return { routes, error: null };
 }
 
 // ─── Mock data (used with --dry-run) ─────────────────────────────────────────
@@ -374,8 +416,11 @@ async function main() {
     generated: new Date().toISOString(),
     searchDate: SEARCH_DATE,
     destinations: DESTINATIONS,
+    partial: false,
+    failedQueries: 0,
     origins: [],
   };
+  const failedQueries = [];
 
   for (const origin of ORIGINS) {
     console.log(`\n📍 ${origin.city} (${origin.airport})`);
@@ -384,7 +429,12 @@ async function main() {
 
     // Try each destination (XRY first, then SVQ)
     for (const dest of DESTINATIONS) {
-      const found = await getRoutes(origin, dest);
+      const result = await getRoutes(origin, dest);
+      if (result.error) {
+        failedQueries.push(`${origin.airport}→${dest.airport}: ${result.error}`);
+        continue;
+      }
+      const found = result.routes;
       if (found.length) {
         routes.push(...found);
         // If we got direct flights to XRY, no need to also check SVQ for this origin
@@ -405,7 +455,12 @@ async function main() {
           ...coordsFor(altCode),
         };
         for (const dest of DESTINATIONS) {
-          const found = await getRoutes(altOrigin, dest);
+          const result = await getRoutes(altOrigin, dest);
+          if (result.error) {
+            failedQueries.push(`${altCode}→${dest.airport}: ${result.error}`);
+            continue;
+          }
+          const found = result.routes;
           if (found.length) {
             routes.push(...found);
             break;
@@ -430,15 +485,26 @@ async function main() {
     });
   }
 
-  // Ensure output directory exists
-  const outDir = resolve(ROOT, "src/data");
-  if (!existsSync(outDir)) {
-    const { mkdirSync } = await import("fs");
-    mkdirSync(outDir, { recursive: true });
+  if (failedQueries.length) {
+    if (!DRY_RUN && !ALLOW_PARTIAL) {
+      console.error(`\n❌  ${failedQueries.length} flight request(s) failed. No JSON was written.`);
+      console.error("    Retry the command, or pass --allow-partial to write successful results.");
+      process.exitCode = 1;
+      return;
+    }
+    output.partial = true;
+    output.failedQueries = failedQueries.length;
+    console.warn(`\n⚠️  Writing partial output: ${failedQueries.length} request(s) failed.`);
   }
 
-  writeFileSync(OUT_PATH, JSON.stringify(output, null, 2), "utf8");
-  console.log(`\n✅  Written to ${OUT_PATH}\n`);
+  const outDir = dirname(TARGET_PATH);
+  if (!existsSync(outDir)) mkdirSync(outDir, { recursive: true });
+
+  // Atomic replace: an interrupted run cannot leave a truncated JSON file.
+  const tempPath = `${TARGET_PATH}.${process.pid}.tmp`;
+  writeFileSync(tempPath, JSON.stringify(output, null, 2) + "\n", "utf8");
+  renameSync(tempPath, TARGET_PATH);
+  console.log(`\n✅  Written to ${TARGET_PATH}\n`);
 }
 
 main().catch((err) => {
