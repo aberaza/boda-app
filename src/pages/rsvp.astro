@@ -8,7 +8,7 @@ const invite = {
   guestName: 'Invitado/a',
   guestPartnerName: '',
   inviteType: 'single',
-  canAddPartner: true
+  canAddPartner: true,
 };
 ---
 
@@ -17,32 +17,52 @@ const invite = {
     <section class="rounded-[2rem] border border-black/10 bg-white/80 p-6 shadow-soft md:p-10">
       <p class="text-xs uppercase tracking-[0.35em] text-clay">Confirmación</p>
       <h1 class="mt-3 text-4xl md:text-5xl">RSVP</h1>
-      <p class="mt-4 text-zinc-700">Token: <code class="rounded bg-sand px-2 py-1">{invite.token || 'sin token'}</code></p>
+      <p class="mt-4 text-zinc-700">
+        Token: <code class="rounded bg-sand px-2 py-1">{invite.token || 'sin token'}</code>
+      </p>
 
       <div class="mt-8 grid gap-4 rounded-3xl border border-black/10 bg-sand/60 p-5">
         <div>
           <label class="text-sm font-medium text-ink">Nombre</label>
-          <input class="mt-2 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none ring-0" value={invite.guestName} readonly />
+          <input
+            class="mt-2 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none ring-0"
+            value={invite.guestName}
+            readonly
+          />
         </div>
 
         <div>
           <label class="text-sm font-medium text-ink">Nombre de su pareja</label>
-          <input class="mt-2 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none ring-0" value={invite.guestPartnerName} placeholder="Si no está registrado, lo podéis añadir aquí" />
+          <input
+            class="mt-2 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none ring-0"
+            value={invite.guestPartnerName}
+            placeholder="Si no está registrado, lo podéis añadir aquí"
+          />
         </div>
 
         <div class="grid gap-3 sm:grid-cols-2">
-          <button class="rounded-full bg-ink px-5 py-3 text-sm font-medium text-paper">Asiste</button>
-          <button class="rounded-full border border-black/10 bg-white px-5 py-3 text-sm font-medium text-ink">No asiste</button>
+          <button class="rounded-full bg-ink px-5 py-3 text-sm font-medium text-paper"
+            >Asiste</button
+          >
+          <button
+            class="rounded-full border border-black/10 bg-white px-5 py-3 text-sm font-medium text-ink"
+            >No asiste</button
+          >
         </div>
 
         <div class="grid gap-4 sm:grid-cols-2">
           <label class="flex flex-col gap-2">
             <span class="text-sm font-medium text-ink">Necesidades alimentarias</span>
-            <input class="rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none ring-0" placeholder="Alergias, vegetariano, etc." />
+            <input
+              class="rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none ring-0"
+              placeholder="Alergias, vegetariano, etc."
+            />
           </label>
           <label class="flex flex-col gap-2">
             <span class="text-sm font-medium text-ink">Necesitará transporte</span>
-            <select class="rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none ring-0">
+            <select
+              class="rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none ring-0"
+            >
               <option>Sí</option>
               <option>No</option>
             </select>
@@ -50,7 +70,8 @@ const invite = {
         </div>
 
         <p class="text-sm text-zinc-600">
-          El transporte se está valorando entre Jerez y la finca. Esta información nos ayudará a decidir la mejor opción.
+          El transporte se está valorando entre Jerez y la finca. Esta información nos ayudará a
+          decidir la mejor opción.
         </p>
       </div>
     </section>

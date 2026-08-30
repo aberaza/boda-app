@@ -1,8 +1,14 @@
 ---
 import type { Locale } from '../../i18n';
 
-interface NavItem { key: string; label: string; }
-interface LocaleLink { locale: Locale; href: string; }
+interface NavItem {
+  key: string;
+  label: string;
+}
+interface LocaleLink {
+  locale: Locale;
+  href: string;
+}
 interface Props {
   lang: Locale;
   keyboardHelp: string;
@@ -15,17 +21,25 @@ const { lang, keyboardHelp, sectionLabel, localeLinks, slideNav } = Astro.props;
 
 <p id="keyboard-help" class="sr-only">{keyboardHelp}</p>
 
-<nav id="language-nav" aria-label="Language" class="fixed top-4 right-5 z-50 flex items-center gap-2">
-  {localeLinks.map(({ locale, href }) => (
-    <a
-      href={href}
-      class={[
-        'font-sans text-[0.6rem] uppercase tracking-[0.35em] px-2 py-1 rounded transition-colors',
-        lang === locale ? 'bg-clay/20 text-clay' : 'text-ink/40 hover:text-ink/70',
-      ].join(' ')}
-      aria-current={lang === locale ? 'true' : undefined}
-    >{locale}</a>
-  ))}
+<nav
+  id="language-nav"
+  aria-label="Language"
+  class="fixed top-4 right-5 z-50 flex items-center gap-2"
+>
+  {
+    localeLinks.map(({ locale, href }) => (
+      <a
+        href={href}
+        class={[
+          'font-sans text-[0.6rem] uppercase tracking-[0.35em] px-2 py-1 rounded transition-colors',
+          lang === locale ? 'bg-clay/20 text-clay' : 'text-ink/40 hover:text-ink/70',
+        ].join(' ')}
+        aria-current={lang === locale ? 'true' : undefined}
+      >
+        {locale}
+      </a>
+    ))
+  }
 </nav>
 
 <nav
@@ -34,18 +48,20 @@ const { lang, keyboardHelp, sectionLabel, localeLinks, slideNav } = Astro.props;
   aria-describedby="keyboard-help"
   class="fixed right-5 top-1/2 z-50 flex -translate-y-1/2 flex-col items-end gap-[18px]"
 >
-  {slideNav.map(({ key, label }, index) => (
-    <button
-      type="button"
-      data-slide-btn={index}
-      data-slide-key={key}
-      aria-label={label}
-      class="group flex min-h-8 min-w-8 items-center justify-end gap-2.5 rounded outline-none focus-visible:ring-2 focus-visible:ring-clay/50"
-    >
-      <span class="pointer-events-none translate-x-1 font-sans text-[0.52rem] uppercase tracking-[0.4em] text-ink/0 opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100 group-hover:text-ink/50 group-focus-visible:translate-x-0 group-focus-visible:opacity-100 group-focus-visible:text-ink/50 group-[[data-active]]:text-clay/60">
-        {label}
-      </span>
-      <span class="block h-[7px] w-[7px] rounded-full bg-ink/20 ring-1 ring-transparent transition-all duration-200 group-hover:scale-110 group-hover:bg-ink/50 group-[[data-active]]:scale-125 group-[[data-active]]:bg-clay group-[[data-active]]:ring-clay/30" />
-    </button>
-  ))}
+  {
+    slideNav.map(({ key, label }, index) => (
+      <button
+        type="button"
+        data-slide-btn={index}
+        data-slide-key={key}
+        aria-label={label}
+        class="group flex min-h-8 min-w-8 items-center justify-end gap-2.5 rounded outline-none focus-visible:ring-2 focus-visible:ring-clay/50"
+      >
+        <span class="pointer-events-none translate-x-1 font-sans text-[0.52rem] uppercase tracking-[0.4em] text-ink/0 opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100 group-hover:text-ink/50 group-focus-visible:translate-x-0 group-focus-visible:opacity-100 group-focus-visible:text-ink/50 group-[[data-active]]:text-clay/60">
+          {label}
+        </span>
+        <span class="block h-[7px] w-[7px] rounded-full bg-ink/20 ring-1 ring-transparent transition-all duration-200 group-hover:scale-110 group-hover:bg-ink/50 group-[[data-active]]:scale-125 group-[[data-active]]:bg-clay group-[[data-active]]:ring-clay/30" />
+      </button>
+    ))
+  }
 </nav>

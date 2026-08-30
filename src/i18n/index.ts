@@ -1,4 +1,4 @@
-import { locales, translations, type Locale } from './translations';
+import { locales, translations, type Locale, type Translation } from './translations';
 
 /**
  * Reads the `lang` querystring param from a URL and returns a valid Locale.
@@ -18,7 +18,7 @@ export function getLang(url: URL): Locale {
 }
 
 /** Returns the translation object for a given locale. */
-export function getT(lang: Locale) {
+export function getT(lang: Locale): Translation {
   return translations[lang];
 }
 

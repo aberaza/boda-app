@@ -7,12 +7,15 @@ export const GET: APIRoute = async ({ request }) => {
     return new Response('Unauthorized', { status: 401 });
   }
 
-  const csv = ['name,attendance,partner,dietary_needs,transport_needed', 'Demo Guest,yes,,none,no'].join('\n');
+  const csv = [
+    'name,attendance,partner,dietary_needs,transport_needed',
+    'Demo Guest,yes,,none,no',
+  ].join('\n');
 
   return new Response(csv, {
     headers: {
       'Content-Type': 'text/csv; charset=utf-8',
-      'Content-Disposition': 'attachment; filename="rsvp-export.csv"'
-    }
+      'Content-Disposition': 'attachment; filename="rsvp-export.csv"',
+    },
   });
 };

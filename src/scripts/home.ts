@@ -4,12 +4,13 @@ import { animation } from '../config/theme';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import flightRoutes from '../data/flight-routes.json';
+import type { FlightRoute, FlightRouteData } from '../components/home/types';
 
 // ── URL state helpers ─────────────────────────────────────────────
 // ?slide=<name> restores scroll position (stable by slide key)
 // ?slide=N      legacy support for old numeric links
 // ?detail=<key> re-opens the named overlay
-const _urlP     = new URLSearchParams(window.location.search);
+const _urlP = new URLSearchParams(window.location.search);
 const initSlideRaw = _urlP.get('slide');
 const initDetail = _urlP.get('detail');
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -17,15 +18,14 @@ const navigationBehavior: ScrollBehavior = prefersReducedMotion ? 'auto' : 'smoo
 
 function setUrlParam(key: string, value: string | null) {
   const p = new URLSearchParams(window.location.search);
-  if (value === null) p.delete(key); else p.set(key, value);
+  if (value === null) p.delete(key);
+  else p.set(key, value);
   const qs = p.toString();
   history.replaceState(null, '', qs ? `?${qs}` : window.location.pathname);
 }
 
-const navBtns = Array.from(
-  document.querySelectorAll<HTMLButtonElement>('[data-slide-btn]')
-);
-const slideKeys = navBtns.map(btn => (btn.dataset.slideKey ?? '').toLowerCase());
+const navBtns = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-slide-btn]'));
+const slideKeys = navBtns.map((btn) => (btn.dataset.slideKey ?? '').toLowerCase());
 const maxSlideIndex = Math.max(navBtns.length - 1, 0);
 
 function clampSlide(index: number) {
@@ -69,9 +69,9 @@ function setMainActive(index: number) {
 }
 
 function isEditableTarget(target: EventTarget | null) {
-  return target instanceof HTMLElement && (
-    target.isContentEditable ||
-    target.matches('input, textarea, select, option')
+  return (
+    target instanceof HTMLElement &&
+    (target.isContentEditable || target.matches('input, textarea, select, option'))
   );
 }
 
@@ -111,16 +111,22 @@ function openOverlay(key: string, trigger?: HTMLElement | null) {
     gsap.set(currentOverlay, { autoAlpha: 0 });
     setOverlayVisibility(currentOverlay, false);
   }
-  overlayTrigger = trigger ?? document.activeElement as HTMLElement | null;
+  overlayTrigger = trigger ?? (document.activeElement as HTMLElement | null);
   currentOverlay = el;
   setOverlayVisibility(el, true);
-  gsap.fromTo(el,
+  gsap.fromTo(
+    el,
     { autoAlpha: 0, y: prefersReducedMotion ? 0 : 30 },
-    { autoAlpha: 1, y: 0, duration: prefersReducedMotion ? 0 : 0.55, ease: 'power3.out',
+    {
+      autoAlpha: 1,
+      y: 0,
+      duration: prefersReducedMotion ? 0 : 0.55,
+      ease: 'power3.out',
       onComplete: () => {
         overlayOnOpen[key]?.();
         el.querySelector<HTMLElement>('[data-close-overlay]')?.focus({ preventScroll: true });
-      } }
+      },
+    },
   );
   document.body.style.overflow = 'hidden';
   setUrlParam('detail', key);
@@ -133,7 +139,8 @@ function closeOverlay() {
   currentOverlay = null;
   overlayTrigger = null;
   gsap.to(el, {
-    autoAlpha: 0, y: prefersReducedMotion ? 0 : 20,
+    autoAlpha: 0,
+    y: prefersReducedMotion ? 0 : 20,
     duration: prefersReducedMotion ? 0 : 0.4,
     ease: 'power2.in',
     onComplete: () => {
@@ -146,10 +153,10 @@ function closeOverlay() {
 }
 
 // Wire all trigger / close buttons globally
-document.querySelectorAll<HTMLElement>('[data-open-overlay]').forEach(btn => {
+document.querySelectorAll<HTMLElement>('[data-open-overlay]').forEach((btn) => {
   btn.addEventListener('click', () => openOverlay(btn.dataset.openOverlay!, btn));
 });
-document.querySelectorAll<HTMLElement>('[data-close-overlay]').forEach(btn => {
+document.querySelectorAll<HTMLElement>('[data-close-overlay]').forEach((btn) => {
   btn.addEventListener('click', closeOverlay);
 });
 
@@ -160,12 +167,18 @@ document.addEventListener('keydown', (event) => {
     return;
   }
   if (event.key === 'Tab' && currentOverlay) {
-    const focusable = Array.from(currentOverlay.querySelectorAll<HTMLElement>(
-      'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
-    )).filter((element) => element.getClientRects().length > 0);
+    const focusable = Array.from(
+      currentOverlay.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      ),
+    ).filter((element) => element.getClientRects().length > 0);
     const first = focusable[0];
     const last = focusable[focusable.length - 1];
-    if (first && last && (event.shiftKey ? document.activeElement === first : document.activeElement === last)) {
+    if (
+      first &&
+      last &&
+      (event.shiftKey ? document.activeElement === first : document.activeElement === last)
+    ) {
       event.preventDefault();
       (event.shiftKey ? last : first).focus();
     }
@@ -188,7 +201,7 @@ document.addEventListener('keydown', (event) => {
 });
 
 // Guarantee all overlays are hidden and removed from the accessibility tree on load.
-document.querySelectorAll<HTMLElement>('[data-overlay-key]').forEach(el => {
+document.querySelectorAll<HTMLElement>('[data-overlay-key]').forEach((el) => {
   gsap.set(el, { autoAlpha: 0 });
   setOverlayVisibility(el, false);
 });
@@ -209,19 +222,24 @@ if (isTouch) {
     setMainActive(target);
   };
 
-  navBtns.forEach(btn => {
+  navBtns.forEach((btn) => {
     btn.addEventListener('click', () => goToMainSlide(Number(btn.dataset.slideBtn)));
   });
-  wrap.addEventListener('scroll', () => {
-    setMainActive(Math.round(wrap.scrollTop / Math.max(wrap.clientHeight, 1)));
-  }, { passive: true });
+  wrap.addEventListener(
+    'scroll',
+    () => {
+      setMainActive(Math.round(wrap.scrollTop / Math.max(wrap.clientHeight, 1)));
+    },
+    { passive: true },
+  );
 
   requestAnimationFrame(() => goToMainSlide(initSlide, 'auto'));
 } else {
   gsap.registerPlugin(ScrollTrigger);
 
   const slides = gsap.utils.toArray<HTMLElement>('.slide');
-  const slideStep = () => Math.max(document.documentElement.scrollHeight - window.innerHeight, 0) / maxSlideIndex;
+  const slideStep = () =>
+    Math.max(document.documentElement.scrollHeight - window.innerHeight, 0) / maxSlideIndex;
   const scrollPositionForSlide = (index: number) => clampSlide(index) * slideStep();
   const ease = 'power2.inOut';
   const master = gsap.timeline({ paused: true });
@@ -237,16 +255,22 @@ if (isTouch) {
     master.to({}, { duration: animation.hold });
     if (i < slides.length - 1) {
       master
-        .to(slide, {
-          autoAlpha: 0,
-          scale: prefersReducedMotion ? 1 : 0.97,
-          duration: prefersReducedMotion ? 0.01 : animation.xfade,
-          ease,
-        }, '>')
-        .fromTo(slides[i + 1],
+        .to(
+          slide,
+          {
+            autoAlpha: 0,
+            scale: prefersReducedMotion ? 1 : 0.97,
+            duration: prefersReducedMotion ? 0.01 : animation.xfade,
+            ease,
+          },
+          '>',
+        )
+        .fromTo(
+          slides[i + 1],
           { autoAlpha: 0, scale: prefersReducedMotion ? 1 : 1.03 },
           { autoAlpha: 1, scale: 1, duration: prefersReducedMotion ? 0.01 : animation.xfade, ease },
-          '<');
+          '<',
+        );
     }
   });
 
@@ -265,7 +289,8 @@ if (isTouch) {
     gsap.set('#hero-almohade', { autoAlpha: 0, x: '18%' });
     gsap.set(['#hero-date', '#hero-names', '#hero-tagline', '#hero-cue'], { autoAlpha: 0, y: 20 });
 
-    gsap.timeline({ delay: animation.heroDelay })
+    gsap
+      .timeline({ delay: animation.heroDelay })
       .to('#hero-bauhaus', { autoAlpha: 1, x: 0, duration: 1.4, ease: 'power3.out' })
       .to('#hero-almohade', { autoAlpha: 1, x: 0, duration: 1.4, ease: 'power3.out' }, '<0.08')
       .to('#hero-names', { autoAlpha: 1, y: 0, duration: 0.85, ease: 'power2.out' }, '-=0.5')
@@ -277,8 +302,10 @@ if (isTouch) {
   }
 
   if (!prefersReducedMotion) {
-    slides.slice(1).forEach(slide => {
-      const elements = slide.querySelectorAll('.slide-label, .slide-title, .slide-body, .slide-right');
+    slides.slice(1).forEach((slide) => {
+      const elements = slide.querySelectorAll(
+        '.slide-label, .slide-title, .slide-body, .slide-right',
+      );
       gsap.set(elements, { opacity: 0, y: 18 });
       ScrollTrigger.create({
         trigger: '#scroll-driver',
@@ -288,8 +315,12 @@ if (isTouch) {
           const visibility = parseFloat(gsap.getProperty(slide, 'autoAlpha') as string);
           if (visibility > 0.5) {
             gsap.to(elements, {
-              opacity: 1, y: 0, duration: 0.7, stagger: 0.1,
-              ease: 'power2.out', overwrite: 'auto',
+              opacity: 1,
+              y: 0,
+              duration: 0.7,
+              stagger: 0.1,
+              ease: 'power2.out',
+              overwrite: 'auto',
             });
           }
         },
@@ -303,13 +334,17 @@ if (isTouch) {
     setMainActive(target);
   };
 
-  navBtns.forEach(btn => {
+  navBtns.forEach((btn) => {
     btn.addEventListener('click', () => goToMainSlide(Number(btn.dataset.slideBtn)));
   });
-  window.addEventListener('scroll', () => {
-    const step = slideStep();
-    setMainActive(step > 0 ? Math.round(window.scrollY / step) : 0);
-  }, { passive: true });
+  window.addEventListener(
+    'scroll',
+    () => {
+      const step = slideStep();
+      setMainActive(step > 0 ? Math.round(window.scrollY / step) : 0);
+    },
+    { passive: true },
+  );
 
   requestAnimationFrame(() => {
     ScrollTrigger.refresh();
@@ -317,12 +352,16 @@ if (isTouch) {
   });
 }
 
-window.addEventListener('resize', () => {
-  if (currentOverlay?.dataset.overlayKey === 'jerez' && goToJerezSlide) {
-    goToJerezSlide(activeJerezSlideIndex, 'auto');
-  }
-  goToMainSlide(activeSlideIndex, 'auto');
-}, { passive: true });
+window.addEventListener(
+  'resize',
+  () => {
+    if (currentOverlay?.dataset.overlayKey === 'jerez' && goToJerezSlide) {
+      goToJerezSlide(activeJerezSlideIndex, 'auto');
+    }
+    goToMainSlide(activeSlideIndex, 'auto');
+  },
+  { passive: true },
+);
 
 // ── FINCA overlay: Leaflet map ────────────────────────────────────
 const clayPin = L.divIcon({
@@ -330,20 +369,27 @@ const clayPin = L.divIcon({
     <path d="M14 0C6.27 0 0 6.27 0 14c0 9.94 14 22 14 22S28 23.94 28 14C28 6.27 21.73 0 14 0z" fill="#bc6c4d"/>
     <circle cx="14" cy="14" r="5.5" fill="#f5f0e8" opacity="0.92"/>
   </svg>`,
-  className: '', iconSize: [28,36], iconAnchor: [14,36], popupAnchor: [0,-38],
+  className: '',
+  iconSize: [28, 36],
+  iconAnchor: [14, 36],
+  popupAnchor: [0, -38],
 });
 const cityPin = L.divIcon({
   html: `<svg width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
     <circle cx="6" cy="6" r="5" fill="#1a1208" opacity="0.35"/>
     <circle cx="6" cy="6" r="3" fill="#1a1208" opacity="0.6"/>
   </svg>`,
-  className: '', iconSize: [12,12], iconAnchor: [6,6],
+  className: '',
+  iconSize: [12, 12],
+  iconAnchor: [6, 6],
 });
 const routePin = L.divIcon({
   html: `<svg width="10" height="10" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg">
     <circle cx="5" cy="5" r="4" fill="#bc6c4d" opacity="0.5"/>
   </svg>`,
-  className: '', iconSize: [10,10], iconAnchor: [5,5],
+  className: '',
+  iconSize: [10, 10],
+  iconAnchor: [5, 5],
 });
 
 let leafletMap: ReturnType<typeof L.map> | null = null;
@@ -357,22 +403,29 @@ function initFincaMap() {
   if (mapInited) return;
   mapInited = true;
   const mapEl = document.getElementById('venue-map') as HTMLElement;
-  const LAT   = parseFloat(mapEl.dataset.lat!);
-  const LNG   = parseFloat(mapEl.dataset.lng!);
-  const NAME  = mapEl.dataset.name ?? 'La Carreña';
-  const CLAT  = parseFloat(mapEl.dataset.cityLat!);
-  const CLNG  = parseFloat(mapEl.dataset.cityLng!);
+  const LAT = parseFloat(mapEl.dataset.lat!);
+  const LNG = parseFloat(mapEl.dataset.lng!);
+  const NAME = mapEl.dataset.name ?? 'La Carreña';
+  const CLAT = parseFloat(mapEl.dataset.cityLat!);
+  const CLNG = parseFloat(mapEl.dataset.cityLng!);
 
   leafletMap = L.map('venue-map', {
-    center: [(LAT+CLAT)/2, (LNG+CLNG)/2], zoom: 11,
-    zoomControl: false, dragging: false, scrollWheelZoom: false,
-    doubleClickZoom: false, touchZoom: false, keyboard: false,
+    center: [(LAT + CLAT) / 2, (LNG + CLNG) / 2],
+    zoom: 11,
+    zoomControl: false,
+    dragging: false,
+    scrollWheelZoom: false,
+    doubleClickZoom: false,
+    touchZoom: false,
+    keyboard: false,
     attributionControl: false,
   });
 
   L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-    subdomains: 'abcd', maxZoom: 19,
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    subdomains: 'abcd',
+    maxZoom: 19,
   }).addTo(leafletMap);
 
   L.marker([LAT, LNG], { icon: clayPin }).addTo(leafletMap).bindPopup(NAME);
@@ -383,8 +436,8 @@ function initFincaMap() {
     const label = document.createElement('div');
     label.textContent = 'Jerez';
     label.className = 'jerez-city-label';
-    label.style.left = (pt.x + 10) + 'px';
-    label.style.top  = (pt.y - 8)  + 'px';
+    label.style.left = pt.x + 10 + 'px';
+    label.style.top = pt.y - 8 + 'px';
     leafletMap!.getContainer().appendChild(label);
   });
 
@@ -428,14 +481,18 @@ function initJerezSlides() {
 
   setActive(0);
 
-  buttons.forEach(btn => {
+  buttons.forEach((btn) => {
     btn.addEventListener('click', () => goToJerezSlide?.(Number(btn.dataset.jerezNav)));
   });
 
-  wrap.addEventListener('scroll', () => {
-    const index = Math.round(wrap.scrollLeft / Math.max(wrap.clientWidth, 1));
-    setActive(index);
-  }, { passive: true });
+  wrap.addEventListener(
+    'scroll',
+    () => {
+      const index = Math.round(wrap.scrollLeft / Math.max(wrap.clientWidth, 1));
+      setActive(index);
+    },
+    { passive: true },
+  );
 }
 
 function initJerezMaps() {
@@ -452,26 +509,36 @@ function initJerezMaps() {
   const CADLNG = parseFloat(cityEl.dataset.cadizLng!);
 
   jerezCityMap = L.map('jerez-city-map', {
-    center: [CLAT, CLNG], zoom: 9,
-    zoomControl: false, dragging: false, scrollWheelZoom: false,
-    doubleClickZoom: false, touchZoom: false, keyboard: false,
+    center: [CLAT, CLNG],
+    zoom: 9,
+    zoomControl: false,
+    dragging: false,
+    scrollWheelZoom: false,
+    doubleClickZoom: false,
+    touchZoom: false,
+    keyboard: false,
     attributionControl: false,
   });
 
   L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-    subdomains: 'abcd', maxZoom: 19,
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    subdomains: 'abcd',
+    maxZoom: 19,
   }).addTo(jerezCityMap);
 
   L.marker([CLAT, CLNG], { icon: clayPin }).addTo(jerezCityMap).bindPopup('Jerez de la Frontera');
   L.marker([SEVLAT, SEVLNG], { icon: cityPin }).addTo(jerezCityMap).bindPopup('Sevilla');
   L.marker([CADLAT, CADLNG], { icon: cityPin }).addTo(jerezCityMap).bindPopup('Cádiz');
 
-  jerezCityMap.fitBounds(L.latLngBounds([
-    [SEVLAT, SEVLNG],
-    [CADLAT, CADLNG],
-    [CLAT, CLNG],
-  ]), { padding: [30, 30] });
+  jerezCityMap.fitBounds(
+    L.latLngBounds([
+      [SEVLAT, SEVLNG],
+      [CADLAT, CADLNG],
+      [CLAT, CLNG],
+    ]),
+    { padding: [30, 30] },
+  );
 
   const JLAT = parseFloat(routesEl.dataset.jerezLat!);
   const JLNG = parseFloat(routesEl.dataset.jerezLng!);
@@ -489,16 +556,23 @@ function initJerezMaps() {
   const VLCLNG = parseFloat(routesEl.dataset.valenciaLng!);
 
   jerezRoutesMap = L.map('jerez-routes-map', {
-    center: [JLAT, JLNG], zoom: 3,
-    zoomControl: false, dragging: false, scrollWheelZoom: false,
-    doubleClickZoom: false, touchZoom: false, keyboard: false,
+    center: [JLAT, JLNG],
+    zoom: 3,
+    zoomControl: false,
+    dragging: false,
+    scrollWheelZoom: false,
+    doubleClickZoom: false,
+    touchZoom: false,
+    keyboard: false,
     attributionControl: false,
   });
 
   // Use a different tile layer for routes map that works better with the larger height
   L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-    subdomains: 'abcd', maxZoom: 19,
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    subdomains: 'abcd',
+    maxZoom: 19,
   }).addTo(jerezRoutesMap);
 
   const routeCities = [
@@ -513,18 +587,18 @@ function initJerezMaps() {
 
   let activePolylines: L.Polyline[] = [];
   let activeMarkers: L.Marker[] = [];
-  
-  const flightData = flightRoutes;
 
-  routeCities.forEach(city => {
+  const flightData = flightRoutes as FlightRouteData;
+
+  routeCities.forEach((city) => {
     const marker = L.marker([city.lat, city.lng], { icon: city.icon }).addTo(jerezRoutesMap!);
-    
+
     // Tooltip minimalista: fondo transparente, sin borde, solo texto
     marker.bindTooltip(`${city.name}`, {
       permanent: false,
       direction: 'top',
       className: 'minimal-tooltip',
-      offset: [0, -5]
+      offset: [0, -5],
     });
 
     // Eventos nativos de Leaflet (on) para interacción
@@ -532,32 +606,42 @@ function initJerezMaps() {
     marker.on('click', () => showRoute(city.name));
   });
 
-  document.querySelectorAll<HTMLButtonElement>('[data-route-city]').forEach(button => {
+  document.querySelectorAll<HTMLButtonElement>('[data-route-city]').forEach((button) => {
     button.addEventListener('click', () => showRoute(button.dataset.routeCity ?? ''));
   });
 
-  jerezRoutesMap.fitBounds(L.latLngBounds(routeCities.map(c => [c.lat, c.lng])), { padding: [10, 10] });
+  jerezRoutesMap.fitBounds(L.latLngBounds(routeCities.map((c) => [c.lat, c.lng])), {
+    padding: [10, 10],
+  });
 
   // --- Interactive Routes Logic ---
   function showRoute(cityName: string) {
     if (!jerezRoutesMap) return;
 
     // Clear previous polylines and markers
-    activePolylines.forEach(p => jerezRoutesMap!.removeLayer(p));
+    activePolylines.forEach((p) => jerezRoutesMap!.removeLayer(p));
     activePolylines = [];
-    activeMarkers.forEach(m => jerezRoutesMap!.removeLayer(m));
+    activeMarkers.forEach((m) => jerezRoutesMap!.removeLayer(m));
     activeMarkers = [];
 
-    const origin = flightData.origins.find((o: any) => 
-      o.city.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "") === 
-      cityName.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    const origin = flightData.origins.find(
+      (o) =>
+        o.city
+          .toLowerCase()
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '') ===
+        cityName
+          .toLowerCase()
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, ''),
     );
     if (!origin || !origin.routes.length) return;
 
-    const shortest = origin.routes.reduce((min: any, r: any) =>
-      r.segments.length < min.segments.length ? r : min
-    , origin.routes[0]);
-    
+    const shortest = origin.routes.reduce(
+      (min: FlightRoute, r: FlightRoute) => (r.segments.length < min.segments.length ? r : min),
+      origin.routes[0],
+    );
+
     function getParabolicPoints(start: L.LatLng, end: L.LatLng, pointsCount = 50) {
       const pts = [];
       for (let i = 0; i <= pointsCount; i++) {
@@ -571,45 +655,44 @@ function initJerezMaps() {
     }
 
     // Draw each segment as a parabolic arc with different colors
-    shortest.segments.forEach((segment: any, index: number) => {
+    shortest.segments.forEach((segment, index: number) => {
       const arcPoints = getParabolicPoints(
         L.latLng(segment.from.lat, segment.from.lng),
-        L.latLng(segment.to.lat, segment.to.lng)
+        L.latLng(segment.to.lat, segment.to.lng),
       );
 
       // Generate different colors or shades for each segment
       const colors = [
-        '#bc6c4d',      // original clay
-        '#d4845e',      // lighter
-        '#a55840',      // darker
-        '#c97d5f',      // medium-light
-        '#9d4f38',      // dark
+        '#bc6c4d', // original clay
+        '#d4845e', // lighter
+        '#a55840', // darker
+        '#c97d5f', // medium-light
+        '#9d4f38', // dark
       ];
       const color = colors[index % colors.length];
-      const opacity = 1 - (index * 0.1); // slightly decrease opacity for later segments
+      const opacity = 1 - index * 0.1; // slightly decrease opacity for later segments
 
       const polyline = L.polyline(arcPoints, {
         color: color,
-        weight: 2.5 + (index * 0.3), // slightly increase weight for each segment
+        weight: 2.5 + index * 0.3, // slightly increase weight for each segment
         opacity: Math.max(0.6, opacity),
         smoothFactor: 1,
         lineCap: 'round',
         dashArray: index > 0 ? '5, 5' : undefined, // dashed lines for segments after first
       }).addTo(jerezRoutesMap!);
-      
+
       activePolylines.push(polyline);
     });
 
     // Add markers for layovers if any
     if (shortest.segments.length > 1) {
-      shortest.segments.slice(0, -1).forEach((seg: any) => {
+      shortest.segments.slice(0, -1).forEach((seg) => {
         const m = L.marker([seg.to.lat, seg.to.lng], { icon: routePin })
           .addTo(jerezRoutesMap!)
           .bindTooltip(seg.to.city, { direction: 'top' });
         activeMarkers.push(m);
       });
     }
-
   }
 
   const SJLAT = parseFloat(surroundingsEl.dataset.jerezLat!);
@@ -626,15 +709,22 @@ function initJerezMaps() {
   const sanlucarDrive = surroundingsEl.dataset.sanlucarDrive ?? '';
 
   jerezSurroundingsMap = L.map('jerez-surroundings-map', {
-    center: [SJLAT, SJLNG], zoom: 10,
-    zoomControl: false, dragging: false, scrollWheelZoom: false,
-    doubleClickZoom: false, touchZoom: false, keyboard: false,
+    center: [SJLAT, SJLNG],
+    zoom: 10,
+    zoomControl: false,
+    dragging: false,
+    scrollWheelZoom: false,
+    doubleClickZoom: false,
+    touchZoom: false,
+    keyboard: false,
     attributionControl: false,
   });
 
   L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-    subdomains: 'abcd', maxZoom: 19,
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    subdomains: 'abcd',
+    maxZoom: 19,
   }).addTo(jerezSurroundingsMap);
 
   L.marker([SJLAT, SJLNG], { icon: clayPin }).addTo(jerezSurroundingsMap);
@@ -651,20 +741,29 @@ function initJerezMaps() {
       className: 'minimal-tooltip',
       offset: [0, -5],
     });
-    L.polyline([[SJLAT, SJLNG], [city.lat, city.lng]], {
-      color: '#bc6c4d',
-      weight: 1.5,
-      opacity: 0.35,
-      dashArray: '4, 6',
-    }).addTo(jerezSurroundingsMap!);
+    L.polyline(
+      [
+        [SJLAT, SJLNG],
+        [city.lat, city.lng],
+      ],
+      {
+        color: '#bc6c4d',
+        weight: 1.5,
+        opacity: 0.35,
+        dashArray: '4, 6',
+      },
+    ).addTo(jerezSurroundingsMap!);
   });
 
-  jerezSurroundingsMap.fitBounds(L.latLngBounds([
-    [SJLAT, SJLNG],
-    [SURSEVLAT, SURSEVLNG],
-    [PRTLAT, PRTLNG],
-    [SNLLAT, SNLLNG],
-  ]), { padding: [30, 30] });
+  jerezSurroundingsMap.fitBounds(
+    L.latLngBounds([
+      [SJLAT, SJLNG],
+      [SURSEVLAT, SURSEVLNG],
+      [PRTLAT, PRTLNG],
+      [SNLLAT, SNLLNG],
+    ]),
+    { padding: [30, 30] },
+  );
 }
 
 // ── Restore overlay state from URL ────────────────────────────────

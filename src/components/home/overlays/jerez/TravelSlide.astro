@@ -1,90 +1,118 @@
 ---
 import type { Translation, ProcessedRoute } from '../../types';
-interface Props { t: Translation; processedRoutes: ProcessedRoute[]; }
+interface Props {
+  t: Translation;
+  processedRoutes: ProcessedRoute[];
+}
 const { t, processedRoutes } = Astro.props;
 ---
 
-      <!-- Slide 2: Getting there -->
-      <section class="jerez-slide flex h-full w-full shrink-0 flex-col justify-center px-8 py-24 md:px-16">
-        <div class="mx-auto w-full max-w-5xl">
-          <p class="font-sans text-[0.65rem] uppercase tracking-[0.5em] text-clay/70">{t.jerez.gettingThere.eyebrow}</p>
-          <h2 class="mt-4 font-display text-[clamp(2.4rem,5vw,4.6rem)] font-light leading-none tracking-tight text-ink">
-            {t.jerez.gettingThere.title}
-          </h2>
-          <div class="mt-10 grid gap-10 md:grid-cols-[1.05fr_0.95fr]">
-            <div class="space-y-6">
-              <p class="font-sans text-base leading-7 text-ink/70">{t.jerez.gettingThere.airports}</p>
-              <div>
-                <p class="font-sans text-[0.6rem] uppercase tracking-[0.4em] text-ink/35">{t.jerez.gettingThere.routesTitle}</p>
-                <div class="mt-6 grid gap-4 sm:grid-cols-2">
-                  {processedRoutes.map((route) => (
-                    <button
-                      type="button"
-                      data-route-city={route.city}
-                      class="text-left rounded-xl border border-clay/15 bg-white/40 p-4 shadow-sm transition-all hover:border-clay/40 hover:bg-white/60 group"
-                    >
-                      <div class="flex items-center justify-between">
-                        <span class="font-sans text-sm font-medium text-ink/80 group-hover:text-clay transition-colors">{route.city} → Jerez</span>
-                        <span class="text-[0.6rem] uppercase tracking-wider text-clay/70">
-                          {route.isDirect ? t.jerez.gettingThere.direct : `${route.steps} ${t.jerez.gettingThere.steps}`}
+<!-- Slide 2: Getting there -->
+<section
+  class="jerez-slide flex h-full w-full shrink-0 flex-col justify-center px-8 py-24 md:px-16"
+>
+  <div class="mx-auto w-full max-w-5xl">
+    <p class="font-sans text-[0.65rem] uppercase tracking-[0.5em] text-clay/70">
+      {t.jerez.gettingThere.eyebrow}
+    </p>
+    <h2
+      class="mt-4 font-display text-[clamp(2.4rem,5vw,4.6rem)] font-light leading-none tracking-tight text-ink"
+    >
+      {t.jerez.gettingThere.title}
+    </h2>
+    <div class="mt-10 grid gap-10 md:grid-cols-[1.05fr_0.95fr]">
+      <div class="space-y-6">
+        <p class="font-sans text-base leading-7 text-ink/70">{t.jerez.gettingThere.airports}</p>
+        <div>
+          <p class="font-sans text-[0.6rem] uppercase tracking-[0.4em] text-ink/35">
+            {t.jerez.gettingThere.routesTitle}
+          </p>
+          <div class="mt-6 grid gap-4 sm:grid-cols-2">
+            {
+              processedRoutes.map((route) => (
+                <button
+                  type="button"
+                  data-route-city={route.city}
+                  class="text-left rounded-xl border border-clay/15 bg-white/40 p-4 shadow-sm transition-all hover:border-clay/40 hover:bg-white/60 group"
+                >
+                  <div class="flex items-center justify-between">
+                    <span class="font-sans text-sm font-medium text-ink/80 group-hover:text-clay transition-colors">
+                      {route.city} → Jerez
+                    </span>
+                    <span class="text-[0.6rem] uppercase tracking-wider text-clay/70">
+                      {route.isDirect
+                        ? t.jerez.gettingThere.direct
+                        : `${route.steps} ${t.jerez.gettingThere.steps}`}
+                    </span>
+                  </div>
+                  <div class="mt-3 grid grid-cols-2 gap-2 border-t border-clay/5 pt-3">
+                    <div>
+                      <p class="text-[0.55rem] uppercase tracking-wider text-ink/30">
+                        {t.jerez.gettingThere.fastest}
+                      </p>
+                      <p class="mt-0.5 font-sans text-xs text-ink/60">
+                        {Math.floor(route.fastestDuration / 60)}h {route.fastestDuration % 60}min
+                      </p>
+                    </div>
+                    <div>
+                      <p class="text-[0.55rem] uppercase tracking-wider text-ink/30">
+                        {t.jerez.gettingThere.cheapest}
+                      </p>
+                      <p class="mt-0.5 font-sans text-xs text-ink/60">{route.cheapestPrice}€</p>
+                    </div>
+                  </div>
+                  <div class="mt-3 flex flex-wrap gap-2">
+                    {route.airlines.map((airline) => (
+                      <div class="group/logo relative flex items-center gap-1.5 rounded border border-clay/15 bg-white/80 px-1.5 py-0.5 shadow-sm">
+                        {airline.logo ? (
+                          <img
+                            src={airline.logo}
+                            alt={airline.name}
+                            class="h-3 w-auto object-contain grayscale transition-all group-hover/logo:grayscale-0"
+                          />
+                        ) : (
+                          <span class="font-sans text-[0.55rem] text-clay/70">{airline.name}</span>
+                        )}
+                        <span class="absolute -top-6 left-1/2 -translate-x-1/2 rounded bg-ink px-1.5 py-0.5 text-[0.5rem] text-white opacity-0 transition-opacity group-hover/logo:opacity-100 whitespace-nowrap z-10">
+                          {airline.name}
                         </span>
                       </div>
-                      <div class="mt-3 grid grid-cols-2 gap-2 border-t border-clay/5 pt-3">
-                        <div>
-                          <p class="text-[0.55rem] uppercase tracking-wider text-ink/30">{t.jerez.gettingThere.fastest}</p>
-                          <p class="mt-0.5 font-sans text-xs text-ink/60">{Math.floor(route.fastestDuration / 60)}h {route.fastestDuration % 60}min</p>
-                        </div>
-                        <div>
-                          <p class="text-[0.55rem] uppercase tracking-wider text-ink/30">{t.jerez.gettingThere.cheapest}</p>
-                          <p class="mt-0.5 font-sans text-xs text-ink/60">{route.cheapestPrice}€</p>
-                        </div>
-                      </div>
-                      <div class="mt-3 flex flex-wrap gap-2">
-                        {route.airlines.map(airline => (
-                          <div class="group/logo relative flex items-center gap-1.5 rounded border border-clay/15 bg-white/80 px-1.5 py-0.5 shadow-sm">
-                            {airline.logo ? (
-                              <img src={airline.logo} alt={airline.name} class="h-3 w-auto object-contain grayscale transition-all group-hover/logo:grayscale-0" />
-                            ) : (
-                              <span class="font-sans text-[0.55rem] text-clay/70">{airline.name}</span>
-                            )}
-                            <span class="absolute -top-6 left-1/2 -translate-x-1/2 rounded bg-ink px-1.5 py-0.5 text-[0.5rem] text-white opacity-0 transition-opacity group-hover/logo:opacity-100 whitespace-nowrap z-10">
-                              {airline.name}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                      <p class="mt-2 text-[0.55rem] italic text-ink/25">
-                        {t.jerez.gettingThere.avgShortest}: {route.avgPriceShortest}€
-                      </p>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-            <div class="flex flex-col gap-4">
-              <div class="w-full overflow-hidden rounded-2xl shadow-soft" style="height: 420px;">
-                <div
-                  id="jerez-routes-map"
-                  data-jerez-lat={t.jerez.routesMap.jerezLat}
-                  data-jerez-lng={t.jerez.routesMap.jerezLng}
-                  data-barcelona-lat={t.jerez.routesMap.barcelonaLat}
-                  data-barcelona-lng={t.jerez.routesMap.barcelonaLng}
-                  data-paris-lat={t.jerez.routesMap.parisLat}
-                  data-paris-lng={t.jerez.routesMap.parisLng}
-                  data-pamplona-lat={t.jerez.routesMap.pamplonaLat}
-                  data-pamplona-lng={t.jerez.routesMap.pamplonaLng}
-                  data-madrid-lat={t.jerez.routesMap.madridLat}
-                  data-madrid-lng={t.jerez.routesMap.madridLng}
-                  data-granada-lat={t.jerez.routesMap.granadaLat}
-                  data-granada-lng={t.jerez.routesMap.granadaLng}
-                  data-valencia-lat={t.jerez.routesMap.valenciaLat}
-                  data-valencia-lng={t.jerez.routesMap.valenciaLng}
-                  class="h-full w-full"
-                  aria-label={t.jerez.routesMap.label}
-                />
-              </div>
-              <p class="font-sans text-sm text-ink/45">{t.jerez.routesMap.caption}</p>
-            </div>
+                    ))}
+                  </div>
+                  <p class="mt-2 text-[0.55rem] italic text-ink/25">
+                    {t.jerez.gettingThere.avgShortest}: {route.avgPriceShortest}€
+                  </p>
+                </button>
+              ))
+            }
           </div>
         </div>
-      </section>
+      </div>
+      <div class="flex flex-col gap-4">
+        <div class="w-full overflow-hidden rounded-2xl shadow-soft" style="height: 420px;">
+          <div
+            id="jerez-routes-map"
+            data-jerez-lat={t.jerez.routesMap.jerezLat}
+            data-jerez-lng={t.jerez.routesMap.jerezLng}
+            data-barcelona-lat={t.jerez.routesMap.barcelonaLat}
+            data-barcelona-lng={t.jerez.routesMap.barcelonaLng}
+            data-paris-lat={t.jerez.routesMap.parisLat}
+            data-paris-lng={t.jerez.routesMap.parisLng}
+            data-pamplona-lat={t.jerez.routesMap.pamplonaLat}
+            data-pamplona-lng={t.jerez.routesMap.pamplonaLng}
+            data-madrid-lat={t.jerez.routesMap.madridLat}
+            data-madrid-lng={t.jerez.routesMap.madridLng}
+            data-granada-lat={t.jerez.routesMap.granadaLat}
+            data-granada-lng={t.jerez.routesMap.granadaLng}
+            data-valencia-lat={t.jerez.routesMap.valenciaLat}
+            data-valencia-lng={t.jerez.routesMap.valenciaLng}
+            class="h-full w-full"
+            aria-label={String(t.jerez.routesMap.label)}
+          >
+          </div>
+        </div>
+        <p class="font-sans text-sm text-ink/45">{t.jerez.routesMap.caption}</p>
+      </div>
+    </div>
+  </div>
+</section>

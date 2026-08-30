@@ -21,7 +21,13 @@ const processedRoutes = getSuggestedRoutes();
 ---
 
 <BaseLayout title={t.meta.title} description={t.meta.description}>
-  <HomeNavigation lang={lang} keyboardHelp={t.nav.keyboardHelp} sectionLabel={t.nav.sectionLabel} localeLinks={localeLinks} slideNav={slideNav} />
+  <HomeNavigation
+    lang={lang}
+    keyboardHelp={t.nav.keyboardHelp}
+    sectionLabel={t.nav.sectionLabel}
+    localeLinks={localeLinks}
+    slideNav={slideNav}
+  />
   <HomeSlideshow t={t} slideCount={slideNav.length} />
   <FincaDetailOverlay t={t} />
   <JerezDetailOverlay t={t} processedRoutes={processedRoutes} />

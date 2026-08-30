@@ -8,6 +8,6 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   return new Response(JSON.stringify({ ok: true, received: body }), {
-    headers: { 'Content-Type': 'application/json' }
+    headers: { 'Content-Type': 'application/json' },
   });
 };

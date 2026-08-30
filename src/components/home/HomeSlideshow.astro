@@ -5,7 +5,10 @@ import WhenSlide from './slides/WhenSlide.astro';
 import VenueSlide from './slides/VenueSlide.astro';
 import ComingSoonSlide from './slides/ComingSoonSlide.astro';
 
-interface Props { t: Translation; slideCount: number; }
+interface Props {
+  t: Translation;
+  slideCount: number;
+}
 const { t, slideCount } = Astro.props;
 ---
 

@@ -17,13 +17,13 @@
 export const patterns = {
   bauhaus: {
     /** Stroke/fill color of the Bauhaus grid SVG. */
-    color: "#1a1208",
+    color: '#1a1208',
     /** Overall opacity passed to <BauhausPattern>. 0–1. */
     opacity: 0.9,
   },
   almohade: {
     /** Stroke/fill color of the Almohade star SVG. */
-    color: "#bc6c4d",
+    color: '#bc6c4d',
     /** Overall opacity passed to <GeoPattern>. 0–1. */
     opacity: 0.9,
   },
@@ -37,13 +37,13 @@ export const patterns = {
      * Up to this % the pattern is at full (peakAlpha) strength.
      * After this point it starts fading toward the centre.
      */
-    solidEnd: "40%",
+    solidEnd: '40%',
     /**
      * At this % the pattern becomes fully transparent.
      * The overlap zone between solidEnd and fadeEnd of each side is
      * where both patterns co-exist → the visual amalgam in the centre.
      */
-    fadeEnd: "68%",
+    fadeEnd: '68%',
   },
 } as const;
 
@@ -64,7 +64,7 @@ export const overlays = {
    * Pulls the monochrome image into the warm palette.
    * Adjust the last value (0–1) to make it warmer or cooler.
    */
-  heroParchment: "rgba(245, 240, 232, 0.72)",
+  heroParchment: 'rgba(245, 240, 232, 0.72)',
 
   /**
    * Opacity of the vineyard photo used as a background *texture*
@@ -74,16 +74,16 @@ export const overlays = {
   cuandoPhotoOpacity: 0.17,
 
   /** CSS filter applied to the hero photo to force true B&W. */
-  heroFilter: "grayscale(1) contrast(1.05)",
+  heroFilter: 'grayscale(1) contrast(1.05)',
 } as const;
 
 // ─── Slide background colours ────────────────────────────────────────────────
 // These sit behind the pattern layers. Adjust to shift the overall mood.
 export const slideBg = {
-  hero: "var(--color-paper)", // references the CSS @theme token
-  cuando: "#f2ebe0",
-  finca: "#ede8de",
-  pronto: "var(--color-paper)",
+  hero: 'var(--color-paper)', // references the CSS @theme token
+  cuando: '#f2ebe0',
+  finca: '#ede8de',
+  pronto: 'var(--color-paper)',
 } as const;
 
 // ─── GSAP animation timing ────────────────────────────────────────────────────
