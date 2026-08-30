@@ -62,6 +62,8 @@ const es = {
     cuando: "Cuándo",
     finca: "El lugar",
     pronto: "Info",
+    sectionLabel: "Navegación por secciones",
+    keyboardHelp: "Usa las flechas, WASD o HJKL para cambiar de sección.",
   },
   eventDetail: {
     open: "Ver detalles del evento",
@@ -267,6 +269,8 @@ const fr = {
     cuando: "Quand",
     finca: "Le lieu",
     pronto: "Info",
+    sectionLabel: "Navigation par sections",
+    keyboardHelp: "Utilisez les flèches, WASD ou HJKL pour changer de section.",
   },
   eventDetail: {
     open: "Voir les détails",
@@ -471,6 +475,8 @@ const en = {
     cuando: "When",
     finca: "The venue",
     pronto: "Info",
+    sectionLabel: "Section navigation",
+    keyboardHelp: "Use the arrow keys, WASD or HJKL to change sections.",
   },
   eventDetail: {
     open: "View event details",

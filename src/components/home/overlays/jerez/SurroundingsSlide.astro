@@ -1,0 +1,51 @@
+---
+import type { Translation } from '../../types';
+interface Props { t: Translation; }
+const { t } = Astro.props;
+---
+
+      <!-- Slide 4: Surroundings -->
+      <section class="jerez-slide flex h-full w-full shrink-0 flex-col justify-center px-8 py-24 md:px-16">
+        <div class="mx-auto w-full max-w-5xl">
+          <p class="font-sans text-[0.65rem] uppercase tracking-[0.5em] text-clay/70">{t.jerez.surroundings.eyebrow}</p>
+          <h2 class="mt-4 font-display text-[clamp(2.4rem,5vw,4.6rem)] font-light leading-none tracking-tight text-ink">
+            {t.jerez.surroundings.title}
+          </h2>
+          <div class="mt-10 grid gap-10 md:grid-cols-[0.95fr_1.05fr]">
+            <div class="rounded-2xl border border-clay/15 bg-white/60 p-6 shadow-soft">
+              <p class="font-sans text-[0.6rem] uppercase tracking-[0.4em] text-ink/35">
+                {t.jerez.surroundings.alternativesTitle}
+              </p>
+              <ul class="mt-5 space-y-3">
+                {t.jerez.surroundings.alternatives.map((city) => (
+                  <li class="flex items-center gap-3 font-sans text-base text-ink/75">
+                    <span class="inline-block h-1.5 w-1.5 rounded-full bg-clay/60" />
+                    <span>{city}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div class="flex flex-col gap-4">
+              <div class="w-full overflow-hidden rounded-2xl shadow-soft" style="height: 320px;">
+                <div
+                  id="jerez-surroundings-map"
+                  data-jerez-lat={t.jerez.surroundings.map.jerezLat}
+                  data-jerez-lng={t.jerez.surroundings.map.jerezLng}
+                  data-sevilla-lat={t.jerez.surroundings.map.sevillaLat}
+                  data-sevilla-lng={t.jerez.surroundings.map.sevillaLng}
+                  data-sevilla-drive={t.jerez.surroundings.map.sevillaDrive}
+                  data-puerto-lat={t.jerez.surroundings.map.puertoLat}
+                  data-puerto-lng={t.jerez.surroundings.map.puertoLng}
+                  data-puerto-drive={t.jerez.surroundings.map.puertoDrive}
+                  data-sanlucar-lat={t.jerez.surroundings.map.sanlucarLat}
+                  data-sanlucar-lng={t.jerez.surroundings.map.sanlucarLng}
+                  data-sanlucar-drive={t.jerez.surroundings.map.sanlucarDrive}
+                  class="h-full w-full"
+                  aria-label={t.jerez.surroundings.map.label}
+                />
+              </div>
+              <p class="font-sans text-sm text-ink/45">{t.jerez.surroundings.map.caption}</p>
+            </div>
+          </div>
+        </div>
+      </section>

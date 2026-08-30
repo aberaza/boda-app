@@ -1,0 +1,72 @@
+---
+import BauhausPattern from '../../BauhausPattern.astro';
+import GeoPattern from '../../GeoPattern.astro';
+import { patterns } from '../../../config/theme';
+import type { Translation, ProcessedRoute } from '../types';
+import { mAlmohade, mBauhaus } from '../view';
+import JerezOverviewSlide from './jerez/JerezOverviewSlide.astro';
+import TravelSlide from './jerez/TravelSlide.astro';
+import AccommodationSlide from './jerez/AccommodationSlide.astro';
+import SurroundingsSlide from './jerez/SurroundingsSlide.astro';
+
+interface Props { t: Translation; processedRoutes: ProcessedRoute[]; }
+const { t, processedRoutes } = Astro.props;
+---
+
+  <div
+    id="jerez-detail"
+    data-overlay-key="jerez"
+    class="fixed inset-0 z-[60] overflow-hidden bg-paper"
+    aria-modal="true"
+    aria-hidden="true"
+    inert
+    role="dialog"
+    aria-label={t.jerez.eyebrow}
+  >
+    <!-- Pattern accents -->
+    <div class="pointer-events-none absolute inset-0" style={mBauhaus}>
+      <BauhausPattern color={patterns.bauhaus.color} opacity={0.5} class="h-full w-full" />
+    </div>
+    <div class="pointer-events-none absolute inset-0" style={mAlmohade}>
+      <GeoPattern color={patterns.almohade.color} opacity={0.5} class="h-full w-full" />
+    </div>
+
+    <!-- Close button -->
+    <button
+      id="close-jerez-detail"
+      type="button"
+      data-close-overlay
+      class="fixed right-5 top-5 z-10 flex items-center gap-2 font-sans text-[0.6rem] uppercase tracking-[0.35em] text-ink/40 transition-colors hover:text-ink/70"
+      aria-label={t.eventDetail.close}
+    >
+      {t.eventDetail.close}
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M1 1l12 12M13 1L1 13"/>
+      </svg>
+    </button>
+
+    <!-- Slides container -->
+    <div id="jerez-slides" class="relative z-[1] flex h-full w-full overflow-hidden">
+      <JerezOverviewSlide t={t} />
+      <TravelSlide t={t} processedRoutes={processedRoutes} />
+      <AccommodationSlide t={t} />
+      <SurroundingsSlide t={t} />
+    </div>
+
+    <!-- Slide nav -->
+    <div class="absolute bottom-10 left-1/2 z-10 flex -translate-x-1/2 items-center gap-2">
+      {t.jerez.nav.map((label, index) => (
+        <button
+          type="button"
+          data-jerez-nav={index}
+          class="group flex items-center gap-2.5 px-2 py-1"
+          aria-label={label}
+        >
+          <span class="pointer-events-none font-sans text-[0.55rem] uppercase tracking-[0.4em] text-ink/35 transition-colors group-hover:text-ink/60">
+            {label}
+          </span>
+          <span class="block h-[6px] w-[6px] rounded-full bg-ink/20 transition-all group-[[data-active]]:bg-clay group-[[data-active]]:scale-125" />
+        </button>
+      ))}
+    </div>
+  </div>{/* /#jerez-detail */}

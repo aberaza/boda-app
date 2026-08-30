@@ -1,0 +1,44 @@
+---
+import type { Translation } from '../../types';
+interface Props { t: Translation; }
+const { t } = Astro.props;
+---
+
+      <!-- Slide 3: Where to stay -->
+      <section class="jerez-slide flex h-full w-full shrink-0 flex-col justify-center px-8 py-24 md:px-16">
+        <div class="mx-auto w-full max-w-5xl">
+          <p class="font-sans text-[0.65rem] uppercase tracking-[0.5em] text-clay/70">{t.jerez.stay.eyebrow}</p>
+          <h2 class="mt-4 font-display text-[clamp(2.4rem,5vw,4.6rem)] font-light leading-none tracking-tight text-ink">
+            {t.jerez.stay.title}
+          </h2>
+          <div class="mt-10 grid gap-10 md:grid-cols-[1.1fr_0.9fr]">
+            <div class="space-y-6">
+              <p class="font-sans text-base leading-7 text-ink/70">{t.jerez.stay.intro}</p>
+              <ul class="space-y-4">
+                {t.jerez.stay.hotels.map((hotel) => (
+                  <li class="rounded-2xl border border-clay/15 bg-white/60 p-5 shadow-soft">
+                    <p class="font-sans text-lg text-ink/80">{hotel.name}</p>
+                    <p class="mt-2 font-sans text-sm text-ink/60">{hotel.details}</p>
+                    <a
+                      href={hotel.url}
+                      target="_blank"
+                      rel="noopener"
+                      class="mt-3 inline-flex items-center gap-1.5 font-sans text-sm text-clay/70 underline-offset-4 hover:underline"
+                    >
+                      {t.jerez.stay.linkLabel}
+                      <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M1 11L11 1M11 1H4M11 1v7"/>
+                      </svg>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div class="rounded-2xl border border-clay/15 bg-white/60 p-6 shadow-soft">
+              <p class="font-sans text-[0.6rem] uppercase tracking-[0.4em] text-ink/35">{t.jerez.stay.bookingTitle}</p>
+              <p class="mt-4 font-sans text-base leading-7 text-ink/70">{t.jerez.stay.bookingInfo}</p>
+              <p class="mt-4 font-display text-lg italic text-clay/80">{t.jerez.stay.bookingNote}</p>
+            </div>
+          </div>
+        </div>
+      </section>

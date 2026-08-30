@@ -1,0 +1,156 @@
+---
+import BauhausPattern from '../../BauhausPattern.astro';
+import GeoPattern from '../../GeoPattern.astro';
+import { event } from '../../../config/content';
+import { patterns } from '../../../config/theme';
+import type { Translation } from '../types';
+import { mAlmohade, mBauhaus } from '../view';
+
+interface Props { t: Translation; }
+const { t } = Astro.props;
+---
+
+  <div
+    id="finca-detail"
+    data-overlay-key="finca"
+    class="fixed inset-0 z-[60] overflow-y-auto bg-paper"
+    aria-modal="true"
+    aria-hidden="true"
+    inert
+    role="dialog"
+    aria-label={t.finca.eyebrow}
+  >
+    <!-- Pattern accents -->
+    <div class="pointer-events-none absolute inset-0" style={mBauhaus}>
+      <BauhausPattern color={patterns.bauhaus.color} opacity={0.5} class="h-full w-full" />
+    </div>
+    <div class="pointer-events-none absolute inset-0" style={mAlmohade}>
+      <GeoPattern color={patterns.almohade.color} opacity={0.5} class="h-full w-full" />
+    </div>
+
+    <!-- Close button -->
+    <button
+      id="close-finca-detail"
+      type="button"
+      data-close-overlay
+      class="fixed right-5 top-5 z-10 flex items-center gap-2 font-sans text-[0.6rem] uppercase tracking-[0.35em] text-ink/40 transition-colors hover:text-ink/70"
+      aria-label={t.eventDetail.close}
+    >
+      {t.eventDetail.close}
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M1 1l12 12M13 1L1 13"/>
+      </svg>
+    </button>
+
+    <!-- Content -->
+    <div class="relative z-[1] mx-auto flex min-h-screen max-w-5xl flex-col justify-center px-8 py-24 md:py-20">
+
+      <!-- Eyebrow -->
+      <p class="font-sans text-[0.65rem] uppercase tracking-[0.5em] text-clay/70">
+        {t.eventDetail.eyebrow}
+      </p>
+
+      <!-- Main heading -->
+      <h2 class="mt-4 font-display text-[clamp(2.6rem,6vw,5rem)] font-light leading-none tracking-tight text-ink">
+        {t.eventDetail.lead}<br />
+        <em class="not-italic font-semibold text-clay">{t.eventDetail.leadSub}</em>
+      </h2>
+
+      <div class="mt-12 grid gap-12 md:grid-cols-2">
+
+        <!-- LEFT — Programme + dress code -->
+        <div class="flex flex-col gap-10">
+
+          <div>
+            <p class="font-sans text-[0.6rem] uppercase tracking-[0.45em] text-ink/35">
+              {t.eventDetail.scheduleTitle}
+            </p>
+            <dl class="mt-6 space-y-5">
+              {[
+                { time: t.eventDetail.s1time, label: t.eventDetail.s1label },
+                { time: t.eventDetail.s2time, label: t.eventDetail.s2label },
+                { time: t.eventDetail.s3time, label: t.eventDetail.s3label },
+              ].map(({ time, label }) => (
+                <div class="flex items-start gap-4">
+                  <div class="mt-[0.6rem] h-px w-6 shrink-0 bg-clay/40" />
+                  <div>
+                    <dt class="font-sans text-[0.58rem] uppercase tracking-[0.4em] text-ink/35">{time}</dt>
+                    <dd class="mt-0.5 font-sans text-base text-ink/80">{label}</dd>
+                  </div>
+                </div>
+              ))}
+            </dl>
+          </div>
+
+          <!-- Dress code -->
+          <div class="flex items-center gap-4">
+            <svg width="20" height="20" viewBox="0 0 20 20" class="shrink-0 text-clay/50" fill="currentColor">
+              <polygon points="10,1 12,7 18,10 12,13 10,19 8,13 2,10 8,7" opacity="0.7"/>
+            </svg>
+            <div>
+              <p class="font-sans text-[0.58rem] uppercase tracking-[0.4em] text-ink/35">
+                {t.eventDetail.dressCodeLabel}
+              </p>
+              <p class="mt-0.5 font-display text-lg italic text-ink/70">
+                {t.eventDetail.dressCodeValue}
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4">
+            <svg width="20" height="20" viewBox="0 0 20 20" class="shrink-0 text-clay/50" fill="currentColor">
+              <polygon points="10,1 12,7 18,10 12,13 10,19 8,13 2,10 8,7" opacity="0.7"/>
+            </svg>
+            <div>
+              <p class="font-sans text-[0.58rem] uppercase tracking-[0.4em] text-ink/35">
+                {t.eventDetail.adultsOnlyLabel}
+              </p>
+              <p class="mt-0.5 font-display text-lg italic text-ink/70">
+                {t.eventDetail.adultsOnlyNote}
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT — Address + map -->
+        <div class="flex flex-col gap-6">
+
+          <div>
+            <p class="font-sans text-[0.6rem] uppercase tracking-[0.45em] text-ink/35">
+              {t.eventDetail.addressLabel}
+            </p>
+            <p class="mt-3 font-sans text-base leading-7 text-ink/75">
+              {event.venue}<br />
+              {event.venueAddress}
+            </p>
+            <a
+              href={event.venueMapsUrl}
+              target="_blank"
+              rel="noopener"
+              class="mt-3 inline-flex items-center gap-1.5 font-sans text-sm text-clay/70 underline-offset-4 hover:underline"
+            >
+              {t.eventDetail.mapsLabel}
+              <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M1 11L11 1M11 1H4M11 1v7"/>
+              </svg>
+            </a>
+          </div>
+
+          <!-- Leaflet map — initialised by client JS -->
+          <div
+          id="venue-map"
+            data-lat={event.venueLat}
+            data-lng={event.venueLng}
+            data-name={event.venue}
+            data-city-lat={36.68762537447789}
+            data-city-lng={-6.136780790369877}
+            class="w-full overflow-hidden rounded-2xl shadow-soft"
+            style="height: 260px;"
+            aria-label="Mapa Finca La Carreña"
+          />
+
+        </div>
+      </div>
+    </div>
+  </div>{/* /#finca-detail */}

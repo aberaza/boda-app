@@ -82,3 +82,44 @@ html.snap-mode .slide:first-child [class*="mt-16"] {
   border: 0px;
   box-shadow: none;
 }
+
+
+/* Hidden overlays must never intercept pointer input. */
+[data-overlay-key][aria-hidden="true"] {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+/* Keep native touch panning predictable inside both scroll-snap axes. */
+html.snap-mode #slides-wrap {
+  overscroll-behavior-y: contain;
+  touch-action: pan-y;
+}
+
+#jerez-slides {
+  overscroll-behavior-x: contain;
+  touch-action: pan-x pan-y;
+}
+
+.jerez-slide {
+  min-width: 100%;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

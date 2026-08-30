@@ -1,0 +1,48 @@
+---
+import BauhausPattern from '../../BauhausPattern.astro';
+import GeoPattern from '../../GeoPattern.astro';
+import { images } from '../../../config/content';
+import { patterns, slideBg } from '../../../config/theme';
+import type { Translation } from '../types';
+import { narrowMask } from '../view';
+
+interface Props { t: Translation; }
+const { t } = Astro.props;
+---
+
+    <section aria-label={t.nav.pronto} class="slide absolute inset-0 flex flex-col items-center justify-center overflow-hidden px-8 text-center" style={`background: ${slideBg.pronto};`}>
+
+      <div class="absolute inset-0" style={narrowMask('right')}>
+        <BauhausPattern color={patterns.bauhaus.color} opacity={0.7} class="h-full w-full" />
+      </div>
+      <div class="absolute inset-0" style={narrowMask('left')}>
+        <GeoPattern color={patterns.almohade.color} opacity={0.7} class="h-full w-full" />
+      </div>
+
+      <div class="relative z-10 flex flex-col items-center">
+        <!-- hybrid ornament: Bauhaus circle + Almohade star -->
+        <svg width="48" height="48" viewBox="0 0 48 48" class="text-clay">
+          <circle cx="24" cy="24" r="20" fill="none" stroke="currentColor" stroke-width="0.8" opacity="0.35" />
+          <circle cx="24" cy="24" r="14" fill="none" stroke="currentColor" stroke-width="0.5" opacity="0.25" />
+          <polygon points="24,10 26.5,18 34,24 26.5,30 24,38 21.5,30 14,24 21.5,18" fill="currentColor" opacity="0.4" />
+        </svg>
+
+        <p class="slide-label mt-8 font-sans text-[0.65rem] uppercase tracking-[0.5em] text-clay/70">{t.pronto.eyebrow}</p>
+
+        <h2 class="slide-title mt-5 font-display text-[clamp(2rem,5vw,3.8rem)] font-light leading-tight text-ink">
+          {t.pronto.title}
+        </h2>
+
+        <div class="mt-6 flex items-center gap-4">
+          <div class="h-px w-12 bg-clay/25" />
+          <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor" class="text-clay opacity-40"><polygon points="4,0 5,3 8,4 5,5 4,8 3,5 0,4 3,3"/></svg>
+          <div class="h-px w-12 bg-clay/25" />
+        </div>
+
+        <p class="slide-body mt-6 max-w-md font-sans text-base leading-7 text-ink/55">{t.pronto.body}</p>
+
+        <div class="slide-body mt-10 overflow-hidden rounded-2xl shadow-soft" style="width: min(340px, 90vw); aspect-ratio: 3/2;">
+          <img src={images.boda} alt={t.pronto.imgAlt} class="h-full w-full object-cover" loading="lazy" />
+        </div>
+      </div>
+    </section>

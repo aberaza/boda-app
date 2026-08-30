@@ -1,0 +1,84 @@
+---
+import BauhausPattern from '../../BauhausPattern.astro';
+import GeoPattern from '../../GeoPattern.astro';
+import { event, images } from '../../../config/content';
+import { patterns, overlays, slideBg } from '../../../config/theme';
+import type { Translation } from '../types';
+import { mAlmohade, mBauhaus } from '../view';
+
+interface Props { t: Translation; }
+const { t } = Astro.props;
+---
+
+    <section aria-label={t.nav.cuando} class="slide absolute inset-0 flex overflow-hidden" style={`background: ${slideBg.cuando};`}>
+
+      <!-- vineyard photo as faint bg texture -->
+      <div
+        class="absolute inset-0"
+        style={`background-image: url('${images.cuando}'); background-size: cover; background-position: center; opacity: ${overlays.cuandoPhotoOpacity};`}
+      />
+
+      <!-- Bauhaus pattern, fades right -->
+      <div class="absolute inset-0" style={mBauhaus}>
+        <BauhausPattern color={patterns.bauhaus.color} opacity={patterns.bauhaus.opacity} class="h-full w-full" />
+      </div>
+
+      <!-- Almohade pattern, fades left -->
+      <div class="absolute inset-0" style={mAlmohade}>
+        <GeoPattern color={patterns.almohade.color} opacity={patterns.almohade.opacity} class="h-full w-full" />
+      </div>
+
+      <div class="relative z-10 grid w-full md:grid-cols-2">
+
+        <!-- LEFT — Bauhaus: data, label, numbers -->
+        <div class="flex flex-col justify-center px-10 py-16 md:px-16">
+          <p class="slide-label font-sans text-[0.65rem] uppercase tracking-[0.5em] text-ink/40">{t.cuando.eyebrow}</p>
+          <h2 class="slide-title mt-5 font-sans text-[clamp(2.2rem,5vw,4rem)] font-light leading-tight tracking-tight text-ink">
+          {t.event.date}
+          </h2>
+
+          <dl class="slide-body mt-10 space-y-6">
+            <div class="flex items-start gap-4">
+              <div class="mt-1 h-px w-6 shrink-0 bg-clay/50" />
+              <div>
+                <dt class="font-sans text-[0.6rem] uppercase tracking-[0.4em] text-ink/35">{t.cuando.labels.ceremony}</dt>
+                <dd class="mt-1 font-sans text-lg text-ink/80">{event.time}</dd>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <div class="mt-1 h-px w-6 shrink-0 bg-clay/50" />
+              <div>
+                <dt class="font-sans text-[0.6rem] uppercase tracking-[0.4em] text-ink/35">{t.cuando.labels.city}</dt>
+                <dd class="mt-1">
+                  <button
+                    type="button"
+                    data-open-overlay="jerez"
+                    class="inline-flex flex-wrap items-center gap-3 font-sans text-lg text-ink/80 underline decoration-clay/40 underline-offset-4 transition-colors hover:text-ink/95"
+                  >
+                    <span>{event.city}, {event.region}</span>
+                    <span class="rounded-full border border-clay/40 bg-clay/10 px-2.5 py-1 text-[0.5rem] uppercase tracking-[0.4em] text-clay/80 no-underline">
+                      {t.jerez.openLabel}
+                    </span>
+                    <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" class="text-clay/70">
+                      <path d="M1 11L11 1M11 1H4M11 1v7"/>
+                    </svg>
+                  </button>
+                </dd>
+              </div>
+            </div>
+          </dl>
+        </div>
+
+        <!-- RIGHT — Almohade: display type, poetic, ornamental -->
+        <div class="slide-right flex flex-col items-start justify-center px-10 py-16 md:px-16">
+          <div class="font-display text-[clamp(5rem,14vw,11rem)] font-light leading-none text-clay/20 select-none">I</div>
+          <p class="mt-4 max-w-xs font-display text-[1.4rem] font-light italic leading-relaxed text-ink/55">
+            &ldquo;{t.cuando.quote}&rdquo;
+          </p>
+          <svg class="mt-6 text-clay" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <polygon points="12,2 14,9 21,12 14,15 12,22 10,15 3,12 10,9" opacity="0.45"/>
+            <polygon points="12,5 13.5,9.5 18,12 13.5,14.5 12,19 10.5,14.5 6,12 10.5,9.5" fill="none" stroke="currentColor" stroke-width="0.6" opacity="0.35"/>
+          </svg>
+        </div>
+      </div>
+    </section>
