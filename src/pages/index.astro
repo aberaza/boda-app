@@ -18,9 +18,10 @@ const slideNav = [
 ];
 const localeLinks = locales.map((locale) => ({ locale, href: langUrl(Astro.url, locale) }));
 const processedRoutes = getSuggestedRoutes();
+const rsvpHref = lang === 'es' ? '/rsvp' : `/rsvp?lang=${lang}`;
 ---
 
-<BaseLayout title={t.meta.title} description={t.meta.description}>
+<BaseLayout title={t.meta.title} description={t.meta.description} lang={lang}>
   <HomeNavigation
     lang={lang}
     keyboardHelp={t.nav.keyboardHelp}
@@ -28,7 +29,7 @@ const processedRoutes = getSuggestedRoutes();
     localeLinks={localeLinks}
     slideNav={slideNav}
   />
-  <HomeSlideshow t={t} slideCount={slideNav.length} />
+  <HomeSlideshow t={t} slideCount={slideNav.length} rsvpHref={rsvpHref} />
   <FincaDetailOverlay t={t} />
   <JerezDetailOverlay t={t} processedRoutes={processedRoutes} />
 

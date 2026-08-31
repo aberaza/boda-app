@@ -24,13 +24,17 @@ The development server is available at `http://localhost:4321` by default.
 
 ## Commands
 
-| Command              | Purpose                                                       |
-| -------------------- | ------------------------------------------------------------- |
-| `npm run dev`        | Start the local development server.                           |
-| `npm run build`      | Build the SSR site for Netlify.                               |
-| `npm run preview`    | Preview the production build locally.                         |
-| `npm run routes:dry` | Generate flight-route data from mock data and write the JSON. |
-| `npm run routes`     | Query SerpAPI and generate flight-route data.                 |
+| Command                    | Purpose                                                       |
+| -------------------------- | ------------------------------------------------------------- |
+| `npm run dev`              | Start the local development server.                           |
+| `npm run build`            | Build the SSR site for Netlify.                               |
+| `npm run preview`          | Preview the production build locally.                         |
+| `npm run routes:dry`       | Generate flight-route data from mock data and write the JSON. |
+| `npm run routes`           | Query SerpAPI and generate flight-route data.                 |
+| `npm run invites:template` | Create a private invitation workbook template.                |
+| `npm run invites:validate` | Validate an invitation workbook without writes.               |
+| `npm run invites:import`   | Preview or apply an idempotent Netlify Database import.       |
+| `npm run invites:qr`       | Generate private invitation QR files locally.                 |
 
 The generator queries the wedding date (`2027-05-08`) by default. Pass `--date YYYY-MM-DD` to query another date. Use `--output /tmp/flight-routes.json` to inspect a run without modifying the tracked file. A real run requires `SERPAPI_KEY`; `routes:dry` never calls SerpApi.
 
@@ -64,5 +68,7 @@ Never commit `.env`, `.envrc`, API keys or other credentials.
 - `scripts/build-routes.mjs`: SerpAPI route-data generator (see the date/output options above).
 - `tests/`: Vitest unit/API tests and Playwright browser tests.
 - `.github/workflows/quality.yml`: required CI checks for pull requests and main.
+
+RSVP provisioning and Netlify Database operations are documented in [`docs/rsvp-operations.md`](docs/rsvp-operations.md).
 
 More detail is available in [`docs/architecture.md`](docs/architecture.md), known limitations in [`docs/known-issues.md`](docs/known-issues.md), and development guidance in [`CONTRIBUTING.md`](CONTRIBUTING.md).

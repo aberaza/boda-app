@@ -4,11 +4,12 @@ import '../styles/global.css';
 const {
   title = 'Aritz & Sandra',
   description = 'Wedding website for Aritz Beraza Garayalde and Sandra Vargas Benavente.',
+  lang = 'es',
 } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

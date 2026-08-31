@@ -8,8 +8,9 @@ import { mAlmohade, mBauhaus } from '../view';
 
 interface Props {
   t: Translation;
+  rsvpHref: string;
 }
-const { t } = Astro.props;
+const { t, rsvpHref } = Astro.props;
 ---
 
 <section
@@ -84,6 +85,13 @@ const { t } = Astro.props;
       </svg>
       <span class="font-display text-xl italic text-ink/60">{names.display2}</span>
     </div>
+
+    <a
+      href={rsvpHref}
+      class="mt-10 rounded-full bg-ink px-7 py-3 font-sans text-xs font-medium uppercase tracking-[0.25em] text-paper transition hover:bg-clay focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clay focus-visible:ring-offset-2"
+    >
+      {t.hero.rsvpCta}
+    </a>
 
     <div id="hero-cue" class="mt-16 flex flex-col items-center gap-3 text-ink/30">
       <div class="h-8 w-px bg-ink/20"></div>

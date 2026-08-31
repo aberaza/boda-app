@@ -6,3 +6,9 @@ dist
 
 # Local Netlify folder
 .netlify
+
+coverage
+test-results
+playwright-report
+private
+*.xlsx

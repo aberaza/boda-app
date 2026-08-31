@@ -20,9 +20,10 @@ test.describe('home experience', () => {
   });
 
   test('opens and closes the Jerez overlay', async ({ page }) => {
-    await page.goto('/');
-    await page.locator('[data-slide-btn="1"]').click();
-    await page.locator('[data-open-overlay="jerez"]').click();
+    await page.goto('/?slide=cuando');
+    const trigger = page.locator('[data-open-overlay="jerez"]');
+    await expect(trigger).toBeVisible();
+    await trigger.click();
     await expect(page.locator('#jerez-detail')).toHaveClass(/is-open/);
     await page.keyboard.press('Escape');
     await expect(page.locator('#jerez-detail')).not.toHaveClass(/is-open/);

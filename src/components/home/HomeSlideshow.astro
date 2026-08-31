@@ -8,13 +8,14 @@ import ComingSoonSlide from './slides/ComingSoonSlide.astro';
 interface Props {
   t: Translation;
   slideCount: number;
+  rsvpHref: string;
 }
-const { t, slideCount } = Astro.props;
+const { t, slideCount, rsvpHref } = Astro.props;
 ---
 
 <div id="scroll-driver" style={'height: calc(' + slideCount + ' * 100vh);'}></div>
 <div id="slides-wrap" class="fixed inset-0 overflow-hidden bg-paper">
-  <HeroSlide t={t} />
+  <HeroSlide t={t} rsvpHref={rsvpHref} />
   <WhenSlide t={t} />
   <VenueSlide t={t} />
   <ComingSoonSlide t={t} />

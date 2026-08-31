@@ -1,29 +1,54 @@
 import { describe, expect, it } from 'vitest';
-import { POST } from '../../src/pages/api/rsvp';
+import { readJsonWithLimit, assertSameOrigin } from '../../src/server/rsvp/http';
+import { saveRsvpSchema } from '../../src/server/rsvp/schemas';
+import { RsvpError } from '../../src/server/rsvp/errors';
 
-describe('POST /api/rsvp scaffold', () => {
-  it('accepts a JSON object and returns the current echo response', async () => {
-    const request = new Request('http://localhost/api/rsvp', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ attendance: 'yes' }),
-    });
-    const response = await POST({ request } as never);
+const validPayload = {
+  revision: 0,
+  contactEmail: null,
+  contactPhone: null,
+  guests: [
+    {
+      invitationPersonId: null,
+      role: 'primary',
+      firstName: 'Ada',
+      lastName: 'Lovelace',
+      attendance: 'yes',
+      dietaryNeeds: '',
+      transportNeeded: 'no',
+      message: '',
+      position: 0,
+    },
+  ],
+};
 
-    expect(response.status).toBe(200);
-    expect(response.headers.get('content-type')).toContain('application/json');
-    await expect(response.json()).resolves.toEqual({ ok: true, received: { attendance: 'yes' } });
+describe('RSVP validation', () => {
+  it('accepts a complete RSVP payload', () => {
+    expect(saveRsvpSchema.safeParse(validPayload).success).toBe(true);
   });
 
-  it('rejects invalid JSON', async () => {
-    const request = new Request('http://localhost/api/rsvp', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: '{',
-    });
-    const response = await POST({ request } as never);
+  it('rejects unknown fields and oversized text', () => {
+    expect(saveRsvpSchema.safeParse({ ...validPayload, unexpected: true }).success).toBe(false);
+    expect(
+      saveRsvpSchema.safeParse({
+        ...validPayload,
+        guests: [{ ...validPayload.guests[0], message: 'x'.repeat(1001) }],
+      }).success,
+    ).toBe(false);
+  });
 
-    expect(response.status).toBe(400);
-    await expect(response.json()).resolves.toEqual({ error: 'Invalid payload' });
+  it('rejects invalid JSON with a stable error', async () => {
+    const request = new Request('http://localhost/api/rsvp', { method: 'PUT', body: '{' });
+    await expect(readJsonWithLimit(request)).rejects.toMatchObject({
+      code: 'invalid_json',
+      status: 400,
+    });
+  });
+
+  it('rejects cross-origin writes', () => {
+    const request = new Request('https://wedding.example/api/rsvp', {
+      headers: { Origin: 'https://evil.example' },
+    });
+    expect(() => assertSameOrigin(request)).toThrowError(RsvpError);
   });
 });

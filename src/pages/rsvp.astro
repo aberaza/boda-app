@@ -1,79 +1,206 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getLang, langUrl, locales } from '../i18n';
+import { getRsvpTranslation } from '../i18n/rsvp';
+import { PRIVATE_HEADERS } from '../server/rsvp/http';
 
-const token = Astro.url.searchParams.get('t') ?? '';
+Astro.response.headers.set('Cache-Control', PRIVATE_HEADERS['Cache-Control']);
+Astro.response.headers.set('Referrer-Policy', PRIVATE_HEADERS['Referrer-Policy']);
+Astro.response.headers.set('X-Robots-Tag', PRIVATE_HEADERS['X-Robots-Tag']);
 
-const invite = {
-  token,
-  guestName: 'Invitado/a',
-  guestPartnerName: '',
-  inviteType: 'single',
-  canAddPartner: true,
-};
+const lang = getLang(Astro.url);
+const t = getRsvpTranslation(lang);
+const errorCode = Astro.url.searchParams.get('error');
+const invalidToken = errorCode === 'invalid_token';
+const serviceUnavailable = errorCode === 'service_unavailable';
+const localeLinks = locales.map((locale) => ({ locale, href: langUrl(Astro.url, locale) }));
 ---
 
-<BaseLayout title="RSVP | Aritz & Sandra">
-  <main class="mx-auto max-w-3xl px-5 py-8 md:px-8 md:py-12">
-    <section class="rounded-[2rem] border border-black/10 bg-white/80 p-6 shadow-soft md:p-10">
-      <p class="text-xs uppercase tracking-[0.35em] text-clay">Confirmación</p>
-      <h1 class="mt-3 text-4xl md:text-5xl">RSVP</h1>
-      <p class="mt-4 text-zinc-700">
-        Token: <code class="rounded bg-sand px-2 py-1">{invite.token || 'sin token'}</code>
-      </p>
-
-      <div class="mt-8 grid gap-4 rounded-3xl border border-black/10 bg-sand/60 p-5">
-        <div>
-          <label class="text-sm font-medium text-ink">Nombre</label>
-          <input
-            class="mt-2 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none ring-0"
-            value={invite.guestName}
-            readonly
-          />
-        </div>
-
-        <div>
-          <label class="text-sm font-medium text-ink">Nombre de su pareja</label>
-          <input
-            class="mt-2 w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none ring-0"
-            value={invite.guestPartnerName}
-            placeholder="Si no está registrado, lo podéis añadir aquí"
-          />
-        </div>
-
-        <div class="grid gap-3 sm:grid-cols-2">
-          <button class="rounded-full bg-ink px-5 py-3 text-sm font-medium text-paper"
-            >Asiste</button
+<BaseLayout title={`${t.pageTitle} | Aritz & Sandra`} description={t.missingAccess} lang={lang}>
+  <main class="mx-auto min-h-screen max-w-3xl px-5 py-8 md:px-8 md:py-12">
+    <nav class="mb-6 flex justify-end gap-2" aria-label="Language">
+      {
+        localeLinks.map(({ locale, href }) => (
+          <a
+            href={href}
+            aria-current={locale === lang ? 'page' : undefined}
+            class="rounded-full px-3 py-2 text-xs uppercase tracking-wider text-ink/60 hover:text-ink"
           >
-          <button
-            class="rounded-full border border-black/10 bg-white px-5 py-3 text-sm font-medium text-ink"
-            >No asiste</button
-          >
-        </div>
+            {locale}
+          </a>
+        ))
+      }
+    </nav>
 
-        <div class="grid gap-4 sm:grid-cols-2">
+    <section
+      data-rsvp-app
+      aria-busy="true"
+      class="rounded-[2rem] border border-black/10 bg-white/85 p-6 shadow-soft md:p-10"
+    >
+      <p class="text-xs uppercase tracking-[0.35em] text-clay">{t.eyebrow}</p>
+      <h1 class="mt-3 font-display text-4xl md:text-5xl">{t.title}</h1>
+
+      {
+        (invalidToken || serviceUnavailable) && (
+          <div role="alert" class="mt-6 rounded-2xl border border-clay/30 bg-clay/10 p-4 text-ink">
+            {serviceUnavailable ? t.unavailable : t.invalidAccess}
+          </div>
+        )
+      }
+      <div
+        data-rsvp-auth-error
+        hidden
+        role="alert"
+        class="mt-6 rounded-2xl border border-clay/30 bg-clay/10 p-4 text-ink"
+      >
+        {invalidToken ? t.invalidAccess : t.missingAccess}
+      </div>
+
+      <form
+        data-rsvp-form
+        hidden
+        class="mt-8 grid gap-7"
+        data-saving={t.saving}
+        data-saved={t.saved}
+        data-error={t.saveError}
+        data-conflict={t.conflict}
+        data-companion-limit={t.maxCompanions}
+      >
+        <p data-companion-limit class="text-sm text-ink/60"></p>
+        <div data-rsvp-guests class="grid gap-5"></div>
+
+        <button
+          type="button"
+          data-add-companion
+          class="justify-self-start rounded-full border border-ink/20 px-5 py-3 text-sm font-medium text-ink hover:bg-sand disabled:cursor-not-allowed disabled:opacity-40"
+        >
+          {t.addCompanion}
+        </button>
+
+        <fieldset
+          class="grid gap-4 rounded-3xl border border-black/10 bg-sand/40 p-5 sm:grid-cols-2"
+        >
+          <legend class="sr-only">Contact</legend>
           <label class="flex flex-col gap-2">
-            <span class="text-sm font-medium text-ink">Necesidades alimentarias</span>
+            <span class="text-sm font-medium text-ink">{t.email}</span>
             <input
-              class="rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none ring-0"
-              placeholder="Alergias, vegetariano, etc."
+              name="contactEmail"
+              type="email"
+              autocomplete="email"
+              maxlength="254"
+              class="rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none focus-visible:ring-2 focus-visible:ring-clay"
             />
           </label>
           <label class="flex flex-col gap-2">
-            <span class="text-sm font-medium text-ink">Necesitará transporte</span>
-            <select
-              class="rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none ring-0"
-            >
-              <option>Sí</option>
-              <option>No</option>
-            </select>
+            <span class="text-sm font-medium text-ink">{t.phone}</span>
+            <input
+              name="contactPhone"
+              type="tel"
+              autocomplete="tel"
+              maxlength="50"
+              class="rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none focus-visible:ring-2 focus-visible:ring-clay"
+            />
           </label>
-        </div>
+        </fieldset>
 
-        <p class="text-sm text-zinc-600">
-          El transporte se está valorando entre Jerez y la finca. Esta información nos ayudará a
-          decidir la mejor opción.
+        <p hidden class="text-sm text-ink/50">
+          <span>{t.lastUpdated}: </span><time data-last-updated></time>
         </p>
-      </div>
+        <p
+          data-rsvp-status
+          role="status"
+          aria-live="polite"
+          class="min-h-6 text-sm data-[error=true]:text-red-700"
+        >
+        </p>
+        <button
+          type="submit"
+          class="rounded-full bg-ink px-6 py-4 text-sm font-medium text-paper hover:bg-ink/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clay focus-visible:ring-offset-2"
+        >
+          {t.save}
+        </button>
+      </form>
+
+      <a
+        href={`/${lang === 'es' ? '' : `?lang=${lang}`}`}
+        class="mt-8 inline-block text-sm text-ink/60 underline underline-offset-4">{t.back}</a
+      >
     </section>
   </main>
+
+  <template
+    id="rsvp-guest-template"
+    data-primary-label={t.primaryGuest}
+    data-companion-label={t.companion}
+  >
+    <fieldset data-guest class="grid gap-4 rounded-3xl border border-black/10 bg-sand/60 p-5">
+      <div class="flex items-center justify-between gap-4">
+        <legend data-guest-title class="font-display text-2xl text-ink"></legend>
+        <button
+          type="button"
+          data-remove-guest
+          class="text-sm text-clay underline underline-offset-4">{t.removeCompanion}</button
+        >
+      </div>
+      <div class="grid gap-4 sm:grid-cols-2">
+        <label class="flex flex-col gap-2"
+          ><span class="text-sm font-medium text-ink">{t.firstName}</span><input
+            required
+            maxlength="100"
+            data-field="firstName"
+            autocomplete="given-name"
+            class="rounded-2xl border border-black/10 bg-white px-4 py-3 focus-visible:ring-2 focus-visible:ring-clay"
+          /></label
+        >
+        <label class="flex flex-col gap-2"
+          ><span class="text-sm font-medium text-ink">{t.lastName}</span><input
+            required
+            maxlength="100"
+            data-field="lastName"
+            autocomplete="family-name"
+            class="rounded-2xl border border-black/10 bg-white px-4 py-3 focus-visible:ring-2 focus-visible:ring-clay"
+          /></label
+        >
+      </div>
+      <label class="flex flex-col gap-2"
+        ><span class="text-sm font-medium text-ink">{t.attendance}</span><select
+          required
+          data-field="attendance"
+          class="rounded-2xl border border-black/10 bg-white px-4 py-3"
+          ><option value="unknown">{t.unknown}</option><option value="yes">{t.yes}</option><option
+            value="no">{t.no}</option
+          ></select
+        ></label
+      >
+      <div class="grid gap-4 sm:grid-cols-2">
+        <label class="flex flex-col gap-2"
+          ><span class="text-sm font-medium text-ink">{t.dietary}</span><textarea
+            maxlength="500"
+            data-field="dietaryNeeds"
+            rows="3"
+            class="rounded-2xl border border-black/10 bg-white px-4 py-3"></textarea></label
+        >
+        <label class="flex flex-col gap-2"
+          ><span class="text-sm font-medium text-ink">{t.transport}</span><select
+            data-field="transportNeeded"
+            class="rounded-2xl border border-black/10 bg-white px-4 py-3"
+            ><option value="unknown">{t.unknown}</option><option value="yes">{t.yes}</option><option
+              value="no">{t.no}</option
+            ></select
+          ></label
+        >
+      </div>
+      <label class="flex flex-col gap-2"
+        ><span class="text-sm font-medium text-ink">{t.message}</span><textarea
+          maxlength="1000"
+          data-field="message"
+          rows="3"
+          class="rounded-2xl border border-black/10 bg-white px-4 py-3"></textarea></label
+      >
+    </fieldset>
+  </template>
+
+  <script>
+    import '../scripts/rsvp';
+  </script>
 </BaseLayout>

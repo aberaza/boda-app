@@ -23,7 +23,7 @@ type Widen<T> = T extends string
 export type Translation = Widen<{
   meta: { title: string; description: string };
   event: { date: string; dateShort: string; venueDescription: string };
-  hero: { tagline: string; scrollCue: string };
+  hero: { tagline: string; scrollCue: string; rsvpCta: string };
   cuando: { eyebrow: string; quote: string; labels: { ceremony: string; city: string } };
   finca: { eyebrow: string; photoAlt: string; photoCaption: string; linkLabel: string };
   pronto: { eyebrow: string; title: string; body: string; imgAlt: string };
@@ -159,6 +159,7 @@ const es = {
   hero: {
     tagline: 'Nos casamos',
     scrollCue: 'Desliza',
+    rsvpCta: 'Confirmar asistencia',
   },
 
   cuando: {
@@ -361,6 +362,7 @@ const fr = {
   hero: {
     tagline: 'On se marie',
     scrollCue: 'Défiler',
+    rsvpCta: 'Confirmer votre présence',
   },
 
   cuando: {
@@ -562,6 +564,7 @@ const en = {
   hero: {
     tagline: "We're getting married",
     scrollCue: 'Scroll',
+    rsvpCta: 'Confirm attendance',
   },
 
   cuando: {
