@@ -1,0 +1,101 @@
+---
+import BauhausPattern from '../../BauhausPattern.astro';
+import GeoPattern from '../../GeoPattern.astro';
+import { event, images, names } from '../../../config/content';
+import { patterns, overlays, slideBg } from '../../../config/theme';
+import type { Translation } from '../types';
+import { mAlmohade, mBauhaus } from '../view';
+
+interface Props {
+  t: Translation;
+  rsvpHref: string;
+}
+const { t, rsvpHref } = Astro.props;
+---
+
+<section
+  aria-label={t.nav.hero}
+  class="slide absolute inset-0 flex items-center justify-center overflow-hidden"
+  style={`background: ${slideBg.hero};`}
+>
+  <!-- B&W hands photo, desaturated + warm parchment wash -->
+  <div
+    id="hero-photo"
+    class="absolute inset-0"
+    style={`background-image: url('${images.hero}'); background-size: cover; background-position: center 40%; filter: ${overlays.heroFilter};`}
+  >
+  </div>
+  <div
+    id="hero-parchment"
+    class="absolute inset-0"
+    style={`background: ${overlays.heroParchment};`}
+  >
+  </div>
+
+  <!-- Bauhaus pattern, fades right -->
+  <div id="hero-bauhaus" class="absolute inset-0" style={mBauhaus}>
+    <BauhausPattern
+      color={patterns.bauhaus.color}
+      opacity={patterns.bauhaus.opacity}
+      class="h-full w-full"
+    />
+  </div>
+
+  <!-- Almohade pattern, fades left -->
+  <div id="hero-almohade" class="absolute inset-0" style={mAlmohade}>
+    <GeoPattern
+      color={patterns.almohade.color}
+      opacity={patterns.almohade.opacity}
+      class="h-full w-full"
+    />
+  </div>
+
+  <!-- content -->
+  <div class="relative z-10 flex w-full max-w-5xl flex-col items-center px-8 text-center">
+    <div id="hero-date" class="flex w-full items-center justify-center gap-6 md:gap-12">
+      <span class="font-sans text-[0.65rem] uppercase tracking-[0.45em] text-ink/50"
+        >{t.event.dateShort}</span
+      >
+      <div class="h-px w-12 bg-clay/40"></div>
+      <span class="font-display text-sm italic text-ink/50">{event.city}</span>
+    </div>
+
+    <h1
+      id="hero-tagline"
+      class="mt-8 font-display text-[clamp(4rem,11vw,9rem)] font-light leading-none tracking-tight text-ink"
+    >
+      {t.hero.tagline.split(' ')[0]}<br />
+      <em class="not-italic font-semibold text-clay"
+        >{t.hero.tagline.split(' ').slice(1).join(' ')}</em
+      >
+    </h1>
+
+    <div id="hero-names" class="mt-10 flex items-baseline gap-4">
+      <span class="font-sans text-sm font-light uppercase tracking-[0.4em] text-ink/60"
+        >{names.display}</span
+      >
+      <svg
+        width="14"
+        height="14"
+        viewBox="0 0 14 14"
+        class="shrink-0 text-clay"
+        fill="currentColor"
+      >
+        <polygon points="7,1 8.5,5 13,7 8.5,9 7,13 5.5,9 1,7 5.5,5" opacity="0.7"></polygon>
+      </svg>
+      <span class="font-display text-xl italic text-ink/60">{names.display2}</span>
+    </div>
+
+    <a
+      href={rsvpHref}
+      class="mt-10 rounded-full bg-ink px-7 py-3 font-sans text-xs font-medium uppercase tracking-[0.25em] text-paper transition hover:bg-clay focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-clay focus-visible:ring-offset-2"
+    >
+      {t.hero.rsvpCta}
+    </a>
+
+    <div id="hero-cue" class="mt-16 flex flex-col items-center gap-3 text-ink/30">
+      <div class="h-8 w-px bg-ink/20"></div>
+      <span class="font-sans text-[0.6rem] uppercase tracking-[0.4em]">{t.hero.scrollCue}</span>
+    </div>
+  </div>
+</section>

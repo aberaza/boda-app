@@ -5,103 +5,238 @@
  * agnostic; everything that is *rendered as copy* lives here.
  */
 
-export const locales = ["es", "fr", "en"] as const;
+export const locales = ['es', 'fr', 'en'] as const;
 export type Locale = (typeof locales)[number];
+
+type Widen<T> = T extends string
+  ? string
+  : T extends number
+    ? number
+    : T extends boolean
+      ? boolean
+      : T extends readonly (infer Item)[]
+        ? readonly Widen<Item>[]
+        : T extends object
+          ? { -readonly [Key in keyof T]: Widen<T[Key]> }
+          : T;
+
+export type Translation = Widen<{
+  meta: { title: string; description: string };
+  event: { date: string; dateShort: string; venueDescription: string };
+  hero: { tagline: string; scrollCue: string; rsvpCta: string };
+  cuando: { eyebrow: string; quote: string; labels: { ceremony: string; city: string } };
+  finca: { eyebrow: string; photoAlt: string; photoCaption: string; linkLabel: string };
+  pronto: { eyebrow: string; title: string; body: string; imgAlt: string };
+  lang: { switcher: { es: string; fr: string; en: string } };
+  nav: {
+    hero: string;
+    cuando: string;
+    finca: string;
+    pronto: string;
+    sectionLabel: string;
+    keyboardHelp: string;
+  };
+  eventDetail: {
+    open: string;
+    close: string;
+    eyebrow: string;
+    lead: string;
+    leadSub: string;
+    scheduleTitle: string;
+    s1time: string;
+    s1label: string;
+    s2time: string;
+    s2label: string;
+    s3time: string;
+    s3label: string;
+    dressCodeLabel: string;
+    dressCodeValue: string;
+    adultsOnlyLabel: string;
+    adultsOnlyNote: string;
+    addressLabel: string;
+    mapsLabel: string;
+  };
+  jerez: {
+    eyebrow: string;
+    title: string;
+    titleSub: string;
+    overview: string;
+    history: string;
+    highlights: string;
+    festivals: string;
+    openLabel: string;
+    nav: readonly string[];
+    map: {
+      label: string;
+      caption: string;
+      cityLat: number;
+      cityLng: number;
+      sevillaLat: number;
+      sevillaLng: number;
+      cadizLat: number;
+      cadizLng: number;
+    };
+    gettingThere: {
+      eyebrow: string;
+      title: string;
+      airports: string;
+      routesTitle: string;
+      direct: string;
+      steps: string;
+      fastest: string;
+      cheapest: string;
+      avgShortest: string;
+      routes: readonly string[];
+    };
+    stay: {
+      eyebrow: string;
+      title: string;
+      intro: string;
+      hotels: readonly { name: string; details: string; url: string }[];
+      linkLabel: string;
+      bookingTitle: string;
+      bookingInfo: string;
+      bookingNote: string;
+    };
+    surroundings: {
+      eyebrow: string;
+      title: string;
+      alternativesTitle: string;
+      alternatives: readonly string[];
+      map: {
+        label: string;
+        caption: string;
+        jerezLat: number;
+        jerezLng: number;
+        sevillaLat: number;
+        sevillaLng: number;
+        sevillaDrive: string;
+        puertoLat: number;
+        puertoLng: number;
+        puertoDrive: string;
+        sanlucarLat: number;
+        sanlucarLng: number;
+        sanlucarDrive: string;
+      };
+    };
+    routesMap: {
+      label: string;
+      caption: string;
+      jerezLat: number;
+      jerezLng: number;
+      barcelonaLat: number;
+      barcelonaLng: number;
+      parisLat: number;
+      parisLng: number;
+      pamplonaLat: number;
+      pamplonaLng: number;
+      madridLat: number;
+      madridLng: number;
+      granadaLat: number;
+      granadaLng: number;
+      valenciaLat: number;
+      valenciaLng: number;
+    };
+  };
+}>;
 
 // ─── Spanish (default) ───────────────────────────────────────────────────────
 const es = {
   meta: {
-    title: "Aritz & Sandra · 8 mayo 2027",
+    title: 'Aritz & Sandra · 8 mayo 2027',
     description:
-      "Boda de Aritz Beraza Garayalde y Sandra Vargas Benavente. 8 de mayo de 2027, Finca La Carreña, Jerez de la Frontera.",
+      'Boda de Aritz Beraza Garayalde y Sandra Vargas Benavente. 8 de mayo de 2027, Finca La Carreña, Jerez de la Frontera.',
   },
 
   event: {
-    date: "8 de mayo de 2027",
-    dateShort: "8 mayo 2027",
+    date: '8 de mayo de 2027',
+    dateShort: '8 mayo 2027',
     venueDescription:
-      "Viña histórica en las afueras de Jerez. Arquitectura de cortijo andaluz, " +
-      "jardines, capilla, caballerizas y una gran sala de celebraciones.",
+      'Viña histórica en las afueras de Jerez. Arquitectura de cortijo andaluz, ' +
+      'jardines, capilla, caballerizas y una gran sala de celebraciones.',
   },
 
   hero: {
-    tagline: "Nos casamos",
-    scrollCue: "Desliza",
+    tagline: 'Nos casamos',
+    scrollCue: 'Desliza',
+    rsvpCta: 'Confirmar asistencia',
   },
 
   cuando: {
-    eyebrow: "Cuándo",
-    quote: "Una tarde de primavera entre viñedos, bajo el sol de Jerez.",
+    eyebrow: 'Cuándo',
+    quote: 'Una tarde de primavera entre viñedos, bajo el sol de Jerez.',
     labels: {
-      ceremony: "Ceremonia & Celebración",
-      city: "Ciudad",
+      ceremony: 'Ceremonia & Celebración',
+      city: 'Ciudad',
     },
   },
 
   finca: {
-    eyebrow: "El lugar",
-    photoAlt: "Finca La Carreña, acceso iluminado",
-    photoCaption: "Jerez de la Frontera, Cádiz",
-    linkLabel: "lacarrena.com",
+    eyebrow: 'El lugar',
+    photoAlt: 'Finca La Carreña, acceso iluminado',
+    photoCaption: 'Jerez de la Frontera, Cádiz',
+    linkLabel: 'lacarrena.com',
   },
 
   pronto: {
-    eyebrow: "En preparación",
-    title: "Pronto más información",
+    eyebrow: 'En preparación',
+    title: 'Pronto más información',
     body:
-      "Seguiremos actualizando esta página con detalles sobre alojamiento, " +
-      "transporte y agenda. Recibirás un enlace personalizado para tu confirmación.",
-    imgAlt: "Finca La Carreña",
+      'Seguiremos actualizando esta página con detalles sobre alojamiento, ' +
+      'transporte y agenda. Recibirás un enlace personalizado para tu confirmación.',
+    imgAlt: 'Finca La Carreña',
   },
 
   lang: {
-    switcher: { es: "ES", fr: "FR", en: "EN" },
+    switcher: { es: 'ES', fr: 'FR', en: 'EN' },
   },
   nav: {
-    hero: "Inicio",
-    cuando: "Cuándo",
-    finca: "El lugar",
-    pronto: "Info",
+    hero: 'Inicio',
+    cuando: 'Cuándo',
+    finca: 'El lugar',
+    pronto: 'Info',
+    sectionLabel: 'Navegación por secciones',
+    keyboardHelp: 'Usa las flechas, WASD o HJKL para cambiar de sección.',
   },
   eventDetail: {
-    open: "Ver detalles del evento",
-    close: "Volver",
-    eyebrow: "8 mayo 2027",
-    lead: "Únete a nosotros",
-    leadSub: "en nuestra boda",
-    scheduleTitle: "El día",
-    s1time: "Mediodía",
-    s1label: "Ceremonia civil",
-    s2time: "Tarde",
-    s2label: "Cóctel & almuerzo",
-    s3time: "Tarde-noche",
-    s3label: "Baile y fiesta",
-    dressCodeLabel: "Dress code",
-    dressCodeValue: "Etiqueta formal",
-    adultsOnlyLabel: "Sobre niños",
+    open: 'Ver detalles del evento',
+    close: 'Volver',
+    eyebrow: '8 mayo 2027',
+    lead: 'Únete a nosotros',
+    leadSub: 'en nuestra boda',
+    scheduleTitle: 'El día',
+    s1time: 'Mediodía',
+    s1label: 'Ceremonia civil',
+    s2time: 'Tarde',
+    s2label: 'Cóctel & almuerzo',
+    s3time: 'Tarde-noche',
+    s3label: 'Baile y fiesta',
+    dressCodeLabel: 'Dress code',
+    dressCodeValue: 'Etiqueta formal',
+    adultsOnlyLabel: 'Sobre niños',
     adultsOnlyNote:
-      "Con mucho cariño, os pedimos que esta celebración sea solo para adultos (sin niños). Gracias por comprenderlo.",
-    addressLabel: "Cómo llegar",
-    mapsLabel: "Abrir en Google Maps",
-    parkingNote: "Aparcamiento disponible en la finca.",
+      'Con mucho cariño, os pedimos que esta celebración sea solo para adultos (sin niños). Gracias por comprenderlo.',
+    addressLabel: 'Cómo llegar',
+    mapsLabel: 'Abrir en Google Maps',
+    parkingNote: 'Aparcamiento disponible en la finca.',
     transportNote:
-      "Estamos valorando ofrecer transporte entre Jerez y la finca — más detalles próximamente.",
+      'Estamos valorando ofrecer transporte entre Jerez y la finca — más detalles próximamente.',
   },
   jerez: {
-    eyebrow: "Jerez de la Frontera",
-    title: "La ciudad",
-    titleSub: "entre viñedos y arte",
+    eyebrow: 'Jerez de la Frontera',
+    title: 'La ciudad',
+    titleSub: 'entre viñedos y arte',
     overview:
-      "Jerez de la Frontera es una ciudad andaluza luminosa, con bodegas de jerez, tradición ecuestre y plazas animadas. Este texto es provisional y debe sustituirse por el resumen definitivo.",
+      'Jerez de la Frontera es una ciudad andaluza luminosa, con bodegas de jerez, tradición ecuestre y plazas animadas. Este texto es provisional y debe sustituirse por el resumen definitivo.',
     history:
-      "Su historia está marcada por el comercio del vino, la herencia andalusí y la cultura contemporánea. Sustituye este párrafo por la versión final.",
+      'Su historia está marcada por el comercio del vino, la herencia andalusí y la cultura contemporánea. Sustituye este párrafo por la versión final.',
     highlights:
-      "Incluye bodegas, flamenco, el Alcázar y mercados locales. Texto provisional pendiente de reemplazo.",
+      'Incluye bodegas, flamenco, el Alcázar y mercados locales. Texto provisional pendiente de reemplazo.',
     festivals:
-      "MotoGP Jerez se celebra en la segunda mitad de abril y la Feria de Jerez alrededor del 8 de mayo, fechas cercanas a la boda.",
+      'MotoGP Jerez se celebra en la segunda mitad de abril y la Feria de Jerez alrededor del 8 de mayo, fechas cercanas a la boda.',
     map: {
-      label: "Mapa de Jerez",
-      caption: "Jerez con Sevilla y Cádiz en contexto.",
+      label: 'Mapa de Jerez',
+      caption: 'Jerez con Sevilla y Cádiz en contexto.',
       cityLat: 36.685,
       cityLng: -6.126,
       sevillaLat: 37.389,
@@ -110,26 +245,25 @@ const es = {
       cadizLng: -6.292,
     },
     gettingThere: {
-      eyebrow: "Cómo llegar",
-      title: "Llegar a Jerez",
-      airports:
-        "Aeropuerto más cercano: Jerez (XRY). Alternativas: Sevilla (SVQ) y Málaga (AGP). ",
-      routesTitle: "Rutas sugeridas",
-      direct: "Directo",
-      steps: "escalas",
-      fastest: "Más rápido",
-      cheapest: "Más barato",
-      avgShortest: "Precio medio (ruta corta)",
+      eyebrow: 'Cómo llegar',
+      title: 'Llegar a Jerez',
+      airports: 'Aeropuerto más cercano: Jerez (XRY). Alternativas: Sevilla (SVQ) y Málaga (AGP). ',
+      routesTitle: 'Rutas sugeridas',
+      direct: 'Directo',
+      steps: 'escalas',
+      fastest: 'Más rápido',
+      cheapest: 'Más barato',
+      avgShortest: 'Precio medio (ruta corta)',
       routes: [
-        "Barcelona → Jerez (vuelo directo o vía Madrid).",
-        "París → Jerez (vuelo directo o vía Sevilla).",
-        "Pamplona → Jerez (vuelo a Sevilla y tren/bus).",
-        "Madrid → Jerez (tren AVE + Media Distancia).",
+        'Barcelona → Jerez (vuelo directo o vía Madrid).',
+        'París → Jerez (vuelo directo o vía Sevilla).',
+        'Pamplona → Jerez (vuelo a Sevilla y tren/bus).',
+        'Madrid → Jerez (tren AVE + Media Distancia).',
       ],
     },
     routesMap: {
-      label: "Mapa de rutas a Jerez",
-      caption: "Rutas desde Barcelona, París, Pamplona y Madrid.",
+      label: 'Mapa de rutas a Jerez',
+      caption: 'Rutas desde Barcelona, París, Pamplona y Madrid.',
       jerezLat: 36.685,
       jerezLng: -6.126,
       barcelonaLat: 41.385,
@@ -146,167 +280,165 @@ const es = {
       valenciaLng: -0.4816,
     },
     stay: {
-      eyebrow: "Dónde dormir",
-      title: "Alojamiento en Jerez",
+      eyebrow: 'Dónde dormir',
+      title: 'Alojamiento en Jerez',
       intro:
-        "Pronto compartiremos acuerdos y tarifas especiales. Sustituye este texto por las recomendaciones definitivas.",
-      linkLabel: "Ver hotel",
+        'Pronto compartiremos acuerdos y tarifas especiales. Sustituye este texto por las recomendaciones definitivas.',
+      linkLabel: 'Ver hotel',
       hotels: [
         {
-          name: "Hotel Placeholder 01",
-          details:
-            "Tarifa especial disponible. Sustituye por detalles y código.",
-          url: "https://example.com",
+          name: 'Hotel Placeholder 01',
+          details: 'Tarifa especial disponible. Sustituye por detalles y código.',
+          url: 'https://example.com',
         },
         {
-          name: "Hotel Placeholder 02",
-          details:
-            "Tarifa especial disponible. Sustituye por detalles y código.",
-          url: "https://example.com",
+          name: 'Hotel Placeholder 02',
+          details: 'Tarifa especial disponible. Sustituye por detalles y código.',
+          url: 'https://example.com',
         },
         {
-          name: "Hotel Placeholder 03",
-          details:
-            "Tarifa especial disponible. Sustituye por detalles y código.",
-          url: "https://example.com",
+          name: 'Hotel Placeholder 03',
+          details: 'Tarifa especial disponible. Sustituye por detalles y código.',
+          url: 'https://example.com',
         },
       ],
-      bookingTitle: "Reservas",
+      bookingTitle: 'Reservas',
       bookingInfo:
-        "Instrucciones provisionales para reservas con tarifa acordada. Sustituye por email, ventanas de reserva y cómo aplicar el descuento.",
-      bookingNote: "Si necesitas ayuda, avísanos y te ayudaremos.",
+        'Instrucciones provisionales para reservas con tarifa acordada. Sustituye por email, ventanas de reserva y cómo aplicar el descuento.',
+      bookingNote: 'Si necesitas ayuda, avísanos y te ayudaremos.',
     },
     surroundings: {
-      eyebrow: "Alrededores",
-      title: "Alargar la estancia",
+      eyebrow: 'Alrededores',
+      title: 'Alargar la estancia',
       alternativesTitle:
-        "Si te interesa quedarte más días, estas ciudades también son una gran alternativa:",
+        'Si te interesa quedarte más días, estas ciudades también son una gran alternativa:',
       alternatives: [
-        "Jerez de la Frontera",
-        "Sanlúcar de Barrameda",
-        "El Puerto de Santa María",
-        "Sevilla",
+        'Jerez de la Frontera',
+        'Sanlúcar de Barrameda',
+        'El Puerto de Santa María',
+        'Sevilla',
       ],
       map: {
-        label: "Mapa de alrededores",
-        caption: "Tiempos orientativos en coche hasta Jerez de la Frontera.",
-        jerezLabel: "Jerez de la Frontera",
+        label: 'Mapa de alrededores',
+        caption: 'Tiempos orientativos en coche hasta Jerez de la Frontera.',
+        jerezLabel: 'Jerez de la Frontera',
         jerezLat: 36.685,
         jerezLng: -6.126,
-        sevillaLabel: "Sevilla",
+        sevillaLabel: 'Sevilla',
         sevillaLat: 37.389,
         sevillaLng: -5.984,
-        sevillaDrive: "1 h 05 min hasta Jerez",
-        puertoLabel: "El Puerto de Santa María",
+        sevillaDrive: '1 h 05 min hasta Jerez',
+        puertoLabel: 'El Puerto de Santa María',
         puertoLat: 36.602,
         puertoLng: -6.228,
-        puertoDrive: "25 min hasta Jerez",
-        sanlucarLabel: "Sanlúcar de Barrameda",
+        puertoDrive: '25 min hasta Jerez',
+        sanlucarLabel: 'Sanlúcar de Barrameda',
         sanlucarLat: 36.779,
         sanlucarLng: -6.354,
-        sanlucarDrive: "35 min hasta Jerez",
+        sanlucarDrive: '35 min hasta Jerez',
       },
     },
-    nav: ["Ciudad", "Llegar", "Dormir", "Alrededores"],
-    openLabel: "Detalles",
+    nav: ['Ciudad', 'Llegar', 'Dormir', 'Alrededores'],
+    openLabel: 'Detalles',
   },
 } as const;
 
 // ─── French ──────────────────────────────────────────────────────────────────
 const fr = {
   meta: {
-    title: "Aritz & Sandra · 8 mai 2027",
+    title: 'Aritz & Sandra · 8 mai 2027',
     description:
       "Mariage d'Aritz Beraza Garayalde et Sandra Vargas Benavente. 8 mai 2027, Finca La Carreña, Jerez de la Frontera.",
   },
 
   event: {
-    date: "8 mai 2027",
-    dateShort: "8 mai 2027",
+    date: '8 mai 2027',
+    dateShort: '8 mai 2027',
     venueDescription:
-      "Vignoble historique aux portes de Jerez. Architecture de cortijo andalou, " +
-      "jardins, chapelle, écuries et une grande salle de réception.",
+      'Vignoble historique aux portes de Jerez. Architecture de cortijo andalou, ' +
+      'jardins, chapelle, écuries et une grande salle de réception.',
   },
 
   hero: {
-    tagline: "On se marie",
-    scrollCue: "Défiler",
+    tagline: 'On se marie',
+    scrollCue: 'Défiler',
+    rsvpCta: 'Confirmer votre présence',
   },
 
   cuando: {
-    eyebrow: "Quand",
-    quote:
-      "Un après-midi de printemps entre les vignes, sous le soleil de Jerez.",
+    eyebrow: 'Quand',
+    quote: 'Un après-midi de printemps entre les vignes, sous le soleil de Jerez.',
     labels: {
-      ceremony: "Cérémonie & Réception",
-      city: "Ville",
+      ceremony: 'Cérémonie & Réception',
+      city: 'Ville',
     },
   },
 
   finca: {
-    eyebrow: "Le lieu",
-    photoAlt: "Finca La Carreña, accès illuminé",
-    photoCaption: "Jerez de la Frontera, Cádiz",
-    linkLabel: "lacarrena.com",
+    eyebrow: 'Le lieu',
+    photoAlt: 'Finca La Carreña, accès illuminé',
+    photoCaption: 'Jerez de la Frontera, Cádiz',
+    linkLabel: 'lacarrena.com',
   },
 
   pronto: {
-    eyebrow: "En préparation",
+    eyebrow: 'En préparation',
     title: "Plus d'informations bientôt",
     body:
       "Nous continuerons à mettre à jour cette page avec des détails sur l'hébergement, " +
-      "le transport et le programme. Vous recevrez un lien personnalisé pour confirmer votre présence.",
-    imgAlt: "Finca La Carreña",
+      'le transport et le programme. Vous recevrez un lien personnalisé pour confirmer votre présence.',
+    imgAlt: 'Finca La Carreña',
   },
 
   lang: {
-    switcher: { es: "ES", fr: "FR", en: "EN" },
+    switcher: { es: 'ES', fr: 'FR', en: 'EN' },
   },
   nav: {
-    hero: "Accueil",
-    cuando: "Quand",
-    finca: "Le lieu",
-    pronto: "Info",
+    hero: 'Accueil',
+    cuando: 'Quand',
+    finca: 'Le lieu',
+    pronto: 'Info',
+    sectionLabel: 'Navigation par sections',
+    keyboardHelp: 'Utilisez les flèches, WASD ou HJKL pour changer de section.',
   },
   eventDetail: {
-    open: "Voir les détails",
-    close: "Retour",
-    eyebrow: "8 mai 2027",
-    lead: "Rejoignez-nous",
-    leadSub: "pour notre mariage",
-    scheduleTitle: "Le programme",
-    s1time: "Midi",
-    s1label: "Cérémonie civile",
-    s2time: "Après-midi",
-    s2label: "Cocktail & déjeuner",
-    s3time: "Soirée",
-    s3label: "Bal et fête",
-    dressCodeLabel: "Dress code",
-    dressCodeValue: "Tenue de soirée",
-    adultsOnlyLabel: "À propos des enfants",
+    open: 'Voir les détails',
+    close: 'Retour',
+    eyebrow: '8 mai 2027',
+    lead: 'Rejoignez-nous',
+    leadSub: 'pour notre mariage',
+    scheduleTitle: 'Le programme',
+    s1time: 'Midi',
+    s1label: 'Cérémonie civile',
+    s2time: 'Après-midi',
+    s2label: 'Cocktail & déjeuner',
+    s3time: 'Soirée',
+    s3label: 'Bal et fête',
+    dressCodeLabel: 'Dress code',
+    dressCodeValue: 'Tenue de soirée',
+    adultsOnlyLabel: 'À propos des enfants',
     adultsOnlyNote:
-      "Avec toute notre affection, nous vous demandons que cette célébration soit réservée aux adultes (sans enfants). Merci de votre compréhension.",
-    addressLabel: "Comment venir",
-    mapsLabel: "Ouvrir dans Google Maps",
-    parkingNote: "Parking disponible sur place.",
+      'Avec toute notre affection, nous vous demandons que cette célébration soit réservée aux adultes (sans enfants). Merci de votre compréhension.',
+    addressLabel: 'Comment venir',
+    mapsLabel: 'Ouvrir dans Google Maps',
+    parkingNote: 'Parking disponible sur place.',
     transportNote:
       "Nous étudions la mise en place d'un transport entre Jerez et la finca — plus de détails bientôt.",
   },
   jerez: {
-    eyebrow: "Jerez de la Frontera",
-    title: "La ville",
-    titleSub: "entre vignes et art",
+    eyebrow: 'Jerez de la Frontera',
+    title: 'La ville',
+    titleSub: 'entre vignes et art',
     overview:
-      "Jerez de la Frontera est une ville andalouse lumineuse, réputée pour ses bodegas, son héritage équestre et ses places animées. Texte provisoire à remplacer.",
+      'Jerez de la Frontera est une ville andalouse lumineuse, réputée pour ses bodegas, son héritage équestre et ses places animées. Texte provisoire à remplacer.',
     history:
-      "Son histoire est marquée par le commerce du xérès, les racines mauresques et la culture contemporaine. Remplacez ce paragraphe par la version finale.",
-    highlights:
-      "Inclure bodegas, flamenco, l’Alcázar et les marchés locaux. Texte provisoire.",
+      'Son histoire est marquée par le commerce du xérès, les racines mauresques et la culture contemporaine. Remplacez ce paragraphe par la version finale.',
+    highlights: 'Inclure bodegas, flamenco, l’Alcázar et les marchés locaux. Texte provisoire.',
     festivals:
-      "Le MotoGP de Jerez a lieu dans la seconde moitié d’avril et la Feria de Jerez autour du 8 mai, des dates proches du mariage.",
+      'Le MotoGP de Jerez a lieu dans la seconde moitié d’avril et la Feria de Jerez autour du 8 mai, des dates proches du mariage.',
     map: {
-      label: "Carte de Jerez",
-      caption: "Jerez avec Séville et Cadix en contexte.",
+      label: 'Carte de Jerez',
+      caption: 'Jerez avec Séville et Cadix en contexte.',
       cityLat: 36.685,
       cityLng: -6.126,
       sevillaLat: 37.389,
@@ -315,26 +447,26 @@ const fr = {
       cadizLng: -6.292,
     },
     gettingThere: {
-      eyebrow: "Comment venir",
-      title: "Aller à Jerez",
+      eyebrow: 'Comment venir',
+      title: 'Aller à Jerez',
       airports:
-        "Aéroport le plus proche : Jerez (XRY). Alternatives : Séville (SVQ) et Malaga (AGP).",
-      routesTitle: "Itinéraires suggérés",
-      direct: "Direct",
-      steps: "escales",
-      fastest: "Le plus rapide",
-      cheapest: "Le moins cher",
-      avgShortest: "Prix moyen (route courte)",
+        'Aéroport le plus proche : Jerez (XRY). Alternatives : Séville (SVQ) et Malaga (AGP).',
+      routesTitle: 'Itinéraires suggérés',
+      direct: 'Direct',
+      steps: 'escales',
+      fastest: 'Le plus rapide',
+      cheapest: 'Le moins cher',
+      avgShortest: 'Prix moyen (route courte)',
       routes: [
-        "Barcelone → Jerez (vol direct ou via Madrid).",
-        "Paris → Jerez (vol direct ou via Séville).",
-        "Pampelune → Jerez (vol vers Séville puis train/bus).",
-        "Madrid → Jerez (train AVE + Media Distancia).",
+        'Barcelone → Jerez (vol direct ou via Madrid).',
+        'Paris → Jerez (vol direct ou via Séville).',
+        'Pampelune → Jerez (vol vers Séville puis train/bus).',
+        'Madrid → Jerez (train AVE + Media Distancia).',
       ],
     },
     routesMap: {
-      label: "Carte des routes vers Jerez",
-      caption: "Routes depuis Barcelone, Paris, Pampelune et Madrid.",
+      label: 'Carte des routes vers Jerez',
+      caption: 'Routes depuis Barcelone, Paris, Pampelune et Madrid.',
       jerezLat: 36.685,
       jerezLng: -6.126,
       barcelonaLat: 41.385,
@@ -351,166 +483,165 @@ const fr = {
       valenciaLng: -0.4816,
     },
     stay: {
-      eyebrow: "Où dormir",
-      title: "Hébergement à Jerez",
+      eyebrow: 'Où dormir',
+      title: 'Hébergement à Jerez',
       intro:
-        "Nous partagerons bientôt les accords et tarifs spéciaux. Texte provisoire à remplacer.",
-      linkLabel: "Voir l’hôtel",
+        'Nous partagerons bientôt les accords et tarifs spéciaux. Texte provisoire à remplacer.',
+      linkLabel: 'Voir l’hôtel',
       hotels: [
         {
-          name: "Hotel Placeholder 01",
-          details:
-            "Tarif spécial disponible. Remplacer par les détails et code.",
-          url: "https://example.com",
+          name: 'Hotel Placeholder 01',
+          details: 'Tarif spécial disponible. Remplacer par les détails et code.',
+          url: 'https://example.com',
         },
         {
-          name: "Hotel Placeholder 02",
-          details:
-            "Tarif spécial disponible. Remplacer par les détails et code.",
-          url: "https://example.com",
+          name: 'Hotel Placeholder 02',
+          details: 'Tarif spécial disponible. Remplacer par les détails et code.',
+          url: 'https://example.com',
         },
         {
-          name: "Hotel Placeholder 03",
-          details:
-            "Tarif spécial disponible. Remplacer par les détails et code.",
-          url: "https://example.com",
+          name: 'Hotel Placeholder 03',
+          details: 'Tarif spécial disponible. Remplacer par les détails et code.',
+          url: 'https://example.com',
         },
       ],
-      bookingTitle: "Réservations",
+      bookingTitle: 'Réservations',
       bookingInfo:
-        "Instructions provisoires pour réserver au tarif négocié. Remplacer par l’email, les dates et la marche à suivre.",
-      bookingNote: "Si vous avez besoin d’aide, dites-le-nous.",
+        'Instructions provisoires pour réserver au tarif négocié. Remplacer par l’email, les dates et la marche à suivre.',
+      bookingNote: 'Si vous avez besoin d’aide, dites-le-nous.',
     },
     surroundings: {
-      eyebrow: "Alentours",
-      title: "Prolonger le séjour",
-      alternativesTitle:
-        "Si vous souhaitez rester plus longtemps, vous pouvez aussi envisager :",
+      eyebrow: 'Alentours',
+      title: 'Prolonger le séjour',
+      alternativesTitle: 'Si vous souhaitez rester plus longtemps, vous pouvez aussi envisager :',
       alternatives: [
-        "Jerez de la Frontera",
-        "Sanlúcar de Barrameda",
-        "El Puerto de Santa María",
-        "Séville",
+        'Jerez de la Frontera',
+        'Sanlúcar de Barrameda',
+        'El Puerto de Santa María',
+        'Séville',
       ],
       map: {
-        label: "Carte des alentours",
-        caption: "Temps de trajet indicatifs en voiture vers Jerez de la Frontera.",
-        jerezLabel: "Jerez de la Frontera",
+        label: 'Carte des alentours',
+        caption: 'Temps de trajet indicatifs en voiture vers Jerez de la Frontera.',
+        jerezLabel: 'Jerez de la Frontera',
         jerezLat: 36.685,
         jerezLng: -6.126,
-        sevillaLabel: "Séville",
+        sevillaLabel: 'Séville',
         sevillaLat: 37.389,
         sevillaLng: -5.984,
-        sevillaDrive: "1 h 05 min jusqu’à Jerez",
-        puertoLabel: "El Puerto de Santa María",
+        sevillaDrive: '1 h 05 min jusqu’à Jerez',
+        puertoLabel: 'El Puerto de Santa María',
         puertoLat: 36.602,
         puertoLng: -6.228,
-        puertoDrive: "25 min jusqu’à Jerez",
-        sanlucarLabel: "Sanlúcar de Barrameda",
+        puertoDrive: '25 min jusqu’à Jerez',
+        sanlucarLabel: 'Sanlúcar de Barrameda',
         sanlucarLat: 36.779,
         sanlucarLng: -6.354,
-        sanlucarDrive: "35 min jusqu’à Jerez",
+        sanlucarDrive: '35 min jusqu’à Jerez',
       },
     },
-    nav: ["Ville", "Venir", "Dormir", "Alentours"],
-    openLabel: "Détails",
+    nav: ['Ville', 'Venir', 'Dormir', 'Alentours'],
+    openLabel: 'Détails',
   },
 } as const;
 
 // ─── English ─────────────────────────────────────────────────────────────────
 const en = {
   meta: {
-    title: "Aritz & Sandra · 8 May 2027",
+    title: 'Aritz & Sandra · 8 May 2027',
     description:
-      "Wedding of Aritz Beraza Garayalde and Sandra Vargas Benavente. 8 May 2027, Finca La Carreña, Jerez de la Frontera.",
+      'Wedding of Aritz Beraza Garayalde and Sandra Vargas Benavente. 8 May 2027, Finca La Carreña, Jerez de la Frontera.',
   },
 
   event: {
-    date: "8 May 2027",
-    dateShort: "8 May 2027",
+    date: '8 May 2027',
+    dateShort: '8 May 2027',
     venueDescription:
-      "A historic vineyard on the outskirts of Jerez. Andalusian cortijo architecture, " +
-      "gardens, chapel, stables and a grand celebration hall.",
+      'A historic vineyard on the outskirts of Jerez. Andalusian cortijo architecture, ' +
+      'gardens, chapel, stables and a grand celebration hall.',
   },
 
   hero: {
     tagline: "We're getting married",
-    scrollCue: "Scroll",
+    scrollCue: 'Scroll',
+    rsvpCta: 'Confirm attendance',
   },
 
   cuando: {
-    eyebrow: "When",
-    quote: "A spring afternoon among the vineyards, under the Jerez sun.",
+    eyebrow: 'When',
+    quote: 'A spring afternoon among the vineyards, under the Jerez sun.',
     labels: {
-      ceremony: "Ceremony & Reception",
-      city: "City",
+      ceremony: 'Ceremony & Reception',
+      city: 'City',
     },
   },
 
   finca: {
-    eyebrow: "The venue",
-    photoAlt: "Finca La Carreña, illuminated entrance",
-    photoCaption: "Jerez de la Frontera, Cádiz",
-    linkLabel: "lacarrena.com",
+    eyebrow: 'The venue',
+    photoAlt: 'Finca La Carreña, illuminated entrance',
+    photoCaption: 'Jerez de la Frontera, Cádiz',
+    linkLabel: 'lacarrena.com',
   },
 
   pronto: {
-    eyebrow: "Coming soon",
-    title: "More details soon",
+    eyebrow: 'Coming soon',
+    title: 'More details soon',
     body:
-      "We will keep updating this page with details on accommodation, " +
-      "transport and schedule. You will receive a personalised link to confirm your attendance.",
-    imgAlt: "Finca La Carreña",
+      'We will keep updating this page with details on accommodation, ' +
+      'transport and schedule. You will receive a personalised link to confirm your attendance.',
+    imgAlt: 'Finca La Carreña',
   },
 
   lang: {
-    switcher: { es: "ES", fr: "FR", en: "EN" },
+    switcher: { es: 'ES', fr: 'FR', en: 'EN' },
   },
   nav: {
-    hero: "Home",
-    cuando: "When",
-    finca: "The venue",
-    pronto: "Info",
+    hero: 'Home',
+    cuando: 'When',
+    finca: 'The venue',
+    pronto: 'Info',
+    sectionLabel: 'Section navigation',
+    keyboardHelp: 'Use the arrow keys, WASD or HJKL to change sections.',
   },
   eventDetail: {
-    open: "View event details",
-    close: "Back",
-    eyebrow: "8 May 2027",
-    lead: "Join us",
-    leadSub: "on our wedding day",
-    scheduleTitle: "The day",
-    s1time: "Midday",
-    s1label: "Civil ceremony",
-    s2time: "Afternoon",
-    s2label: "Cocktail & seated lunch",
-    s3time: "Evening",
-    s3label: "Dancing & celebrations",
-    dressCodeLabel: "Dress code",
-    dressCodeValue: "Formal attire",
-    adultsOnlyLabel: "About kids",
+    open: 'View event details',
+    close: 'Back',
+    eyebrow: '8 May 2027',
+    lead: 'Join us',
+    leadSub: 'on our wedding day',
+    scheduleTitle: 'The day',
+    s1time: 'Midday',
+    s1label: 'Civil ceremony',
+    s2time: 'Afternoon',
+    s2label: 'Cocktail & seated lunch',
+    s3time: 'Evening',
+    s3label: 'Dancing & celebrations',
+    dressCodeLabel: 'Dress code',
+    dressCodeValue: 'Formal attire',
+    adultsOnlyLabel: 'About kids',
     adultsOnlyNote:
-      "With lots of love, we kindly ask that this celebration be adults-only (no children). Thank you for understanding.",
-    addressLabel: "Getting there",
-    mapsLabel: "Open in Google Maps",
-    parkingNote: "Parking available at the venue.",
+      'With lots of love, we kindly ask that this celebration be adults-only (no children). Thank you for understanding.',
+    addressLabel: 'Getting there',
+    mapsLabel: 'Open in Google Maps',
+    parkingNote: 'Parking available at the venue.',
     transportNote:
-      "We are looking into providing transport between Jerez and the venue — details to follow.",
+      'We are looking into providing transport between Jerez and the venue — details to follow.',
   },
   jerez: {
-    eyebrow: "Jerez de la Frontera",
-    title: "La ciudad",
-    titleSub: "entre viñedos y arte",
+    eyebrow: 'Jerez de la Frontera',
+    title: 'La ciudad',
+    titleSub: 'entre viñedos y arte',
     overview:
-      "Jerez de la Frontera is a sunlit Andalusian city known for its sherry bodegas, equestrian heritage, and lively plazas. This is placeholder copy; replace it with the final summary of the city’s identity, architecture, and pace of life.",
+      'Jerez de la Frontera is a sunlit Andalusian city known for its sherry bodegas, equestrian heritage, and lively plazas. This is placeholder copy; replace it with the final summary of the city’s identity, architecture, and pace of life.',
     history:
-      "Historically shaped by the sherry trade, Moorish roots, and modern winemaking, Jerez blends centuries-old traditions with contemporary culture. Replace this paragraph with your preferred historical overview.",
+      'Historically shaped by the sherry trade, Moorish roots, and modern winemaking, Jerez blends centuries-old traditions with contemporary culture. Replace this paragraph with your preferred historical overview.',
     highlights:
-      "Add highlights such as bodegas, flamenco, the Alcázar, and local food markets. This is placeholder text that should be replaced once the final highlights are chosen.",
+      'Add highlights such as bodegas, flamenco, the Alcázar, and local food markets. This is placeholder text that should be replaced once the final highlights are chosen.',
     festivals:
-      "MotoGP Jerez takes place in the second half of April, and Feria de Jerez is around 8 May — both surround our wedding dates.",
+      'MotoGP Jerez takes place in the second half of April, and Feria de Jerez is around 8 May — both surround our wedding dates.',
     map: {
-      label: "Mapa de Jerez",
-      caption: "Jerez con Sevilla y Cádiz en contexto.",
+      label: 'Mapa de Jerez',
+      caption: 'Jerez con Sevilla y Cádiz en contexto.',
       cityLat: 36.685,
       cityLng: -6.126,
       sevillaLat: 37.389,
@@ -519,26 +650,26 @@ const en = {
       cadizLng: -6.292,
     },
     gettingThere: {
-      eyebrow: "Cómo llegar",
-      title: "Llegar a Jerez",
+      eyebrow: 'Cómo llegar',
+      title: 'Llegar a Jerez',
       airports:
-        "Nearest airport: Jerez (XRY). Alternatives include Sevilla (SVQ) and Málaga (AGP).",
-      routesTitle: "Suggested routes",
-      direct: "Direct",
-      steps: "steps",
-      fastest: "Fastest",
-      cheapest: "Cheapest",
-      avgShortest: "Avg price (short route)",
+        'Nearest airport: Jerez (XRY). Alternatives include Sevilla (SVQ) and Málaga (AGP).',
+      routesTitle: 'Suggested routes',
+      direct: 'Direct',
+      steps: 'steps',
+      fastest: 'Fastest',
+      cheapest: 'Cheapest',
+      avgShortest: 'Avg price (short route)',
       routes: [
-        "Barcelona → Jerez (vuelo directo o vía Madrid).",
-        "Paris → Jerez (vuelo directo o vía Sevilla).",
-        "Pamplona → Jerez (vuelo a Sevilla y tren/bus).",
-        "Madrid → Jerez (tren AVE + Media Distancia).",
+        'Barcelona → Jerez (vuelo directo o vía Madrid).',
+        'Paris → Jerez (vuelo directo o vía Sevilla).',
+        'Pamplona → Jerez (vuelo a Sevilla y tren/bus).',
+        'Madrid → Jerez (tren AVE + Media Distancia).',
       ],
     },
     routesMap: {
-      label: "Mapa de rutas a Jerez",
-      caption: "Rutas desde Barcelona, Párís, Pamplona y Madrid.",
+      label: 'Mapa de rutas a Jerez',
+      caption: 'Rutas desde Barcelona, Párís, Pamplona y Madrid.',
       jerezLat: 36.685,
       jerezLng: -6.126,
       barcelonaLat: 41.385,
@@ -555,71 +686,68 @@ const en = {
       valenciaLng: -0.4816,
     },
     stay: {
-      eyebrow: "Where to stay",
-      title: "Staying in Jerez",
+      eyebrow: 'Where to stay',
+      title: 'Staying in Jerez',
       intro:
-        "We will share hotel agreements and special rates soon. This placeholder text should be replaced with specific recommendations and booking notes.",
-      linkLabel: "View hotel",
+        'We will share hotel agreements and special rates soon. This placeholder text should be replaced with specific recommendations and booking notes.',
+      linkLabel: 'View hotel',
       hotels: [
         {
-          name: "Hotel Placeholder 01",
-          details:
-            "Special rate available. Replace with final details and booking code.",
-          url: "https://example.com",
+          name: 'Hotel Placeholder 01',
+          details: 'Special rate available. Replace with final details and booking code.',
+          url: 'https://example.com',
         },
         {
-          name: "Hotel Placeholder 02",
-          details:
-            "Special rate available. Replace with final details and booking code.",
-          url: "https://example.com",
+          name: 'Hotel Placeholder 02',
+          details: 'Special rate available. Replace with final details and booking code.',
+          url: 'https://example.com',
         },
         {
-          name: "Hotel Placeholder 03",
-          details:
-            "Special rate available. Replace with final details and booking code.",
-          url: "https://example.com",
+          name: 'Hotel Placeholder 03',
+          details: 'Special rate available. Replace with final details and booking code.',
+          url: 'https://example.com',
         },
       ],
-      bookingTitle: "Reservations",
+      bookingTitle: 'Reservations',
       bookingInfo:
-        "Placeholder instructions for booking with negotiated rates. Replace with contact emails, booking windows, and how to claim the discount.",
-      bookingNote: "If you need help, let us know and we will assist.",
+        'Placeholder instructions for booking with negotiated rates. Replace with contact emails, booking windows, and how to claim the discount.',
+      bookingNote: 'If you need help, let us know and we will assist.',
     },
     surroundings: {
-      eyebrow: "Surroundings",
-      title: "Extending your stay",
+      eyebrow: 'Surroundings',
+      title: 'Extending your stay',
       alternativesTitle:
-        "If you are interested in staying longer, these cities are also a great option:",
+        'If you are interested in staying longer, these cities are also a great option:',
       alternatives: [
-        "Jerez de la Frontera",
-        "Sanlúcar de Barrameda",
-        "El Puerto de Santa María",
-        "Seville",
+        'Jerez de la Frontera',
+        'Sanlúcar de Barrameda',
+        'El Puerto de Santa María',
+        'Seville',
       ],
       map: {
-        label: "Surroundings map",
-        caption: "Estimated driving times to Jerez de la Frontera.",
-        jerezLabel: "Jerez de la Frontera",
+        label: 'Surroundings map',
+        caption: 'Estimated driving times to Jerez de la Frontera.',
+        jerezLabel: 'Jerez de la Frontera',
         jerezLat: 36.685,
         jerezLng: -6.126,
-        sevillaLabel: "Seville",
+        sevillaLabel: 'Seville',
         sevillaLat: 37.389,
         sevillaLng: -5.984,
-        sevillaDrive: "1h 05m to Jerez",
-        puertoLabel: "El Puerto de Santa María",
+        sevillaDrive: '1h 05m to Jerez',
+        puertoLabel: 'El Puerto de Santa María',
         puertoLat: 36.602,
         puertoLng: -6.228,
-        puertoDrive: "25m to Jerez",
-        sanlucarLabel: "Sanlúcar de Barrameda",
+        puertoDrive: '25m to Jerez',
+        sanlucarLabel: 'Sanlúcar de Barrameda',
         sanlucarLat: 36.779,
         sanlucarLng: -6.354,
-        sanlucarDrive: "35m to Jerez",
+        sanlucarDrive: '35m to Jerez',
       },
     },
-    nav: ["City", "Getting there", "Stay", "Surroundings"],
-    openLabel: "Details",
+    nav: ['City', 'Getting there', 'Stay', 'Surroundings'],
+    openLabel: 'Details',
   },
 } as const;
 
-// Defined after all locale consts to avoid "cannot access before initialization"
-export const translations: Record<Locale, typeof en> = { es, fr, en };
+// All locales satisfy the same widened translation contract while retaining localized strings.
+export const translations: Record<Locale, Translation> = { es, fr, en };

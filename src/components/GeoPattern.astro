@@ -30,56 +30,55 @@ const { color = 'currentColor', opacity = 1, class: className = '' } = Astro.pro
           40,68  33,54  18,58  26,44
           12,40  26,36  18,22  33,26"
         fill={color}
-        opacity={opacity * 0.22}
-      />
+        opacity={opacity * 0.22}></polygon>
       <!-- ── Square frame rotated 45° ── -->
       <rect
-        x="18" y="18" width="44" height="44"
+        x="18"
+        y="18"
+        width="44"
+        height="44"
         fill="none"
         stroke={color}
         stroke-width="0.8"
         opacity={opacity * 0.12}
-        transform="rotate(45 40 40)"
-      />
+        transform="rotate(45 40 40)"></rect>
       <!-- ── Upright square ── -->
       <rect
-        x="18" y="18" width="44" height="44"
+        x="18"
+        y="18"
+        width="44"
+        height="44"
         fill="none"
         stroke={color}
         stroke-width="0.8"
-        opacity={opacity * 0.12}
-      />
+        opacity={opacity * 0.12}></rect>
       <!-- ── Four corner quarter-stars (shared with adjacent tiles) ── -->
       <polygon
         points="0,-28  7,-14  22,-18  14,-4  28,0  14,4  22,18  7,14  0,28  -7,14  -22,18  -14,4  -28,0  -14,-4  -22,-18  -7,-14"
         fill={color}
         opacity={opacity * 0.22}
-        transform="translate(0,0)"
-      />
+        transform="translate(0,0)"></polygon>
       <polygon
         points="0,-28  7,-14  22,-18  14,-4  28,0  14,4  22,18  7,14  0,28  -7,14  -22,18  -14,4  -28,0  -14,-4  -22,-18  -7,-14"
         fill={color}
         opacity={opacity * 0.22}
-        transform="translate(80,0)"
-      />
+        transform="translate(80,0)"></polygon>
       <polygon
         points="0,-28  7,-14  22,-18  14,-4  28,0  14,4  22,18  7,14  0,28  -7,14  -22,18  -14,4  -28,0  -14,-4  -22,-18  -7,-14"
         fill={color}
         opacity={opacity * 0.22}
-        transform="translate(0,80)"
-      />
+        transform="translate(0,80)"></polygon>
       <polygon
         points="0,-28  7,-14  22,-18  14,-4  28,0  14,4  22,18  7,14  0,28  -7,14  -22,18  -14,4  -28,0  -14,-4  -22,-18  -7,-14"
         fill={color}
         opacity={opacity * 0.22}
-        transform="translate(80,80)"
-      />
+        transform="translate(80,80)"></polygon>
       <!-- ── Mid-edge diamonds ── -->
-      <polygon points="40,0  46,10  40,20  34,10" fill={color} opacity={opacity * 0.14} />
-      <polygon points="40,60 46,70  40,80  34,70" fill={color} opacity={opacity * 0.14} />
-      <polygon points="0,40  10,46  20,40  10,34" fill={color} opacity={opacity * 0.14} />
-      <polygon points="60,40 70,46  80,40  70,34" fill={color} opacity={opacity * 0.14} />
+      <polygon points="40,0  46,10  40,20  34,10" fill={color} opacity={opacity * 0.14}></polygon>
+      <polygon points="40,60 46,70  40,80  34,70" fill={color} opacity={opacity * 0.14}></polygon>
+      <polygon points="0,40  10,46  20,40  10,34" fill={color} opacity={opacity * 0.14}></polygon>
+      <polygon points="60,40 70,46  80,40  70,34" fill={color} opacity={opacity * 0.14}></polygon>
     </pattern>
   </defs>
-  <rect width="100%" height="100%" fill="url(#almohade)" />
+  <rect width="100%" height="100%" fill="url(#almohade)"></rect>
 </svg>

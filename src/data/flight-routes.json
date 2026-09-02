@@ -1,6 +1,6 @@
 {
-  "generated": "2026-05-03T01:27:23.557Z",
-  "searchDate": "2026-06-02",
+  "generated": "2026-08-30T20:31:16.523Z",
+  "searchDate": "2027-05-08",
   "destinations": [
     {
       "city": "Jerez de la Frontera",
@@ -25,8 +25,8 @@
         {
           "type": "direct",
           "airline": "Vueling",
-          "totalDuration": 110,
-          "price": 71,
+          "totalDuration": 135,
+          "price": 89,
           "segments": [
             {
               "from": {
@@ -43,33 +43,7 @@
               },
               "airline": "Vueling",
               "logo": "https://www.gstatic.com/flights/airline_logos/70px/VY.png",
-              "duration": 110
-            }
-          ],
-          "layovers": []
-        },
-        {
-          "type": "direct",
-          "airline": "Vueling",
-          "totalDuration": 110,
-          "price": 77,
-          "segments": [
-            {
-              "from": {
-                "code": "BCN",
-                "city": "Barcelona",
-                "lat": 41.2971,
-                "lng": 2.0785
-              },
-              "to": {
-                "code": "XRY",
-                "city": "Jerez de la Frontera",
-                "lat": 36.7446,
-                "lng": -6.0601
-              },
-              "airline": "Vueling",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/VY.png",
-              "duration": 110
+              "duration": 135
             }
           ],
           "layovers": []
@@ -77,8 +51,8 @@
         {
           "type": "connecting",
           "airline": "Iberia",
-          "totalDuration": 240,
-          "price": 263,
+          "totalDuration": 230,
+          "price": 65,
           "segments": [
             {
               "from": {
@@ -95,7 +69,7 @@
               },
               "airline": "Iberia",
               "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
-              "duration": 85
+              "duration": 75
             },
             {
               "from": {
@@ -112,7 +86,7 @@
               },
               "airline": "Iberia",
               "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
-              "duration": 80
+              "duration": 65
             }
           ],
           "layovers": [
@@ -121,7 +95,7 @@
               "city": "Madrid",
               "lat": 40.4983,
               "lng": -3.5676,
-              "duration": 75
+              "duration": 90
             }
           ]
         }
@@ -134,163 +108,10 @@
       "lng": 2.352,
       "routes": [
         {
-          "type": "connecting",
-          "airline": "Vueling",
-          "totalDuration": 680,
-          "price": 109,
-          "segments": [
-            {
-              "from": {
-                "code": "CDG",
-                "city": "París (CDG)",
-                "lat": 49.0097,
-                "lng": 2.5479
-              },
-              "to": {
-                "code": "BCN",
-                "city": "Barcelona",
-                "lat": 41.2971,
-                "lng": 2.0785
-              },
-              "airline": "Vueling",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/VY.png",
-              "duration": 115
-            },
-            {
-              "from": {
-                "code": "BCN",
-                "city": "Barcelona",
-                "lat": 41.2971,
-                "lng": 2.0785
-              },
-              "to": {
-                "code": "XRY",
-                "city": "Jerez de la Frontera",
-                "lat": 36.7446,
-                "lng": -6.0601
-              },
-              "airline": "Vueling",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/VY.png",
-              "duration": 110
-            }
-          ],
-          "layovers": [
-            {
-              "code": "BCN",
-              "city": "Barcelona",
-              "lat": 41.2971,
-              "lng": 2.0785,
-              "duration": 455
-            }
-          ]
-        },
-        {
-          "type": "connecting",
-          "airline": "Vueling",
-          "totalDuration": 320,
-          "price": 120,
-          "segments": [
-            {
-              "from": {
-                "code": "CDG",
-                "city": "París (CDG)",
-                "lat": 49.0097,
-                "lng": 2.5479
-              },
-              "to": {
-                "code": "BCN",
-                "city": "Barcelona",
-                "lat": 41.2971,
-                "lng": 2.0785
-              },
-              "airline": "Vueling",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/VY.png",
-              "duration": 115
-            },
-            {
-              "from": {
-                "code": "BCN",
-                "city": "Barcelona",
-                "lat": 41.2971,
-                "lng": 2.0785
-              },
-              "to": {
-                "code": "XRY",
-                "city": "Jerez de la Frontera",
-                "lat": 36.7446,
-                "lng": -6.0601
-              },
-              "airline": "Vueling",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/VY.png",
-              "duration": 110
-            }
-          ],
-          "layovers": [
-            {
-              "code": "BCN",
-              "city": "Barcelona",
-              "lat": 41.2971,
-              "lng": 2.0785,
-              "duration": 95
-            }
-          ]
-        },
-        {
-          "type": "connecting",
-          "airline": "Iberia",
-          "totalDuration": 835,
-          "price": 121,
-          "segments": [
-            {
-              "from": {
-                "code": "CDG",
-                "city": "París (CDG)",
-                "lat": 49.0097,
-                "lng": 2.5479
-              },
-              "to": {
-                "code": "MAD",
-                "city": "Madrid",
-                "lat": 40.4983,
-                "lng": -3.5676
-              },
-              "airline": "Iberia",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
-              "duration": 130
-            },
-            {
-              "from": {
-                "code": "MAD",
-                "city": "Madrid",
-                "lat": 40.4983,
-                "lng": -3.5676
-              },
-              "to": {
-                "code": "XRY",
-                "city": "Jerez de la Frontera",
-                "lat": 36.7446,
-                "lng": -6.0601
-              },
-              "airline": "Iberia",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
-              "duration": 80
-            }
-          ],
-          "layovers": [
-            {
-              "code": "MAD",
-              "city": "Madrid",
-              "lat": 40.4983,
-              "lng": -3.5676,
-              "duration": 625
-            }
-          ]
-        },
-        {
           "type": "direct",
           "airline": "Air France",
-          "totalDuration": 155,
-          "price": 79,
+          "totalDuration": 165,
+          "price": 120,
           "segments": [
             {
               "from": {
@@ -307,112 +128,10 @@
               },
               "airline": "Air France",
               "logo": "https://www.gstatic.com/flights/airline_logos/70px/AF.png",
-              "duration": 155
+              "duration": 165
             }
           ],
           "layovers": []
-        },
-        {
-          "type": "connecting",
-          "airline": "Vueling",
-          "totalDuration": 270,
-          "price": 105,
-          "segments": [
-            {
-              "from": {
-                "code": "CDG",
-                "city": "París (CDG)",
-                "lat": 49.0097,
-                "lng": 2.5479
-              },
-              "to": {
-                "code": "BCN",
-                "city": "Barcelona",
-                "lat": 41.2971,
-                "lng": 2.0785
-              },
-              "airline": "Vueling",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/VY.png",
-              "duration": 115
-            },
-            {
-              "from": {
-                "code": "BCN",
-                "city": "Barcelona",
-                "lat": 41.2971,
-                "lng": 2.0785
-              },
-              "to": {
-                "code": "SVQ",
-                "city": "Sevilla",
-                "lat": 37.418,
-                "lng": -5.8931
-              },
-              "airline": "Vueling",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/VY.png",
-              "duration": 105
-            }
-          ],
-          "layovers": [
-            {
-              "code": "BCN",
-              "city": "Barcelona",
-              "lat": 41.2971,
-              "lng": 2.0785,
-              "duration": 50
-            }
-          ]
-        },
-        {
-          "type": "connecting",
-          "airline": "Iberia",
-          "totalDuration": 405,
-          "price": 121,
-          "segments": [
-            {
-              "from": {
-                "code": "CDG",
-                "city": "París (CDG)",
-                "lat": 49.0097,
-                "lng": 2.5479
-              },
-              "to": {
-                "code": "MAD",
-                "city": "Madrid",
-                "lat": 40.4983,
-                "lng": -3.5676
-              },
-              "airline": "Iberia",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
-              "duration": 130
-            },
-            {
-              "from": {
-                "code": "MAD",
-                "city": "Madrid",
-                "lat": 40.4983,
-                "lng": -3.5676
-              },
-              "to": {
-                "code": "SVQ",
-                "city": "Sevilla",
-                "lat": 37.418,
-                "lng": -5.8931
-              },
-              "airline": "Iberia",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
-              "duration": 75
-            }
-          ],
-          "layovers": [
-            {
-              "code": "MAD",
-              "city": "Madrid",
-              "lat": 40.4983,
-              "lng": -3.5676,
-              "duration": 200
-            }
-          ]
         }
       ]
     },
@@ -423,28 +142,11 @@
       "lng": -1.644,
       "routes": [
         {
-          "type": "connecting",
+          "type": "direct",
           "airline": "Iberia",
-          "totalDuration": 195,
-          "price": 209,
+          "totalDuration": 70,
+          "price": 55,
           "segments": [
-            {
-              "from": {
-                "code": "PNA",
-                "city": "Pamplona",
-                "lat": 42.7701,
-                "lng": -1.6464
-              },
-              "to": {
-                "code": "MAD",
-                "city": "Madrid",
-                "lat": 40.4983,
-                "lng": -3.5676
-              },
-              "airline": "Iberia",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
-              "duration": 65
-            },
             {
               "from": {
                 "code": "MAD",
@@ -460,273 +162,10 @@
               },
               "airline": "Iberia",
               "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
-              "duration": 80
+              "duration": 70
             }
           ],
-          "layovers": [
-            {
-              "code": "MAD",
-              "city": "Madrid",
-              "lat": 40.4983,
-              "lng": -3.5676,
-              "duration": 50
-            }
-          ]
-        },
-        {
-          "type": "connecting",
-          "airline": "Iberia",
-          "totalDuration": 1325,
-          "price": 129,
-          "segments": [
-            {
-              "from": {
-                "code": "PNA",
-                "city": "Pamplona",
-                "lat": 42.7701,
-                "lng": -1.6464
-              },
-              "to": {
-                "code": "MAD",
-                "city": "Madrid",
-                "lat": 40.4983,
-                "lng": -3.5676
-              },
-              "airline": "Iberia",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
-              "duration": 65
-            },
-            {
-              "from": {
-                "code": "MAD",
-                "city": "Madrid",
-                "lat": 40.4983,
-                "lng": -3.5676
-              },
-              "to": {
-                "code": "XRY",
-                "city": "Jerez de la Frontera",
-                "lat": 36.7446,
-                "lng": -6.0601
-              },
-              "airline": "Iberia",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
-              "duration": 80
-            }
-          ],
-          "layovers": [
-            {
-              "code": "MAD",
-              "city": "Madrid",
-              "lat": 40.4983,
-              "lng": -3.5676,
-              "duration": 1180
-            }
-          ]
-        },
-        {
-          "type": "connecting",
-          "airline": "Iberia",
-          "totalDuration": 900,
-          "price": 167,
-          "segments": [
-            {
-              "from": {
-                "code": "PNA",
-                "city": "Pamplona",
-                "lat": 42.7701,
-                "lng": -1.6464
-              },
-              "to": {
-                "code": "MAD",
-                "city": "Madrid",
-                "lat": 40.4983,
-                "lng": -3.5676
-              },
-              "airline": "Iberia",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
-              "duration": 65
-            },
-            {
-              "from": {
-                "code": "MAD",
-                "city": "Madrid",
-                "lat": 40.4983,
-                "lng": -3.5676
-              },
-              "to": {
-                "code": "XRY",
-                "city": "Jerez de la Frontera",
-                "lat": 36.7446,
-                "lng": -6.0601
-              },
-              "airline": "Iberia",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
-              "duration": 80
-            }
-          ],
-          "layovers": [
-            {
-              "code": "MAD",
-              "city": "Madrid",
-              "lat": 40.4983,
-              "lng": -3.5676,
-              "duration": 755
-            }
-          ]
-        },
-        {
-          "type": "connecting",
-          "airline": "Iberia",
-          "totalDuration": 360,
-          "price": 90,
-          "segments": [
-            {
-              "from": {
-                "code": "PNA",
-                "city": "Pamplona",
-                "lat": 42.7701,
-                "lng": -1.6464
-              },
-              "to": {
-                "code": "MAD",
-                "city": "Madrid",
-                "lat": 40.4983,
-                "lng": -3.5676
-              },
-              "airline": "Iberia",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
-              "duration": 65
-            },
-            {
-              "from": {
-                "code": "MAD",
-                "city": "Madrid",
-                "lat": 40.4983,
-                "lng": -3.5676
-              },
-              "to": {
-                "code": "SVQ",
-                "city": "Sevilla",
-                "lat": 37.418,
-                "lng": -5.8931
-              },
-              "airline": "Iberia",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
-              "duration": 75
-            }
-          ],
-          "layovers": [
-            {
-              "code": "MAD",
-              "city": "Madrid",
-              "lat": 40.4983,
-              "lng": -3.5676,
-              "duration": 220
-            }
-          ]
-        },
-        {
-          "type": "connecting",
-          "airline": "Iberia",
-          "totalDuration": 625,
-          "price": 90,
-          "segments": [
-            {
-              "from": {
-                "code": "PNA",
-                "city": "Pamplona",
-                "lat": 42.7701,
-                "lng": -1.6464
-              },
-              "to": {
-                "code": "MAD",
-                "city": "Madrid",
-                "lat": 40.4983,
-                "lng": -3.5676
-              },
-              "airline": "Iberia",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
-              "duration": 65
-            },
-            {
-              "from": {
-                "code": "MAD",
-                "city": "Madrid",
-                "lat": 40.4983,
-                "lng": -3.5676
-              },
-              "to": {
-                "code": "SVQ",
-                "city": "Sevilla",
-                "lat": 37.418,
-                "lng": -5.8931
-              },
-              "airline": "Iberia",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
-              "duration": 75
-            }
-          ],
-          "layovers": [
-            {
-              "code": "MAD",
-              "city": "Madrid",
-              "lat": 40.4983,
-              "lng": -3.5676,
-              "duration": 485
-            }
-          ]
-        },
-        {
-          "type": "connecting",
-          "airline": "Iberia",
-          "totalDuration": 200,
-          "price": 129,
-          "segments": [
-            {
-              "from": {
-                "code": "PNA",
-                "city": "Pamplona",
-                "lat": 42.7701,
-                "lng": -1.6464
-              },
-              "to": {
-                "code": "MAD",
-                "city": "Madrid",
-                "lat": 40.4983,
-                "lng": -3.5676
-              },
-              "airline": "Iberia",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
-              "duration": 65
-            },
-            {
-              "from": {
-                "code": "MAD",
-                "city": "Madrid",
-                "lat": 40.4983,
-                "lng": -3.5676
-              },
-              "to": {
-                "code": "SVQ",
-                "city": "Sevilla",
-                "lat": 37.418,
-                "lng": -5.8931
-              },
-              "airline": "Iberia",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
-              "duration": 75
-            }
-          ],
-          "layovers": [
-            {
-              "code": "MAD",
-              "city": "Madrid",
-              "lat": 40.4983,
-              "lng": -3.5676,
-              "duration": 60
-            }
-          ]
+          "layovers": []
         }
       ]
     },
@@ -739,8 +178,8 @@
         {
           "type": "direct",
           "airline": "Iberia",
-          "totalDuration": 80,
-          "price": 105,
+          "totalDuration": 70,
+          "price": 55,
           "segments": [
             {
               "from": {
@@ -757,59 +196,7 @@
               },
               "airline": "Iberia",
               "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
-              "duration": 80
-            }
-          ],
-          "layovers": []
-        },
-        {
-          "type": "direct",
-          "airline": "Iberia",
-          "totalDuration": 80,
-          "price": 105,
-          "segments": [
-            {
-              "from": {
-                "code": "MAD",
-                "city": "Madrid",
-                "lat": 40.4983,
-                "lng": -3.5676
-              },
-              "to": {
-                "code": "XRY",
-                "city": "Jerez de la Frontera",
-                "lat": 36.7446,
-                "lng": -6.0601
-              },
-              "airline": "Iberia",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
-              "duration": 80
-            }
-          ],
-          "layovers": []
-        },
-        {
-          "type": "direct",
-          "airline": "Iberia",
-          "totalDuration": 80,
-          "price": 120,
-          "segments": [
-            {
-              "from": {
-                "code": "MAD",
-                "city": "Madrid",
-                "lat": 40.4983,
-                "lng": -3.5676
-              },
-              "to": {
-                "code": "XRY",
-                "city": "Jerez de la Frontera",
-                "lat": 36.7446,
-                "lng": -6.0601
-              },
-              "airline": "Iberia",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
-              "duration": 80
+              "duration": 70
             }
           ],
           "layovers": []
@@ -821,553 +208,14 @@
       "airport": "VLC",
       "lat": 39.4893,
       "lng": -0.4816,
-      "routes": [
-        {
-          "type": "connecting",
-          "airline": "Iberia",
-          "totalDuration": 420,
-          "price": 177,
-          "segments": [
-            {
-              "from": {
-                "code": "VLC",
-                "city": "Valencia",
-                "lat": 39.4893,
-                "lng": -0.4816
-              },
-              "to": {
-                "code": "MAD",
-                "city": "Madrid",
-                "lat": 40.4983,
-                "lng": -3.5676
-              },
-              "airline": "Iberia",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
-              "duration": 65
-            },
-            {
-              "from": {
-                "code": "MAD",
-                "city": "Madrid",
-                "lat": 40.4983,
-                "lng": -3.5676
-              },
-              "to": {
-                "code": "XRY",
-                "city": "Jerez de la Frontera",
-                "lat": 36.7446,
-                "lng": -6.0601
-              },
-              "airline": "Iberia",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
-              "duration": 80
-            }
-          ],
-          "layovers": [
-            {
-              "code": "MAD",
-              "city": "Madrid",
-              "lat": 40.4983,
-              "lng": -3.5676,
-              "duration": 275
-            }
-          ]
-        },
-        {
-          "type": "connecting",
-          "airline": "Iberia",
-          "totalDuration": 200,
-          "price": 202,
-          "segments": [
-            {
-              "from": {
-                "code": "VLC",
-                "city": "Valencia",
-                "lat": 39.4893,
-                "lng": -0.4816
-              },
-              "to": {
-                "code": "MAD",
-                "city": "Madrid",
-                "lat": 40.4983,
-                "lng": -3.5676
-              },
-              "airline": "Iberia",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
-              "duration": 65
-            },
-            {
-              "from": {
-                "code": "MAD",
-                "city": "Madrid",
-                "lat": 40.4983,
-                "lng": -3.5676
-              },
-              "to": {
-                "code": "XRY",
-                "city": "Jerez de la Frontera",
-                "lat": 36.7446,
-                "lng": -6.0601
-              },
-              "airline": "Iberia",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
-              "duration": 80
-            }
-          ],
-          "layovers": [
-            {
-              "code": "MAD",
-              "city": "Madrid",
-              "lat": 40.4983,
-              "lng": -3.5676,
-              "duration": 55
-            }
-          ]
-        },
-        {
-          "type": "connecting",
-          "airline": "Iberia",
-          "totalDuration": 380,
-          "price": 225,
-          "segments": [
-            {
-              "from": {
-                "code": "VLC",
-                "city": "Valencia",
-                "lat": 39.4893,
-                "lng": -0.4816
-              },
-              "to": {
-                "code": "BCN",
-                "city": "Barcelona",
-                "lat": 41.2971,
-                "lng": 2.0785
-              },
-              "airline": "Iberia",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
-              "duration": 70
-            },
-            {
-              "from": {
-                "code": "BCN",
-                "city": "Barcelona",
-                "lat": 41.2971,
-                "lng": 2.0785
-              },
-              "to": {
-                "code": "XRY",
-                "city": "Jerez de la Frontera",
-                "lat": 36.7446,
-                "lng": -6.0601
-              },
-              "airline": "Vueling",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/VY.png",
-              "duration": 110
-            }
-          ],
-          "layovers": [
-            {
-              "code": "BCN",
-              "city": "Barcelona",
-              "lat": 41.2971,
-              "lng": 2.0785,
-              "duration": 200
-            }
-          ]
-        },
-        {
-          "type": "direct",
-          "airline": "Ryanair",
-          "totalDuration": 75,
-          "price": 15,
-          "segments": [
-            {
-              "from": {
-                "code": "VLC",
-                "city": "Valencia",
-                "lat": 39.4893,
-                "lng": -0.4816
-              },
-              "to": {
-                "code": "SVQ",
-                "city": "Sevilla",
-                "lat": 37.418,
-                "lng": -5.8931
-              },
-              "airline": "Ryanair",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/FR.png",
-              "duration": 75
-            }
-          ],
-          "layovers": []
-        },
-        {
-          "type": "direct",
-          "airline": "Ryanair",
-          "totalDuration": 75,
-          "price": 15,
-          "segments": [
-            {
-              "from": {
-                "code": "VLC",
-                "city": "Valencia",
-                "lat": 39.4893,
-                "lng": -0.4816
-              },
-              "to": {
-                "code": "SVQ",
-                "city": "Sevilla",
-                "lat": 37.418,
-                "lng": -5.8931
-              },
-              "airline": "Ryanair",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/FR.png",
-              "duration": 75
-            }
-          ],
-          "layovers": []
-        },
-        {
-          "type": "direct",
-          "airline": "Vueling",
-          "totalDuration": 75,
-          "price": 29,
-          "segments": [
-            {
-              "from": {
-                "code": "VLC",
-                "city": "Valencia",
-                "lat": 39.4893,
-                "lng": -0.4816
-              },
-              "to": {
-                "code": "SVQ",
-                "city": "Sevilla",
-                "lat": 37.418,
-                "lng": -5.8931
-              },
-              "airline": "Vueling",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/VY.png",
-              "duration": 75
-            }
-          ],
-          "layovers": []
-        }
-      ]
+      "routes": []
     },
     {
       "city": "Granada",
       "airport": "GRX",
       "lat": 37.1887,
       "lng": -3.7774,
-      "routes": [
-        {
-          "type": "connecting",
-          "airline": "Iberia",
-          "totalDuration": 665,
-          "price": 64,
-          "segments": [
-            {
-              "from": {
-                "code": "GRX",
-                "city": "Granada",
-                "lat": 37.1887,
-                "lng": -3.7774
-              },
-              "to": {
-                "code": "MAD",
-                "city": "Madrid",
-                "lat": 40.4983,
-                "lng": -3.5676
-              },
-              "airline": "Iberia",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
-              "duration": 70
-            },
-            {
-              "from": {
-                "code": "MAD",
-                "city": "Madrid",
-                "lat": 40.4983,
-                "lng": -3.5676
-              },
-              "to": {
-                "code": "XRY",
-                "city": "Jerez de la Frontera",
-                "lat": 36.7446,
-                "lng": -6.0601
-              },
-              "airline": "Iberia",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
-              "duration": 80
-            }
-          ],
-          "layovers": [
-            {
-              "code": "MAD",
-              "city": "Madrid",
-              "lat": 40.4983,
-              "lng": -3.5676,
-              "duration": 515
-            }
-          ]
-        },
-        {
-          "type": "connecting",
-          "airline": "Vueling",
-          "totalDuration": 420,
-          "price": 121,
-          "segments": [
-            {
-              "from": {
-                "code": "GRX",
-                "city": "Granada",
-                "lat": 37.1887,
-                "lng": -3.7774
-              },
-              "to": {
-                "code": "BCN",
-                "city": "Barcelona",
-                "lat": 41.2971,
-                "lng": 2.0785
-              },
-              "airline": "Vueling",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/VY.png",
-              "duration": 90
-            },
-            {
-              "from": {
-                "code": "BCN",
-                "city": "Barcelona",
-                "lat": 41.2971,
-                "lng": 2.0785
-              },
-              "to": {
-                "code": "XRY",
-                "city": "Jerez de la Frontera",
-                "lat": 36.7446,
-                "lng": -6.0601
-              },
-              "airline": "Vueling",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/VY.png",
-              "duration": 110
-            }
-          ],
-          "layovers": [
-            {
-              "code": "BCN",
-              "city": "Barcelona",
-              "lat": 41.2971,
-              "lng": 2.0785,
-              "duration": 220
-            }
-          ]
-        },
-        {
-          "type": "connecting",
-          "airline": "Vueling",
-          "totalDuration": 445,
-          "price": 148,
-          "segments": [
-            {
-              "from": {
-                "code": "GRX",
-                "city": "Granada",
-                "lat": 37.1887,
-                "lng": -3.7774
-              },
-              "to": {
-                "code": "BCN",
-                "city": "Barcelona",
-                "lat": 41.2971,
-                "lng": 2.0785
-              },
-              "airline": "Vueling",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/VY.png",
-              "duration": 90
-            },
-            {
-              "from": {
-                "code": "BCN",
-                "city": "Barcelona",
-                "lat": 41.2971,
-                "lng": 2.0785
-              },
-              "to": {
-                "code": "XRY",
-                "city": "Jerez de la Frontera",
-                "lat": 36.7446,
-                "lng": -6.0601
-              },
-              "airline": "Vueling",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/VY.png",
-              "duration": 110
-            }
-          ],
-          "layovers": [
-            {
-              "code": "BCN",
-              "city": "Barcelona",
-              "lat": 41.2971,
-              "lng": 2.0785,
-              "duration": 245
-            }
-          ]
-        },
-        {
-          "type": "connecting",
-          "airline": "Iberia",
-          "totalDuration": 445,
-          "price": 62,
-          "segments": [
-            {
-              "from": {
-                "code": "GRX",
-                "city": "Granada",
-                "lat": 37.1887,
-                "lng": -3.7774
-              },
-              "to": {
-                "code": "MAD",
-                "city": "Madrid",
-                "lat": 40.4983,
-                "lng": -3.5676
-              },
-              "airline": "Iberia",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
-              "duration": 70
-            },
-            {
-              "from": {
-                "code": "MAD",
-                "city": "Madrid",
-                "lat": 40.4983,
-                "lng": -3.5676
-              },
-              "to": {
-                "code": "SVQ",
-                "city": "Sevilla",
-                "lat": 37.418,
-                "lng": -5.8931
-              },
-              "airline": "Iberia",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
-              "duration": 75
-            }
-          ],
-          "layovers": [
-            {
-              "code": "MAD",
-              "city": "Madrid",
-              "lat": 40.4983,
-              "lng": -3.5676,
-              "duration": 300
-            }
-          ]
-        },
-        {
-          "type": "connecting",
-          "airline": "Vueling",
-          "totalDuration": 485,
-          "price": 92,
-          "segments": [
-            {
-              "from": {
-                "code": "GRX",
-                "city": "Granada",
-                "lat": 37.1887,
-                "lng": -3.7774
-              },
-              "to": {
-                "code": "BCN",
-                "city": "Barcelona",
-                "lat": 41.2971,
-                "lng": 2.0785
-              },
-              "airline": "Vueling",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/VY.png",
-              "duration": 90
-            },
-            {
-              "from": {
-                "code": "BCN",
-                "city": "Barcelona",
-                "lat": 41.2971,
-                "lng": 2.0785
-              },
-              "to": {
-                "code": "SVQ",
-                "city": "Sevilla",
-                "lat": 37.418,
-                "lng": -5.8931
-              },
-              "airline": "Vueling",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/VY.png",
-              "duration": 105
-            }
-          ],
-          "layovers": [
-            {
-              "code": "BCN",
-              "city": "Barcelona",
-              "lat": 41.2971,
-              "lng": 2.0785,
-              "duration": 290
-            }
-          ]
-        },
-        {
-          "type": "connecting",
-          "airline": "Vueling",
-          "totalDuration": 260,
-          "price": 100,
-          "segments": [
-            {
-              "from": {
-                "code": "GRX",
-                "city": "Granada",
-                "lat": 37.1887,
-                "lng": -3.7774
-              },
-              "to": {
-                "code": "BCN",
-                "city": "Barcelona",
-                "lat": 41.2971,
-                "lng": 2.0785
-              },
-              "airline": "Vueling",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/VY.png",
-              "duration": 90
-            },
-            {
-              "from": {
-                "code": "BCN",
-                "city": "Barcelona",
-                "lat": 41.2971,
-                "lng": 2.0785
-              },
-              "to": {
-                "code": "SVQ",
-                "city": "Sevilla",
-                "lat": 37.418,
-                "lng": -5.8931
-              },
-              "airline": "Vueling",
-              "logo": "https://www.gstatic.com/flights/airline_logos/70px/VY.png",
-              "duration": 105
-            }
-          ],
-          "layovers": [
-            {
-              "code": "BCN",
-              "city": "Barcelona",
-              "lat": 41.2971,
-              "lng": 2.0785,
-              "duration": 65
-            }
-          ]
-        }
-      ]
+      "routes": []
     }
   ]
 }
