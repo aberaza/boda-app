@@ -49,7 +49,7 @@ const { t } = Astro.props;
         opacity="0.4"></polygon>
     </svg>
 
-    <p class="slide-label mt-8 font-sans text-[0.65rem] uppercase tracking-[0.5em] text-clay/70">
+    <p class="slide-label mt-8 font-sans text-[0.65rem] uppercase tracking-[0.5em] text-clay/85">
       {t.pronto.eyebrow}
     </p>
 
@@ -67,18 +67,18 @@ const { t } = Astro.props;
       <div class="h-px w-12 bg-clay/25"></div>
     </div>
 
-    <p class="slide-body mt-6 max-w-md font-sans text-base leading-7 text-ink/55">
+    <p class="slide-body mt-6 max-w-md font-sans text-base leading-7 text-ink/90">
       {t.pronto.body}
     </p>
 
     <div
       class="slide-body mt-10 overflow-hidden rounded-2xl shadow-soft"
-      style="width: min(340px, 90vw); aspect-ratio: 3/2;"
+      style="width: min(260px, 52vw); aspect-ratio: 2/3;"
     >
       <img
         src={images.boda}
         alt={t.pronto.imgAlt}
-        class="h-full w-full object-cover"
+        class="h-full w-full object-cover object-top"
         loading="lazy"
       />
     </div>

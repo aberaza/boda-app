@@ -35,7 +35,7 @@ const { t } = Astro.props;
   <div class="relative z-10 grid w-full items-center md:grid-cols-2">
     <!-- LEFT — Bauhaus: clean venue data -->
     <div class="flex flex-col justify-center px-10 py-16 md:px-16">
-      <p class="slide-label font-sans text-[0.65rem] uppercase tracking-[0.5em] text-ink/40">
+      <p class="slide-label font-sans text-[0.65rem] uppercase tracking-[0.5em] text-ink/85">
         {t.finca.eyebrow}
       </p>
       <h2
@@ -44,14 +44,14 @@ const { t } = Astro.props;
         {event.venue.split(' ')[0]}<br />
         <strong class="font-medium text-clay">{event.venue.split(' ').slice(1).join(' ')}</strong>
       </h2>
-      <p class="slide-body mt-6 max-w-xs font-sans text-base leading-7 text-ink/60">
+      <p class="slide-body mt-6 max-w-xs font-sans text-base leading-7 text-ink/85">
         {t.event.venueDescription}
       </p>
       <a
         href={event.venueUrl}
         target="_blank"
         rel="noopener"
-        class="slide-body mt-8 inline-flex items-center gap-2 self-start font-sans text-sm text-clay/80 underline-offset-4 hover:underline"
+        class="slide-body mt-8 inline-flex items-center gap-2 self-start font-sans text-sm text-clay/90 underline-offset-4 hover:underline"
       >
         {t.finca.linkLabel}
         <svg
@@ -101,7 +101,7 @@ const { t } = Astro.props;
           loading="lazy"
         />
       </div>
-      <p class="mt-5 font-display text-base italic text-ink/45 text-center">
+      <p class="mt-5 font-display text-base italic text-ink/85 text-center">
         {t.finca.photoCaption}
       </p>
     </div>

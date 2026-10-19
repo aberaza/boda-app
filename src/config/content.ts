@@ -46,15 +46,15 @@ export const event = {
 // ─── Images ──────────────────────────────────────────────────────────────────
 // Swap any URL here to change a photo across the whole site.
 export const images = {
-  /** Hero: golden ring in pink roses bouquet (Unsplash M2T1j-6Fn8w), locally hosted. */
-  hero: '/images/hero.jpg',
+  /** Hero: Aritz and Sandra, locally hosted. */
+  hero: '/images/oliver-alejandro-27062026-113.jpg',
   /** "Cuándo" slide background texture (vineyard of La Carreña). */
   cuando: 'https://cdn0.bodas.net/vendor/40644/3_2/1280/jpg/6_1_40644-162500944294411.jpeg',
   /** "La Finca" slide — inset photo panel. */
   finca:
     'https://lacarrena.com/wp-content/uploads/2018/09/la-carre%C3%B1a-acceso-iluminado-boda.jpg',
-  /** "Pronto más" slide — closing image (La Carreña, locally hosted). */
-  boda: '/images/pronto.jpg',
+  /** "Pronto más" slide — portrait of Aritz and Sandra, locally hosted. */
+  boda: '/images/bn-27062026-45.jpg',
 } as const;
 
 // ─── Slide copy ──────────────────────────────────────────────────────────────
