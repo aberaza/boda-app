@@ -1,0 +1,105 @@
+---
+import BauhausPattern from '../../BauhausPattern.astro';
+import GeoPattern from '../../GeoPattern.astro';
+import { event } from '../../../config/content';
+import { patterns } from '../../../config/theme';
+import type { Translation } from '../types';
+import { mAlmohade, mBauhaus } from '../view';
+
+interface Props {
+  t: Translation;
+}
+const { t } = Astro.props;
+---
+
+<section
+  aria-label={t.nav.eventDetail}
+  class="slide absolute inset-0 flex overflow-hidden"
+  style="background: var(--color-paper);"
+>
+  <div class="absolute inset-0" style={mBauhaus}>
+    <BauhausPattern color={patterns.bauhaus.color} opacity={0.5} class="h-full w-full" />
+  </div>
+  <div class="absolute inset-0" style={mAlmohade}>
+    <GeoPattern color={patterns.almohade.color} opacity={0.5} class="h-full w-full" />
+  </div>
+
+  <div class="relative z-10 mx-auto flex w-full max-w-5xl flex-col justify-center px-8 py-20 md:py-16">
+    <p class="slide-label font-sans text-[0.65rem] uppercase tracking-[0.5em] text-clay/85">
+      {t.eventDetail.eyebrow}
+    </p>
+    <h2 class="slide-title mt-4 font-display text-[clamp(2.6rem,6vw,5rem)] font-light leading-none tracking-tight text-ink">
+      {t.eventDetail.lead}<br />
+      <em class="not-italic font-semibold text-clay">{t.eventDetail.leadSub}</em>
+    </h2>
+
+    <div class="slide-body mt-10 grid gap-8 md:grid-cols-2">
+      <div class="flex flex-col gap-7">
+        <div>
+          <p class="font-sans text-[0.6rem] uppercase tracking-[0.45em] text-ink/90">
+            {t.eventDetail.scheduleTitle}
+          </p>
+          <dl class="mt-5 space-y-4">
+            {[
+              { time: t.eventDetail.s1time, label: t.eventDetail.s1label },
+              { time: t.eventDetail.s2time, label: t.eventDetail.s2label },
+              { time: t.eventDetail.s3time, label: t.eventDetail.s3label },
+            ].map(({ time, label }) => (
+              <div class="flex items-start gap-4">
+                <div class="mt-[0.6rem] h-px w-6 shrink-0 bg-clay/60" />
+                <div>
+                  <dt class="font-sans text-[0.58rem] uppercase tracking-[0.4em] text-ink/90">{time}</dt>
+                  <dd class="mt-0.5 font-sans text-base text-ink/90">{label}</dd>
+                </div>
+              </div>
+            ))}
+          </dl>
+        </div>
+        <div class="flex items-start gap-4">
+          <span class="mt-1 h-2 w-2 shrink-0 rounded-full bg-clay/80" />
+          <div>
+            <p class="font-sans text-[0.58rem] uppercase tracking-[0.4em] text-ink/90">
+              {t.eventDetail.dressCodeLabel}
+            </p>
+            <p class="mt-0.5 font-display text-lg italic text-ink/90">{t.eventDetail.dressCodeValue}</p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <span class="mt-1 h-2 w-2 shrink-0 rounded-full bg-clay/80" />
+          <p class="font-display text-lg italic text-ink/90">{t.eventDetail.adultsOnlyNote}</p>
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-5">
+        <div>
+          <p class="font-sans text-[0.6rem] uppercase tracking-[0.45em] text-ink/90">
+            {t.eventDetail.addressLabel}
+          </p>
+          <p class="mt-3 font-sans text-base leading-7 text-ink/85">
+            {event.venue}<br />
+            {event.venueAddress}
+          </p>
+          <a
+            href={event.venueMapsUrl}
+            target="_blank"
+            rel="noopener"
+            class="mt-3 inline-flex items-center gap-1.5 font-sans text-sm text-clay/85 underline-offset-4 hover:underline"
+          >
+            {t.eventDetail.mapsLabel}
+          </a>
+        </div>
+        <div
+          id="venue-map"
+          data-lat={event.venueLat}
+          data-lng={event.venueLng}
+          data-name={event.venue}
+          data-city-lat={36.68762537447789}
+          data-city-lng={-6.136780790369877}
+          class="w-full overflow-hidden rounded-2xl shadow-soft"
+          style="height: 220px;"
+          aria-label="Mapa Finca La Carreña"
+        ></div>
+      </div>
+    </div>
+  </div>
+</section>

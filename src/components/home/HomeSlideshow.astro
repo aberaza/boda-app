@@ -2,6 +2,7 @@
 import type { Translation } from './types';
 import HeroSlide from './slides/HeroSlide.astro';
 import WhenSlide from './slides/WhenSlide.astro';
+import EventDetailSlide from './slides/EventDetailSlide.astro';
 import VenueSlide from './slides/VenueSlide.astro';
 import ComingSoonSlide from './slides/ComingSoonSlide.astro';
 
@@ -17,6 +18,7 @@ const { t, slideCount, rsvpHref } = Astro.props;
 <div id="slides-wrap" class="fixed inset-0 overflow-hidden bg-paper">
   <HeroSlide t={t} rsvpHref={rsvpHref} />
   <WhenSlide t={t} />
+  <EventDetailSlide t={t} />
   <VenueSlide t={t} />
   <ComingSoonSlide t={t} />
 </div>

@@ -73,26 +73,10 @@ const { t } = Astro.props;
             <dd class="mt-1">
               <button
                 type="button"
-                data-open-overlay="jerez"
-                class="inline-flex flex-wrap items-center gap-3 font-sans text-lg text-ink/90 underline decoration-clay/40 underline-offset-4 transition-colors hover:text-ink/95"
+                class="inline-flex flex-wrap items-center gap-3 font-sans text-lg text-ink/90"
               >
                 <span>{event.city}, {event.region}</span>
-                <span
-                  class="rounded-full border border-clay/40 bg-clay/10 px-2.5 py-1 text-[0.5rem] uppercase tracking-[0.4em] text-clay/90 no-underline"
-                >
-                  {t.jerez.openLabel}
-                </span>
-                <svg
-                  width="10"
-                  height="10"
-                  viewBox="0 0 12 12"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  class="text-clay/85"
-                >
-                  <path d="M1 11L11 1M11 1H4M11 1v7"></path>
-                </svg>
+
               </button>
             </dd>
           </div>

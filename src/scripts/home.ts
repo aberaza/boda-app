@@ -66,6 +66,7 @@ function setMainActive(index: number) {
     if ('inert' in slide) slide.inert = !active;
   });
   setUrlParam('slide', getSlideParamValue(activeSlideIndex));
+  if (slideKeys[activeSlideIndex] === 'evento') requestAnimationFrame(initFincaMap);
 }
 
 function isEditableTarget(target: EventTarget | null) {
@@ -91,7 +92,6 @@ function keyboardDirection(key: string): -1 | 1 | null {
 
 // Per-overlay callbacks — called once after the open animation ends
 const overlayOnOpen: Record<string, () => void> = {
-  finca: initFincaMap,
   jerez: initJerezOverlay,
 };
 
@@ -364,6 +364,13 @@ window.addEventListener(
 );
 
 // ── FINCA overlay: Leaflet map ────────────────────────────────────
+const MAP_API_KEY = import.meta.env.PUBLIC_MAP_API_KEY ?? '';
+
+function cartoTileUrl(style: 'light_all' | 'light_nolabels') {
+  const query = MAP_API_KEY ? `?api_key=${encodeURIComponent(MAP_API_KEY)}` : '';
+  return `https://{s}.basemaps.cartocdn.com/${style}/{z}/{x}/{y}{r}.png${query}`;
+}
+
 const clayPin = L.divIcon({
   html: `<svg width="28" height="36" viewBox="0 0 28 36" xmlns="http://www.w3.org/2000/svg">
     <path d="M14 0C6.27 0 0 6.27 0 14c0 9.94 14 22 14 22S28 23.94 28 14C28 6.27 21.73 0 14 0z" fill="#bc6c4d"/>
@@ -421,7 +428,7 @@ function initFincaMap() {
     attributionControl: false,
   });
 
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+  L.tileLayer(cartoTileUrl('light_nolabels'), {
     attribution:
       '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
     subdomains: 'abcd',
@@ -520,7 +527,7 @@ function initJerezMaps() {
     attributionControl: false,
   });
 
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  L.tileLayer(cartoTileUrl('light_all'), {
     attribution:
       '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
     subdomains: 'abcd',
@@ -568,7 +575,7 @@ function initJerezMaps() {
   });
 
   // Use a different tile layer for routes map that works better with the larger height
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  L.tileLayer(cartoTileUrl('light_all'), {
     attribution:
       '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
     subdomains: 'abcd',
@@ -720,7 +727,7 @@ function initJerezMaps() {
     attributionControl: false,
   });
 
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  L.tileLayer(cartoTileUrl('light_all'), {
     attribution:
       '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
     subdomains: 'abcd',

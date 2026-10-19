@@ -66,24 +66,18 @@ const { t } = Astro.props;
         </svg>
       </a>
 
-      <!-- Event detail trigger -->
+      <div class="slide-body mt-6 flex items-center gap-3 text-ink/90">
+        <span class="h-2 w-2 rounded-full bg-clay/80"></span>
+        <span class="font-sans text-base">{event.city}, {event.region}</span>
+      </div>
       <button
         type="button"
-        id="open-finca-detail"
-        data-open-overlay="finca"
-        class="slide-body mt-5 inline-flex items-center gap-2 self-start rounded-full border border-clay/40 bg-clay/8 px-4 py-2 font-sans text-[0.7rem] uppercase tracking-[0.35em] text-clay transition-colors hover:bg-clay/15"
+        data-open-overlay="jerez"
+        class="slide-body mt-5 inline-flex items-center gap-2 self-start rounded-full border border-clay/60 bg-clay/10 px-4 py-2 font-sans text-[0.7rem] uppercase tracking-[0.35em] text-clay/90 transition-colors hover:bg-clay/20"
       >
-        {t.eventDetail.open}
-        <svg
-          width="12"
-          height="12"
-          viewBox="0 0 12 12"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.5"
-        >
-          <path d="M6 1v10M11 6H1" transform="rotate(45 6 6)"></path>
-          <circle cx="6" cy="6" r="5"></circle>
+        {t.jerez.openLabel}
+        <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M1 11L11 1M11 1H4M11 1v7"></path>
         </svg>
       </button>
     </div>
