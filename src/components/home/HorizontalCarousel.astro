@@ -1,0 +1,50 @@
+---
+import type { HorizontalCopy } from '../../i18n/horizontal';
+import 'swiper/css';
+import '../../styles/horizontal-carousel.css';
+
+interface Props {
+  id: string;
+  label: string;
+  labels: string[];
+  copy: HorizontalCopy;
+}
+const { id, label, labels, copy } = Astro.props;
+---
+
+<div id={id} data-horizontal-carousel class="horizontal-carousel" role="region" aria-label={label}>
+  <div class="swiper horizontal-viewport" data-horizontal-viewport>
+    <div class="swiper-wrapper"><slot /></div>
+  </div>
+  <nav class="horizontal-controls" aria-label={label}>
+    <span class="horizontal-hint">{copy.hint} <span aria-hidden="true">↔</span></span>
+    <div class="horizontal-controls-row">
+      <button type="button" data-horizontal-prev aria-label={copy.previous} class="horizontal-arrow"
+        >←</button
+      >
+      <div class="horizontal-dots">
+        {
+          labels.map((name, index) => (
+            <button
+              type="button"
+              data-horizontal-dot={index}
+              aria-label={name}
+              class="horizontal-dot"
+            >
+              <span aria-hidden="true" />
+            </button>
+          ))
+        }
+      </div>
+      <button type="button" data-horizontal-next aria-label={copy.next} class="horizontal-arrow"
+        >→</button
+      >
+    </div>
+    <span
+      data-horizontal-status
+      class="horizontal-status"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"></span>
+  </nav>
+</div>

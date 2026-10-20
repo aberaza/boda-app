@@ -1,0 +1,104 @@
+.horizontal-carousel {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+}
+
+.horizontal-carousel .horizontal-viewport {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  touch-action: pan-y pinch-zoom;
+}
+
+.horizontal-carousel [data-horizontal-panel] {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  flex-shrink: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.horizontal-panel-body {
+  width: 100%;
+  min-height: 100%;
+  max-width: 78rem;
+  margin-inline: auto;
+  padding: 4rem clamp(2rem, 5vw, 5rem) 2rem;
+}
+
+.horizontal-controls {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.5rem 1rem max(0.75rem, env(safe-area-inset-bottom));
+  color: var(--color-ink);
+  background: color-mix(in srgb, var(--color-paper) 90%, transparent);
+  border-top: 1px solid color-mix(in srgb, var(--color-clay) 25%, transparent);
+}
+
+.horizontal-controls-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.horizontal-dots {
+  display: flex;
+}
+.horizontal-hint,
+.horizontal-status {
+  font-size: 0.75rem;
+}
+.horizontal-hint {
+  letter-spacing: 0.08em;
+}
+.horizontal-arrow,
+.horizontal-dot {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
+}
+.horizontal-arrow {
+  border-radius: 50%;
+  border: 1px solid var(--color-clay);
+  font-size: 1.25rem;
+}
+.horizontal-arrow:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+.horizontal-dot span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #887e70;
+}
+.horizontal-dot[aria-current='step'] span {
+  background: var(--color-clay);
+  outline: 2px solid var(--color-clay);
+  outline-offset: 3px;
+}
+.horizontal-controls button:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 3px;
+}
+
+@media (max-width: 767px) {
+  .horizontal-panel-body {
+    padding-top: 3.5rem;
+    padding-bottom: 1.5rem;
+  }
+}

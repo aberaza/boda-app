@@ -2,7 +2,6 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import HomeNavigation from '../components/home/HomeNavigation.astro';
 import HomeSlideshow from '../components/home/HomeSlideshow.astro';
-import JerezDetailOverlay from '../components/home/overlays/JerezDetailOverlay.astro';
 import { getLang, getT, langUrl, locales } from '../i18n';
 import { getSuggestedRoutes } from '../lib/flight-routes';
 import '../styles/page-home.css';
@@ -29,8 +28,12 @@ const rsvpHref = lang === 'es' ? '/rsvp' : `/rsvp?lang=${lang}`;
     localeLinks={localeLinks}
     slideNav={slideNav}
   />
-  <HomeSlideshow t={t} slideCount={slideNav.length} rsvpHref={rsvpHref} />
-  <JerezDetailOverlay t={t} processedRoutes={processedRoutes} />
+  <HomeSlideshow
+    t={t}
+    slideCount={slideNav.length}
+    rsvpHref={rsvpHref}
+    processedRoutes={processedRoutes}
+  />
 
   <script>
     import '../scripts/home';
