@@ -18,11 +18,17 @@ const { t, rsvpHref } = Astro.props;
   class="slide absolute inset-0 flex items-center justify-center overflow-hidden"
   style={`background: ${slideBg.hero};`}
 >
-  <!-- B&W hands photo, desaturated + warm parchment wash -->
+  <!-- Couple photo: show as much of the frame as possible, favouring the upper third. -->
   <div
     id="hero-photo"
     class="absolute inset-0"
-    style={`background-image: url('${images.hero}'); background-size: cover; background-position: center 40%; filter: ${overlays.heroFilter};`}
+    style={`background-image: url('${images.hero}'); background-size: cover; background-position: center 22%; filter: ${overlays.heroFilter};`}
+  >
+  </div>
+  <div
+    id="hero-contrast"
+    class="absolute inset-0"
+    style="background: linear-gradient(180deg, rgba(26, 18, 8, 0.2) 0%, rgba(26, 18, 8, 0.04) 38%, rgba(252, 250, 246, 0.12) 100%);"
   >
   </div>
   <div
@@ -52,17 +58,17 @@ const { t, rsvpHref } = Astro.props;
 
   <!-- content -->
   <div class="relative z-10 flex w-full max-w-5xl flex-col items-center px-8 text-center">
-    <div id="hero-date" class="flex w-full items-center justify-center gap-6 md:gap-12">
-      <span class="font-sans text-[0.65rem] uppercase tracking-[0.45em] text-ink/50"
+    <div id="hero-date" class="flex w-full flex-col items-center justify-center gap-2">
+      <span class="font-sans text-[0.9rem] font-medium uppercase tracking-[0.38em] text-ink/85 drop-shadow-sm md:text-base"
         >{t.event.dateShort}</span
       >
-      <div class="h-px w-12 bg-clay/40"></div>
-      <span class="font-display text-sm italic text-ink/50">{event.city}</span>
+      <div class="h-px w-20 bg-clay/65"></div>
+      <span class="font-display text-base italic text-ink/90 drop-shadow-sm md:text-lg">{event.city}</span>
     </div>
 
     <h1
       id="hero-tagline"
-      class="mt-8 font-display text-[clamp(4rem,11vw,9rem)] font-light leading-none tracking-tight text-ink"
+      class="mt-7 font-display text-[clamp(3.4rem,9vw,7.5rem)] font-light leading-none tracking-tight text-ink drop-shadow-sm"
     >
       {t.hero.tagline.split(' ')[0]}<br />
       <em class="not-italic font-semibold text-clay"
@@ -70,20 +76,20 @@ const { t, rsvpHref } = Astro.props;
       >
     </h1>
 
-    <div id="hero-names" class="mt-10 flex items-baseline gap-4">
-      <span class="font-sans text-sm font-light uppercase tracking-[0.4em] text-ink/60"
+    <div id="hero-names" class="mt-9 flex items-baseline gap-4 drop-shadow-sm">
+      <span class="font-sans text-base font-medium uppercase tracking-[0.3em] text-ink/85 md:text-lg"
         >{names.display}</span
       >
       <svg
-        width="14"
-        height="14"
+        width="16"
+        height="16"
         viewBox="0 0 14 14"
         class="shrink-0 text-clay"
         fill="currentColor"
       >
-        <polygon points="7,1 8.5,5 13,7 8.5,9 7,13 5.5,9 1,7 5.5,5" opacity="0.7"></polygon>
+        <polygon points="7,1 8.5,5 13,7 8.5,9 7,13 5.5,9 1,7 5.5,5" opacity="0.8"></polygon>
       </svg>
-      <span class="font-display text-xl italic text-ink/60">{names.display2}</span>
+      <span class="font-display text-2xl italic text-ink/85 md:text-3xl">{names.display2}</span>
     </div>
 
     <a
@@ -93,7 +99,7 @@ const { t, rsvpHref } = Astro.props;
       {t.hero.rsvpCta}
     </a>
 
-    <div id="hero-cue" class="mt-16 flex flex-col items-center gap-3 text-ink/30">
+    <div id="hero-cue" class="mt-16 flex flex-col items-center gap-3 text-ink/85">
       <div class="h-8 w-px bg-ink/20"></div>
       <span class="font-sans text-[0.6rem] uppercase tracking-[0.4em]">{t.hero.scrollCue}</span>
     </div>

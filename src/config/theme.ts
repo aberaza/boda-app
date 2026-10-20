@@ -64,7 +64,7 @@ export const overlays = {
    * Pulls the monochrome image into the warm palette.
    * Adjust the last value (0–1) to make it warmer or cooler.
    */
-  heroParchment: 'rgba(245, 240, 232, 0.72)',
+  heroParchment: 'rgba(245, 240, 232, 0.48)',
 
   /**
    * Opacity of the vineyard photo used as a background *texture*
@@ -74,7 +74,7 @@ export const overlays = {
   cuandoPhotoOpacity: 0.17,
 
   /** CSS filter applied to the hero photo to force true B&W. */
-  heroFilter: 'grayscale(1) contrast(1.05)',
+  heroFilter: 'grayscale(0.72) saturate(0.58) sepia(0.1) contrast(1.12) brightness(0.98)',
 } as const;
 
 // ─── Slide background colours ────────────────────────────────────────────────

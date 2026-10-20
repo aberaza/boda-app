@@ -32,6 +32,7 @@ export type Translation = Widen<{
     hero: string;
     cuando: string;
     finca: string;
+    eventDetail: string;
     pronto: string;
     sectionLabel: string;
     keyboardHelp: string;
@@ -194,6 +195,7 @@ const es = {
     hero: 'Inicio',
     cuando: 'Cuándo',
     finca: 'El lugar',
+    eventDetail: 'Nuestra boda',
     pronto: 'Info',
     sectionLabel: 'Navegación por secciones',
     keyboardHelp: 'Usa las flechas, WASD o HJKL para cambiar de sección.',
@@ -397,6 +399,7 @@ const fr = {
     hero: 'Accueil',
     cuando: 'Quand',
     finca: 'Le lieu',
+    eventDetail: 'Notre mariage',
     pronto: 'Info',
     sectionLabel: 'Navigation par sections',
     keyboardHelp: 'Utilisez les flèches, WASD ou HJKL pour changer de section.',
@@ -599,6 +602,7 @@ const en = {
     hero: 'Home',
     cuando: 'When',
     finca: 'The venue',
+    eventDetail: 'Our wedding',
     pronto: 'Info',
     sectionLabel: 'Section navigation',
     keyboardHelp: 'Use the arrow keys, WASD or HJKL to change sections.',

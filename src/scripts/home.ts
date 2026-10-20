@@ -1,6 +1,7 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { animation } from '../config/theme';
+import { initHorizontalCarousels } from './horizontal-carousel';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import flightRoutes from '../data/flight-routes.json';
@@ -9,10 +10,8 @@ import type { FlightRoute, FlightRouteData } from '../components/home/types';
 // ── URL state helpers ─────────────────────────────────────────────
 // ?slide=<name> restores scroll position (stable by slide key)
 // ?slide=N      legacy support for old numeric links
-// ?detail=<key> re-opens the named overlay
 const _urlP = new URLSearchParams(window.location.search);
 const initSlideRaw = _urlP.get('slide');
-const initDetail = _urlP.get('detail');
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const navigationBehavior: ScrollBehavior = prefersReducedMotion ? 'auto' : 'smooth';
 
@@ -27,6 +26,8 @@ function setUrlParam(key: string, value: string | null) {
 const navBtns = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-slide-btn]'));
 const slideKeys = navBtns.map((btn) => (btn.dataset.slideKey ?? '').toLowerCase());
 const maxSlideIndex = Math.max(navBtns.length - 1, 0);
+const mainSlides = Array.from(document.querySelectorAll<HTMLElement>('#slides-wrap > .slide'));
+const horizontalCarousels = initHorizontalCarousels();
 
 function clampSlide(index: number) {
   return Math.min(Math.max(index, 0), maxSlideIndex);
@@ -48,9 +49,11 @@ function resolveInitSlide(raw: string | null) {
 
 const initSlide = resolveInitSlide(initSlideRaw);
 let activeSlideIndex = initSlide;
+let navigationViewportHeight = window.innerHeight;
+let resizingNavigation = false;
+let resizeTimer: ReturnType<typeof setTimeout>;
+let resizeSlideIndex = initSlide;
 let goToMainSlide: (index: number, behavior?: ScrollBehavior) => void = () => {};
-let goToJerezSlide: ((index: number, behavior?: ScrollBehavior) => void) | null = null;
-let activeJerezSlideIndex = 0;
 
 function setMainActive(index: number) {
   activeSlideIndex = clampSlide(index);
@@ -60,12 +63,18 @@ function setMainActive(index: number) {
     if (active) btn.setAttribute('aria-current', 'step');
     else btn.removeAttribute('aria-current');
   });
-  document.querySelectorAll<HTMLElement>('.slide').forEach((slide, i) => {
+  mainSlides.forEach((slide, i) => {
     const active = i === activeSlideIndex;
     slide.setAttribute('aria-hidden', String(!active));
     if ('inert' in slide) slide.inert = !active;
+    if (prefersReducedMotion) gsap.set(slide, { autoAlpha: active ? 1 : 0, scale: 1 });
   });
   setUrlParam('slide', getSlideParamValue(activeSlideIndex));
+  const activeSection = mainSlides[activeSlideIndex];
+  horizontalCarousels.forEach(({ root }) => {
+    if (activeSection?.contains(root)) root.dispatchEvent(new Event('horizontal:refresh'));
+  });
+  if (slideKeys[activeSlideIndex] === 'evento') requestAnimationFrame(initFincaMap);
 }
 
 function isEditableTarget(target: EventTarget | null) {
@@ -82,128 +91,41 @@ function keyboardDirection(key: string): -1 | 1 | null {
   return null;
 }
 
-// ══════════════════════════════════════════════════════════════════
-// GENERIC OVERLAY SYSTEM
-// Trigger:  data-open-overlay="<key>"  on any clickable element
-// Dismiss:  data-close-overlay          on any button inside overlay
-// Overlay:  data-overlay-key="<key>"    on the full-screen panel
-// ══════════════════════════════════════════════════════════════════
-
-// Per-overlay callbacks — called once after the open animation ends
-const overlayOnOpen: Record<string, () => void> = {
-  finca: initFincaMap,
-  jerez: initJerezOverlay,
-};
-
-let currentOverlay: HTMLElement | null = null;
-let overlayTrigger: HTMLElement | null = null;
-
-function setOverlayVisibility(el: HTMLElement, visible: boolean) {
-  el.classList.toggle('is-open', visible);
-  el.setAttribute('aria-hidden', String(!visible));
-  if ('inert' in el) el.inert = !visible;
-}
-
-function openOverlay(key: string, trigger?: HTMLElement | null) {
-  const el = document.querySelector<HTMLElement>('[data-overlay-key="' + key + '"]');
-  if (!el || currentOverlay === el) return;
-  if (currentOverlay) {
-    gsap.set(currentOverlay, { autoAlpha: 0 });
-    setOverlayVisibility(currentOverlay, false);
-  }
-  overlayTrigger = trigger ?? (document.activeElement as HTMLElement | null);
-  currentOverlay = el;
-  setOverlayVisibility(el, true);
-  gsap.fromTo(
-    el,
-    { autoAlpha: 0, y: prefersReducedMotion ? 0 : 30 },
-    {
-      autoAlpha: 1,
-      y: 0,
-      duration: prefersReducedMotion ? 0 : 0.55,
-      ease: 'power3.out',
-      onComplete: () => {
-        overlayOnOpen[key]?.();
-        el.querySelector<HTMLElement>('[data-close-overlay]')?.focus({ preventScroll: true });
-      },
-    },
-  );
-  document.body.style.overflow = 'hidden';
-  setUrlParam('detail', key);
-}
-
-function closeOverlay() {
-  if (!currentOverlay) return;
-  const el = currentOverlay;
-  const trigger = overlayTrigger;
-  currentOverlay = null;
-  overlayTrigger = null;
-  gsap.to(el, {
-    autoAlpha: 0,
-    y: prefersReducedMotion ? 0 : 20,
-    duration: prefersReducedMotion ? 0 : 0.4,
-    ease: 'power2.in',
-    onComplete: () => {
-      setOverlayVisibility(el, false);
-      trigger?.focus({ preventScroll: true });
-    },
+// Horizontal Jerez panels progressively initialize their maps when first visited.
+horizontalCarousels.forEach(({ root }) => {
+  root.addEventListener('horizontal:change', (event) => {
+    const index = (event as CustomEvent<number>).detail;
+    if (root.id !== 'venue-carousel' || index < 1) return;
+    initJerezMaps();
+    requestAnimationFrame(() => {
+      jerezCityMap?.invalidateSize();
+      jerezRoutesMap?.invalidateSize();
+      jerezSurroundingsMap?.invalidateSize();
+    });
   });
-  document.body.style.overflow = '';
-  setUrlParam('detail', null);
-}
-
-// Wire all trigger / close buttons globally
-document.querySelectorAll<HTMLElement>('[data-open-overlay]').forEach((btn) => {
-  btn.addEventListener('click', () => openOverlay(btn.dataset.openOverlay!, btn));
-});
-document.querySelectorAll<HTMLElement>('[data-close-overlay]').forEach((btn) => {
-  btn.addEventListener('click', closeOverlay);
 });
 
 document.addEventListener('keydown', (event) => {
-  if (event.key === 'Escape' && currentOverlay) {
-    event.preventDefault();
-    closeOverlay();
-    return;
-  }
-  if (event.key === 'Tab' && currentOverlay) {
-    const focusable = Array.from(
-      currentOverlay.querySelectorAll<HTMLElement>(
-        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
-      ),
-    ).filter((element) => element.getClientRects().length > 0);
-    const first = focusable[0];
-    const last = focusable[focusable.length - 1];
-    if (
-      first &&
-      last &&
-      (event.shiftKey ? document.activeElement === first : document.activeElement === last)
-    ) {
-      event.preventDefault();
-      (event.shiftKey ? last : first).focus();
-    }
-    return;
-  }
   if (event.metaKey || event.ctrlKey || event.altKey || isEditableTarget(event.target)) return;
 
   const direction = keyboardDirection(event.key);
   if (direction === null) return;
 
-  if (currentOverlay?.dataset.overlayKey === 'jerez' && goToJerezSlide) {
-    event.preventDefault();
-    goToJerezSlide(activeJerezSlideIndex + direction);
-    return;
+  const horizontalKey = ['arrowleft', 'arrowright', 'a', 'd', 'h', 'l'].includes(
+    event.key.toLowerCase(),
+  );
+  if (horizontalKey) {
+    const carousel = horizontalCarousels.find(({ root }) =>
+      mainSlides[activeSlideIndex]?.contains(root),
+    );
+    if (carousel) {
+      event.preventDefault();
+      carousel.move(direction);
+      return;
+    }
   }
-  if (currentOverlay) return;
-
   event.preventDefault();
   goToMainSlide(activeSlideIndex + direction);
-});
-
-// Guarantee all overlays are hidden and removed from the accessibility tree on load.
-document.querySelectorAll<HTMLElement>('[data-overlay-key]').forEach((el) => {
-  gsap.set(el, { autoAlpha: 0 });
-  setOverlayVisibility(el, false);
 });
 
 // ── Pointer, wheel and touch navigation ───────────────────────────
@@ -237,7 +159,7 @@ if (isTouch) {
 } else {
   gsap.registerPlugin(ScrollTrigger);
 
-  const slides = gsap.utils.toArray<HTMLElement>('.slide');
+  const slides = mainSlides;
   const slideStep = () =>
     Math.max(document.documentElement.scrollHeight - window.innerHeight, 0) / maxSlideIndex;
   const scrollPositionForSlide = (index: number) => clampSlide(index) * slideStep();
@@ -274,16 +196,21 @@ if (isTouch) {
     }
   });
 
-  ScrollTrigger.create({
-    trigger: '#scroll-driver',
-    start: 'top top',
-    end: 'bottom bottom',
-    scrub: prefersReducedMotion ? false : animation.scrub,
-    animation: master,
-    onUpdate: (self) => setMainActive(Math.round(self.progress * maxSlideIndex)),
-  });
+  if (!prefersReducedMotion)
+    ScrollTrigger.create({
+      trigger: '#scroll-driver',
+      start: 'top top',
+      end: 'bottom bottom',
+      scrub: prefersReducedMotion ? false : animation.scrub,
+      animation: master,
+      onUpdate: (self) => {
+        if (!resizingNavigation && window.innerHeight === navigationViewportHeight) {
+          setMainActive(Math.round(self.progress * maxSlideIndex));
+        }
+      },
+    });
 
-  if (!prefersReducedMotion && initSlide === 0 && !initDetail) {
+  if (!prefersReducedMotion && initSlide === 0) {
     gsap.set(['#hero-photo', '#hero-parchment'], { autoAlpha: 0 });
     gsap.set('#hero-bauhaus', { autoAlpha: 0, x: '-18%' });
     gsap.set('#hero-almohade', { autoAlpha: 0, x: '18%' });
@@ -340,6 +267,7 @@ if (isTouch) {
   window.addEventListener(
     'scroll',
     () => {
+      if (resizingNavigation || window.innerHeight !== navigationViewportHeight) return;
       const step = slideStep();
       setMainActive(step > 0 ? Math.round(window.scrollY / step) : 0);
     },
@@ -355,15 +283,29 @@ if (isTouch) {
 window.addEventListener(
   'resize',
   () => {
-    if (currentOverlay?.dataset.overlayKey === 'jerez' && goToJerezSlide) {
-      goToJerezSlide(activeJerezSlideIndex, 'auto');
-    }
-    goToMainSlide(activeSlideIndex, 'auto');
+    if (!resizingNavigation) resizeSlideIndex = activeSlideIndex;
+    resizingNavigation = true;
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      navigationViewportHeight = window.innerHeight;
+      if (!isTouch) ScrollTrigger.refresh();
+      goToMainSlide(resizeSlideIndex, 'auto');
+      requestAnimationFrame(() => {
+        resizingNavigation = false;
+      });
+    }, 250);
   },
   { passive: true },
 );
 
-// ── FINCA overlay: Leaflet map ────────────────────────────────────
+// ── Venue and Jerez Leaflet maps ─────────────────────────────────
+const MAP_API_KEY = import.meta.env.PUBLIC_MAP_API_KEY ?? '';
+
+function cartoTileUrl(style: 'light_all' | 'light_nolabels') {
+  const query = MAP_API_KEY ? `?key=${encodeURIComponent(MAP_API_KEY)}` : '';
+  return `https://{s}.basemaps.cartocdn.com/${style}/{z}/{x}/{y}{r}.png${query}`;
+}
+
 const clayPin = L.divIcon({
   html: `<svg width="28" height="36" viewBox="0 0 28 36" xmlns="http://www.w3.org/2000/svg">
     <path d="M14 0C6.27 0 0 6.27 0 14c0 9.94 14 22 14 22S28 23.94 28 14C28 6.27 21.73 0 14 0z" fill="#bc6c4d"/>
@@ -421,7 +363,7 @@ function initFincaMap() {
     attributionControl: false,
   });
 
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+  L.tileLayer(cartoTileUrl('light_nolabels'), {
     attribution:
       '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
     subdomains: 'abcd',
@@ -444,58 +386,9 @@ function initFincaMap() {
   leafletMap.invalidateSize();
 }
 
-function initJerezOverlay() {
-  if (!jerezInited) {
-    jerezInited = true;
-    initJerezSlides();
-    initJerezMaps();
-  }
-  requestAnimationFrame(() => {
-    jerezCityMap?.invalidateSize();
-    jerezRoutesMap?.invalidateSize();
-    jerezSurroundingsMap?.invalidateSize();
-  });
-}
-
-function initJerezSlides() {
-  const wrap = document.getElementById('jerez-slides');
-  if (!wrap) return;
-  const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-jerez-nav]'));
-  const slides = Array.from(document.querySelectorAll<HTMLElement>('.jerez-slide'));
-
-  function setActive(index: number) {
-    activeJerezSlideIndex = Math.min(Math.max(index, 0), slides.length - 1);
-    buttons.forEach((btn, i) => {
-      const active = i === activeJerezSlideIndex;
-      btn.toggleAttribute('data-active', active);
-      if (active) btn.setAttribute('aria-current', 'step');
-      else btn.removeAttribute('aria-current');
-    });
-  }
-
-  goToJerezSlide = (index, behavior = navigationBehavior) => {
-    const target = Math.min(Math.max(index, 0), slides.length - 1);
-    wrap.scrollTo({ left: target * wrap.clientWidth, behavior });
-    setActive(target);
-  };
-
-  setActive(0);
-
-  buttons.forEach((btn) => {
-    btn.addEventListener('click', () => goToJerezSlide?.(Number(btn.dataset.jerezNav)));
-  });
-
-  wrap.addEventListener(
-    'scroll',
-    () => {
-      const index = Math.round(wrap.scrollLeft / Math.max(wrap.clientWidth, 1));
-      setActive(index);
-    },
-    { passive: true },
-  );
-}
-
 function initJerezMaps() {
+  if (jerezInited) return;
+  jerezInited = true;
   const cityEl = document.getElementById('jerez-city-map') as HTMLElement | null;
   const routesEl = document.getElementById('jerez-routes-map') as HTMLElement | null;
   const surroundingsEl = document.getElementById('jerez-surroundings-map') as HTMLElement | null;
@@ -520,7 +413,7 @@ function initJerezMaps() {
     attributionControl: false,
   });
 
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  L.tileLayer(cartoTileUrl('light_all'), {
     attribution:
       '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
     subdomains: 'abcd',
@@ -568,7 +461,7 @@ function initJerezMaps() {
   });
 
   // Use a different tile layer for routes map that works better with the larger height
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  L.tileLayer(cartoTileUrl('light_all'), {
     attribution:
       '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
     subdomains: 'abcd',
@@ -720,7 +613,7 @@ function initJerezMaps() {
     attributionControl: false,
   });
 
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  L.tileLayer(cartoTileUrl('light_all'), {
     attribution:
       '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
     subdomains: 'abcd',
@@ -765,6 +658,3 @@ function initJerezMaps() {
     { padding: [30, 30] },
   );
 }
-
-// ── Restore overlay state from URL ────────────────────────────────
-if (initDetail) openOverlay(initDetail, null);

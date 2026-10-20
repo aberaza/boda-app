@@ -22,6 +22,7 @@
 
   html {
     @apply bg-paper text-ink antialiased;
+    font-size: 106.25%;
     /* hide scrollbar — scroll is driven by GSAP */
     scrollbar-width: none;
     overflow-x: hidden;
@@ -33,6 +34,7 @@
 
   body {
     @apply font-sans;
+    font-size: 1.0625rem;
     /* tall scroll driver lives inside body — no bg needed here */
     background: transparent;
   }
