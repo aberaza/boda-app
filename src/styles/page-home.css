@@ -28,6 +28,22 @@ html.snap-mode #slides-wrap > .slide {
   transform: none !important;
 }
 
+/* The event details are taller than a mobile viewport; keep the heading and
+   adults-only notice at the top and let the section scroll internally. */
+html.snap-mode #slides-wrap > .event-detail-slide {
+  align-items: flex-start;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+html.snap-mode .event-detail-content {
+  align-self: flex-start;
+  justify-content: flex-start;
+  min-height: 100%;
+}
+
 /* Hide the hero scroll-cue nudge on snap mode (irrelevant UX) */
 html.snap-mode .slide:first-child [class*='mt-16'] {
   display: none;

@@ -59,6 +59,32 @@ test.describe('home experience', () => {
     expect(errors).toEqual([]);
   });
 
+  test('highlights the adults-only notice in the event section', async ({ page }) => {
+    await page.goto('/');
+    await navigate(page, 'evento');
+    const notice = page.locator('#adults-only-notice');
+    const heading = page.locator('.event-detail-slide .slide-title');
+    await expect(notice).toBeVisible();
+    await expect(notice.getByRole('heading', { name: 'Solo adultos' })).toBeVisible();
+    await expect(notice).toContainText('sin niños');
+    await expect
+      .poll(() =>
+        heading.evaluate((element) => {
+          const bounds = element.getBoundingClientRect();
+          return bounds.top >= 0 && bounds.bottom <= window.innerHeight;
+        }),
+      )
+      .toBe(true);
+    await expect
+      .poll(() =>
+        notice.evaluate((element) => {
+          const bounds = element.getBoundingClientRect();
+          return bounds.top >= 0 && bounds.bottom <= window.innerHeight;
+        }),
+      )
+      .toBe(true);
+  });
+
   test('buttons and dots change only the horizontal axis; vertical exit and return preserve the panel', async ({
     page,
   }) => {

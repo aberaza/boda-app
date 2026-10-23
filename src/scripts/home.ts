@@ -4,6 +4,7 @@ import { animation } from '../config/theme';
 import { initHorizontalCarousels } from './horizontal-carousel';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+import 'leaflet-providers';
 import flightRoutes from '../data/flight-routes.json';
 import type { FlightRoute, FlightRouteData } from '../components/home/types';
 
@@ -299,11 +300,17 @@ window.addEventListener(
 );
 
 // ── Venue and Jerez Leaflet maps ─────────────────────────────────
-const MAP_API_KEY = import.meta.env.PUBLIC_MAP_API_KEY ?? '';
+const MAP_API_KEY = import.meta.env.PUBLIC_MAP_API_KEY?.trim() ?? '';
+console.info(
+  `[maps] MAP_API_KEY ${MAP_API_KEY ? 'found and defined' : 'was not found or is empty'}.`,
+);
 
-function cartoTileUrl(style: 'light_all' | 'light_nolabels') {
-  const query = MAP_API_KEY ? `?key=${encodeURIComponent(MAP_API_KEY)}` : '';
-  return `https://{s}.basemaps.cartocdn.com/${style}/{z}/{x}/{y}{r}.png${query}`;
+function cartoTileLayer(style: 'light_all' | 'light_nolabels') {
+  const provider = style === 'light_nolabels' ? 'CartoDB.PositronNoLabels' : 'CartoDB.Positron';
+  return L.tileLayer.provider(provider, {
+    apikey: MAP_API_KEY,
+    maxZoom: 19,
+  });
 }
 
 const clayPin = L.divIcon({
@@ -363,12 +370,7 @@ function initFincaMap() {
     attributionControl: false,
   });
 
-  L.tileLayer(cartoTileUrl('light_nolabels'), {
-    attribution:
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-    subdomains: 'abcd',
-    maxZoom: 19,
-  }).addTo(leafletMap);
+  cartoTileLayer('light_nolabels').addTo(leafletMap);
 
   L.marker([LAT, LNG], { icon: clayPin }).addTo(leafletMap).bindPopup(NAME);
   L.marker([CLAT, CLNG], { icon: cityPin }).addTo(leafletMap);
@@ -413,12 +415,7 @@ function initJerezMaps() {
     attributionControl: false,
   });
 
-  L.tileLayer(cartoTileUrl('light_all'), {
-    attribution:
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-    subdomains: 'abcd',
-    maxZoom: 19,
-  }).addTo(jerezCityMap);
+  cartoTileLayer('light_all').addTo(jerezCityMap);
 
   L.marker([CLAT, CLNG], { icon: clayPin }).addTo(jerezCityMap).bindPopup('Jerez de la Frontera');
   L.marker([SEVLAT, SEVLNG], { icon: cityPin }).addTo(jerezCityMap).bindPopup('Sevilla');
@@ -460,13 +457,8 @@ function initJerezMaps() {
     attributionControl: false,
   });
 
-  // Use a different tile layer for routes map that works better with the larger height
-  L.tileLayer(cartoTileUrl('light_all'), {
-    attribution:
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-    subdomains: 'abcd',
-    maxZoom: 19,
-  }).addTo(jerezRoutesMap);
+  // Use the same CARTO provider for the routes map, which has the largest viewport.
+  cartoTileLayer('light_all').addTo(jerezRoutesMap);
 
   const routeCities = [
     { name: 'Jerez', lat: JLAT, lng: JLNG, icon: clayPin },
@@ -613,12 +605,7 @@ function initJerezMaps() {
     attributionControl: false,
   });
 
-  L.tileLayer(cartoTileUrl('light_all'), {
-    attribution:
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-    subdomains: 'abcd',
-    maxZoom: 19,
-  }).addTo(jerezSurroundingsMap);
+  cartoTileLayer('light_all').addTo(jerezSurroundingsMap);
 
   L.marker([SJLAT, SJLNG], { icon: clayPin }).addTo(jerezSurroundingsMap);
 

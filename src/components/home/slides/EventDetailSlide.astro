@@ -14,7 +14,7 @@ const { t } = Astro.props;
 
 <section
   aria-label={t.nav.eventDetail}
-  class="slide absolute inset-0 flex overflow-hidden"
+  class="event-detail-slide slide absolute inset-0 flex overflow-hidden"
   style="background: var(--color-paper);"
 >
   <div class="absolute inset-0" style={mBauhaus}>
@@ -24,7 +24,9 @@ const { t } = Astro.props;
     <GeoPattern color={patterns.almohade.color} opacity={0.5} class="h-full w-full" />
   </div>
 
-  <div class="relative z-10 mx-auto flex w-full max-w-5xl flex-col justify-center px-8 py-20 md:py-16">
+  <div
+    class="event-detail-content relative z-10 mx-auto flex w-full max-w-5xl flex-col justify-center px-8 py-20 md:py-16"
+  >
     <p class="slide-label font-sans text-[0.65rem] uppercase tracking-[0.5em] text-clay/85">
       {t.eventDetail.eyebrow}
     </p>
@@ -33,7 +35,23 @@ const { t } = Astro.props;
       <em class="not-italic font-semibold text-clay">{t.eventDetail.leadSub}</em>
     </h2>
 
-    <div class="slide-body mt-10 grid gap-8 md:grid-cols-2">
+    <aside
+      id="adults-only-notice"
+      aria-labelledby="adults-only-heading"
+      class="mt-6 max-w-4xl rounded-xl border border-clay/25 border-l-4 border-l-clay bg-sand/75 px-5 py-4 shadow-soft md:mt-7 md:px-6"
+    >
+      <h3
+        id="adults-only-heading"
+        class="font-sans text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-ink"
+      >
+        {t.eventDetail.adultsOnlyLabel}
+      </h3>
+      <p class="mt-1 font-display text-lg font-medium leading-snug text-ink/90 md:text-xl">
+        {t.eventDetail.adultsOnlyNote}
+      </p>
+    </aside>
+
+    <div class="slide-body mt-7 grid gap-8 md:mt-8 md:grid-cols-2">
       <div class="flex flex-col gap-7">
         <div>
           <p class="font-sans text-[0.6rem] uppercase tracking-[0.45em] text-ink/90">
@@ -63,10 +81,6 @@ const { t } = Astro.props;
             </p>
             <p class="mt-0.5 font-display text-lg italic text-ink/90">{t.eventDetail.dressCodeValue}</p>
           </div>
-        </div>
-        <div class="flex items-start gap-4">
-          <span class="mt-1 h-2 w-2 shrink-0 rounded-full bg-clay/80" />
-          <p class="font-display text-lg italic text-ink/90">{t.eventDetail.adultsOnlyNote}</p>
         </div>
       </div>
 

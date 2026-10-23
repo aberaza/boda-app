@@ -215,7 +215,7 @@ const es = {
     s3label: 'Baile y fiesta',
     dressCodeLabel: 'Dress code',
     dressCodeValue: 'Etiqueta formal',
-    adultsOnlyLabel: 'Sobre niños',
+    adultsOnlyLabel: 'Solo adultos',
     adultsOnlyNote:
       'Con mucho cariño, os pedimos que esta celebración sea solo para adultos (sin niños). Gracias por comprenderlo.',
     addressLabel: 'Cómo llegar',
@@ -419,7 +419,7 @@ const fr = {
     s3label: 'Bal et fête',
     dressCodeLabel: 'Dress code',
     dressCodeValue: 'Tenue de soirée',
-    adultsOnlyLabel: 'À propos des enfants',
+    adultsOnlyLabel: 'Réservé aux adultes',
     adultsOnlyNote:
       'Avec toute notre affection, nous vous demandons que cette célébration soit réservée aux adultes (sans enfants). Merci de votre compréhension.',
     addressLabel: 'Comment venir',
@@ -622,7 +622,7 @@ const en = {
     s3label: 'Dancing & celebrations',
     dressCodeLabel: 'Dress code',
     dressCodeValue: 'Formal attire',
-    adultsOnlyLabel: 'About kids',
+    adultsOnlyLabel: 'Adults only',
     adultsOnlyNote:
       'With lots of love, we kindly ask that this celebration be adults-only (no children). Thank you for understanding.',
     addressLabel: 'Getting there',
