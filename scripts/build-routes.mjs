@@ -6,7 +6,7 @@
  *
  * Usage:
  *   SERPAPI_KEY=<key> node scripts/build-routes.mjs
- *   SERPAPI_KEY=<key> node scripts/build-routes.mjs --date 2027-05-08
+ *   SERPAPI_KEY=<key> node scripts/build-routes.mjs --date 2027-05-07
  *   node scripts/build-routes.mjs --dry-run [--date YYYY-MM-DD] [--output path]
  *   node scripts/build-routes.mjs --allow-partial
  *
@@ -35,7 +35,8 @@ const dateArg = dateArgIdx !== -1 ? args[dateArgIdx + 1] : undefined;
 const outputArgIdx = args.indexOf('--output');
 const outputArg = outputArgIdx !== -1 ? args[outputArgIdx + 1] : undefined;
 const hasValue = (value) => typeof value === 'string' && !value.startsWith('-');
-const WEDDING_DATE = '2027-05-08';
+// Guests should arrive the day before the wedding; --date can override this.
+const WEDDING_DATE = '2027-05-07';
 
 function isValidDate(value) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
@@ -91,11 +92,9 @@ const ORIGINS = [
   },
   {
     city: 'Pamplona',
-    // PNA is the local airport but has very few routes; MAD is the practical gateway
     airport: 'PNA',
     lat: 42.817,
     lng: -1.644,
-    altAirports: ['MAD', 'BIO'],
   },
   {
     city: 'Madrid',
@@ -116,18 +115,26 @@ const ORIGINS = [
     lat: 37.1887,
     lng: -3.7774,
   },
+  {
+    city: 'Avilés',
+    airport: 'OVD',
+    // Asturias Airport is about 15 km from Avilés.
+    lat: 43.5563,
+    lng: -5.9248,
+  },
 ];
 
 // ─── Airport coordinate lookup ────────────────────────────────────────────────
 // Populated with the airports that are likely to appear as layovers.
 const AIRPORT_COORDS = {
-  XRY: { city: 'Jerez de la Frontera', lat: 36.7446, lng: -6.0601 },
-  SVQ: { city: 'Sevilla', lat: 37.418, lng: -5.8931 },
+  XRY: { city: 'Aeropuerto de Jerez (XRY)', lat: 36.7446, lng: -6.0601 },
+  SVQ: { city: 'Aeropuerto de Sevilla (SVQ)', lat: 37.418, lng: -5.8931 },
   AGP: { city: 'Málaga', lat: 36.6749, lng: -4.4991 },
   MAD: { city: 'Madrid', lat: 40.4983, lng: -3.5676 },
   BCN: { city: 'Barcelona', lat: 41.2971, lng: 2.0785 },
   CDG: { city: 'París (CDG)', lat: 49.0097, lng: 2.5479 },
   ORY: { city: 'París (Orly)', lat: 48.7253, lng: 2.3795 },
+  BVA: { city: 'París (Beauvais)', lat: 49.4544, lng: 2.1128 },
   PNA: { city: 'Pamplona', lat: 42.7701, lng: -1.6464 },
   BIO: { city: 'Bilbao', lat: 43.3011, lng: -2.9106 },
   LIS: { city: 'Lisboa', lat: 38.7742, lng: -9.1342 },
@@ -140,12 +147,35 @@ const AIRPORT_COORDS = {
   GRX: { city: 'Granada', lat: 37.1887, lng: -3.7774 },
   VLC: { city: 'Valencia', lat: 39.4893, lng: -0.4816 },
   PMI: { city: 'Palma de Mallorca', lat: 39.5517, lng: 2.7388 },
+  OVD: { city: 'Aeropuerto de Asturias', lat: 43.5632, lng: -6.0346 },
 };
 
 /** Resolve coordinates for an IATA code. Falls back to a placeholder. */
 function coordsFor(iata) {
   return AIRPORT_COORDS[iata] ?? { city: iata, lat: 0, lng: 0 };
 }
+
+function googleFlightsUrl(segments) {
+  const flights = segments.filter((segment) => segment.mode === 'flight');
+  if (!flights.length) return null;
+  const from = flights[0].from.code;
+  const to = flights.at(-1).to.code;
+  const query = `Flights from ${from} to ${to} on ${SEARCH_DATE}`;
+  return `https://www.google.com/travel/flights?hl=es&curr=EUR&q=${encodeURIComponent(query)}`;
+}
+
+const RAIL_STATIONS = {
+  pamplona: { code: 'PNA-RENFE', city: 'Estación Pamplona-Iruña', lat: 42.8168, lng: -1.6432 },
+  madridChamartin: { code: 'MAD-CH', city: 'Madrid-Chamartín', lat: 40.4721, lng: -3.6822 },
+  madridAtocha: { code: 'MAD-ATO', city: 'Madrid-Atocha', lat: 40.4066, lng: -3.6894 },
+  seville: { code: 'SVQ-STA', city: 'Sevilla-Santa Justa', lat: 37.3924, lng: -5.9752 },
+  jerez: { code: 'XRY-RENFE', city: 'Estación de Jerez', lat: 36.6815, lng: -6.1262 },
+};
+const RENFE_TIMETABLE_URL = 'https://www.renfe.com/es/es/viajar/informacion-util/horarios';
+const RENFE_MADRID_JEREZ_URL = 'https://www.renfe.com/es/es/inspirate/rutas/madrid-jerez';
+const RENFE_PAMPLONA_MADRID_URL =
+  'https://www.renfe.com/es/es/inspirate/rutas/pamplona-iruna-madrid';
+const MAX_SEVILLE_RAIL_ARRIVAL_MINUTES = 19 * 60;
 
 // ─── SerpAPI call ─────────────────────────────────────────────────────────────
 async function fetchFlights(fromCode, toCode) {
@@ -216,18 +246,12 @@ function parseOption(option) {
   const segments = flights.map((f) => {
     const fromCode = f.departure_airport?.id ?? '???';
     const toCode = f.arrival_airport?.id ?? '???';
-    const fromInfo = AIRPORT_COORDS[fromCode] ?? {
-      city: f.departure_airport?.name ?? fromCode,
-      lat: 0,
-      lng: 0,
-    };
-    const toInfo = AIRPORT_COORDS[toCode] ?? {
-      city: f.arrival_airport?.name ?? toCode,
-      lat: 0,
-      lng: 0,
-    };
+    const fromInfo = AIRPORT_COORDS[fromCode];
+    const toInfo = AIRPORT_COORDS[toCode];
+    if (!fromInfo || !toInfo) return null;
 
     return {
+      mode: 'flight',
       from: {
         code: fromCode,
         city: fromInfo.city,
@@ -237,37 +261,110 @@ function parseOption(option) {
       to: { code: toCode, city: toInfo.city, lat: toInfo.lat, lng: toInfo.lng },
       airline: f.airline ?? 'Desconocida',
       logo: f.airline_logo ?? null,
-      duration: f.duration ?? 0,
+      duration: typeof f.duration === 'number' ? f.duration : null,
+      flightNumber: f.flight_number ?? null,
+      departureTime: f.departure_airport?.time ?? null,
+      arrivalTime: f.arrival_airport?.time ?? null,
     };
   });
+  if (segments.some((segment) => segment === null)) return null;
 
   // Layovers with coords
   const parsedLayovers = layovers.map((l) => {
-    const info = AIRPORT_COORDS[l.id] ?? {
-      city: l.name ?? l.id,
-      lat: 0,
-      lng: 0,
-    };
+    const info = AIRPORT_COORDS[l.id];
+    if (!info) return null;
     return {
       code: l.id,
       city: info.city,
       lat: info.lat,
       lng: info.lng,
-      duration: l.duration ?? 0,
+      duration: typeof l.duration === 'number' ? l.duration : null,
+      overnight: Boolean(l.overnight),
     };
   });
+  if (parsedLayovers.some((layover) => layover === null)) return null;
 
   // Primary airline = first segment's airline (or majority)
   const primaryAirline = segments[0]?.airline ?? 'Desconocida';
+  const durationFromSegments = segments.every((segment) => segment.duration !== null)
+    ? segments.reduce((sum, segment) => sum + segment.duration, 0)
+    : null;
+  const flightSearchUrl = googleFlightsUrl(segments);
 
   return {
     type: isConnecting ? 'connecting' : 'direct',
     airline: primaryAirline,
-    totalDuration: total_duration ?? segments.reduce((s, f) => s + f.duration, 0),
-    price: price ?? null,
+    totalDuration:
+      typeof total_duration === 'number' && Number.isFinite(total_duration)
+        ? total_duration
+        : durationFromSegments,
+    price,
+    priceScope: 'total',
+    links: flightSearchUrl ? [{ mode: 'flight', url: flightSearchUrl }] : [],
     segments,
     layovers: parsedLayovers,
   };
+}
+
+function connectSevilleFlightToJerez(route) {
+  const airport = coordsFor('SVQ');
+  return {
+    ...route,
+    type: 'multimodal',
+    totalDuration: null,
+    priceScope: 'flight-only',
+    bookingUrl: RENFE_TIMETABLE_URL,
+    links: [...(route.links ?? []), { mode: 'train', url: RENFE_TIMETABLE_URL }],
+    segments: [
+      ...route.segments,
+      {
+        mode: 'transfer',
+        from: { code: 'SVQ', ...airport },
+        to: RAIL_STATIONS.seville,
+        duration: null,
+      },
+      {
+        mode: 'train',
+        from: RAIL_STATIONS.seville,
+        to: RAIL_STATIONS.jerez,
+        operator: 'Renfe',
+        duration: null,
+      },
+    ],
+  };
+}
+
+function connectAlternateAirportToOrigin(route, origin, airportCode) {
+  const airport = coordsFor(airportCode);
+  return {
+    ...route,
+    type: 'multimodal',
+    totalDuration: null,
+    priceScope: 'flight-only',
+    segments: [
+      {
+        mode: 'transfer',
+        from: {
+          code: `CITY-${origin.airport}`,
+          city: origin.city,
+          lat: origin.lat,
+          lng: origin.lng,
+        },
+        to: { code: airportCode, ...airport },
+        duration: null,
+      },
+      ...route.segments,
+    ],
+  };
+}
+
+function hasTimeToConnectWithSevilleTrain(route) {
+  const arrival = route.segments.at(-1)?.arrivalTime?.match(/(\d{2}):(\d{2})$/);
+  if (!arrival) return false;
+  const arrivalMinutes = Number(arrival[1]) * 60 + Number(arrival[2]);
+  // Without published Renfe schedules, don't imply a same-day rail connection
+  // for flights landing late in the evening.
+  return arrivalMinutes <= MAX_SEVILLE_RAIL_ARRIVAL_MINUTES;
 }
 
 /**
@@ -300,11 +397,39 @@ async function getRoutes(origin, dest) {
 
   if (!allOptions.length) return { routes: [], error: null };
 
-  // Keep up to 3 options (best + a connecting alt if available).
+  // Keep useful options, remove duplicate itineraries, and avoid extreme
+  // overnight connections that are technically bookable but poor recommendations.
+  const seen = new Set();
   const routes = allOptions
-    .slice(0, 3)
     .map((opt) => parseOption(opt))
-    .filter(Boolean);
+    .filter(Boolean)
+    .filter(
+      (route) =>
+        route.segments.length <= 2 &&
+        typeof route.totalDuration === 'number' &&
+        route.totalDuration <= 12 * 60 &&
+        (dest.airport !== 'SVQ' || hasTimeToConnectWithSevilleTrain(route)) &&
+        route.layovers.every(
+          (layover) =>
+            typeof layover.duration === 'number' &&
+            !layover.overnight &&
+            layover.duration <= 6 * 60,
+        ),
+    )
+    .filter((route) => {
+      const fingerprint = [
+        route.price,
+        ...route.segments.map(
+          (segment) =>
+            `${segment.from.code}-${segment.to.code}-${segment.flightNumber ?? ''}-${segment.departureTime ?? ''}`,
+        ),
+      ].join('|');
+      if (seen.has(fingerprint)) return false;
+      seen.add(fingerprint);
+      return true;
+    })
+    .slice(0, 3)
+    .map((route) => (dest.airport === 'SVQ' ? connectSevilleFlightToJerez(route) : route));
   return { routes, error: null };
 }
 
@@ -361,8 +486,12 @@ const MOCK_DATA = {
       {
         flights: [
           {
-            departure_airport: { id: 'CDG', name: 'París CDG' },
-            arrival_airport: { id: 'SVQ', name: 'Sevilla' },
+            departure_airport: {
+              id: 'CDG',
+              name: 'París CDG',
+              time: `${SEARCH_DATE} 13:55`,
+            },
+            arrival_airport: { id: 'SVQ', name: 'Sevilla', time: `${SEARCH_DATE} 16:30` },
             airline: 'Air France',
             airline_logo: 'https://www.gstatic.com/flights/airline_logos/70px/AF.png',
             duration: 165,
@@ -375,7 +504,34 @@ const MOCK_DATA = {
     ],
     other_flights: [],
   },
-  'PNA-XRY': { best_flights: [], other_flights: [] },
+  'PNA-XRY': {
+    best_flights: [
+      {
+        flights: [
+          {
+            departure_airport: { id: 'PNA', name: 'Pamplona' },
+            arrival_airport: { id: 'MAD', name: 'Madrid' },
+            airline: 'Iberia',
+            airline_logo: 'https://www.gstatic.com/flights/airline_logos/70px/IB.png',
+            flight_number: 'IB 1050',
+            duration: 65,
+          },
+          {
+            departure_airport: { id: 'MAD', name: 'Madrid' },
+            arrival_airport: { id: 'XRY', name: 'Aeropuerto de Jerez' },
+            airline: 'Iberia',
+            airline_logo: 'https://www.gstatic.com/flights/airline_logos/70px/IB.png',
+            flight_number: 'IB 1091',
+            duration: 80,
+          },
+        ],
+        layovers: [{ id: 'MAD', name: 'Madrid', duration: 55 }],
+        total_duration: 200,
+        price: 180,
+      },
+    ],
+    other_flights: [],
+  },
   'PNA-SVQ': { best_flights: [], other_flights: [] },
   'MAD-XRY': {
     best_flights: [
@@ -396,7 +552,112 @@ const MOCK_DATA = {
     ],
     other_flights: [],
   },
+  'OVD-XRY': {
+    best_flights: [
+      {
+        flights: [
+          {
+            departure_airport: { id: 'OVD', name: 'Aeropuerto de Asturias' },
+            arrival_airport: { id: 'MAD', name: 'Madrid' },
+            airline: 'Iberia',
+            airline_logo: 'https://www.gstatic.com/flights/airline_logos/70px/IB.png',
+            flight_number: 'IB 478',
+            duration: 70,
+          },
+          {
+            departure_airport: { id: 'MAD', name: 'Madrid' },
+            arrival_airport: { id: 'XRY', name: 'Aeropuerto de Jerez' },
+            airline: 'Iberia',
+            airline_logo: 'https://www.gstatic.com/flights/airline_logos/70px/IB.png',
+            flight_number: 'IB 1091',
+            duration: 70,
+          },
+        ],
+        layovers: [{ id: 'MAD', name: 'Madrid', duration: 90 }],
+        total_duration: 230,
+        price: 180,
+      },
+    ],
+    other_flights: [],
+  },
 };
+
+function addCuratedTrainRoutes(output) {
+  const madrid = output.origins.find((origin) => origin.city === 'Madrid');
+  const pamplona = output.origins.find((origin) => origin.city === 'Pamplona');
+
+  if (madrid) {
+    madrid.routes.push({
+      type: 'multimodal',
+      airline: 'Renfe',
+      totalDuration: null,
+      price: null,
+      priceScope: 'unknown',
+      bookingUrl: RENFE_MADRID_JEREZ_URL,
+      links: [{ mode: 'train', url: RENFE_MADRID_JEREZ_URL }],
+      segments: [
+        {
+          mode: 'train',
+          from: RAIL_STATIONS.madridAtocha,
+          to: RAIL_STATIONS.seville,
+          operator: 'Renfe',
+          duration: null,
+        },
+        {
+          mode: 'train',
+          from: RAIL_STATIONS.seville,
+          to: RAIL_STATIONS.jerez,
+          operator: 'Renfe',
+          duration: null,
+        },
+      ],
+      layovers: [
+        {
+          code: RAIL_STATIONS.seville.code,
+          city: RAIL_STATIONS.seville.city,
+          lat: RAIL_STATIONS.seville.lat,
+          lng: RAIL_STATIONS.seville.lng,
+          duration: null,
+        },
+      ],
+    });
+  }
+
+  const madridFlight = madrid?.routes.find(
+    (route) =>
+      route.priceScope === 'total' &&
+      route.segments[0]?.from.code === 'MAD' &&
+      route.segments.at(-1)?.to.code === 'XRY',
+  );
+  if (!pamplona || !madridFlight) return;
+
+  pamplona.routes.push({
+    type: 'multimodal',
+    airline: `Renfe + ${madridFlight.airline ?? 'avión'}`,
+    totalDuration: null,
+    price: madridFlight.price,
+    priceScope: 'flight-only',
+    bookingUrl: RENFE_PAMPLONA_MADRID_URL,
+    links: [...(madridFlight.links ?? []), { mode: 'train', url: RENFE_PAMPLONA_MADRID_URL }],
+    segments: [
+      {
+        mode: 'train',
+        from: RAIL_STATIONS.pamplona,
+        to: RAIL_STATIONS.madridChamartin,
+        operator: 'Renfe',
+        duration: null,
+      },
+      {
+        mode: 'transfer',
+        from: RAIL_STATIONS.madridChamartin,
+        to: { code: 'MAD', ...AIRPORT_COORDS.MAD },
+        duration: null,
+      },
+      ...madridFlight.segments,
+    ],
+    layovers: madridFlight.layovers,
+  });
+}
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
 async function main() {
@@ -442,7 +703,6 @@ async function main() {
         const altOrigin = {
           ...origin,
           airport: altCode,
-          ...coordsFor(altCode),
         };
         for (const dest of DESTINATIONS) {
           const result = await getRoutes(altOrigin, dest);
@@ -452,7 +712,9 @@ async function main() {
           }
           const found = result.routes;
           if (found.length) {
-            routes.push(...found);
+            routes.push(
+              ...found.map((route) => connectAlternateAirportToOrigin(route, origin, altCode)),
+            );
             break;
           }
         }
@@ -474,6 +736,8 @@ async function main() {
       routes,
     });
   }
+
+  addCuratedTrainRoutes(output);
 
   if (failedQueries.length) {
     if (!DRY_RUN && !ALLOW_PARTIAL) {

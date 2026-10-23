@@ -154,6 +154,43 @@ test.describe('home experience', () => {
     await expect(page).toHaveURL(/slide=donde/);
   });
 
+  test('shows multimodal itinerary legs and draws the selected train route', async ({ page }) => {
+    await page.goto('/?slide=donde');
+    await expectPanel(page, 0);
+    await page.locator('[data-horizontal-dot="2"]').click();
+    await expectPanel(page, 2);
+
+    const travelPanel = page.locator('#venue-carousel [data-horizontal-panel]').nth(2);
+    await expect(travelPanel.locator('[data-route-card]')).toHaveCount(7);
+    await expect(travelPanel.locator('[data-route-card="Granada"]')).toBeVisible();
+    await expect(travelPanel.locator('[data-route-card="Madrid"]')).toBeVisible();
+    await expect(travelPanel.locator('[data-route-card="Avilés"]')).toContainText('OVD');
+
+    const barcelona = travelPanel.locator('[data-route-card="Barcelona"]');
+    await barcelona.locator('[data-route-card-trigger]').click();
+    await expect(barcelona.locator('[data-route-search-link]').first()).toHaveAttribute(
+      'href',
+      /google\.com\/travel\/flights/,
+    );
+
+    const madrid = travelPanel.locator('[data-route-card="Madrid"]');
+    await madrid.locator('[data-route-card-trigger]').click();
+    await expect(madrid.locator('details')).toHaveJSProperty('open', true);
+    const trainOption = madrid.locator('[data-route-option]').filter({ hasText: 'Madrid-Atocha' });
+    await expect(trainOption).toContainText('Madrid-Atocha → Sevilla-Santa Justa');
+    await expect(trainOption).toContainText('Sevilla-Santa Justa → Estación de Jerez');
+    await expect(trainOption).toContainText('Duración por confirmar');
+    await expect(trainOption.locator('[data-route-search-link]')).toHaveAttribute(
+      'href',
+      /renfe\.com/,
+    );
+
+    await trainOption.getByRole('button').click();
+    await expect(
+      page.locator('#jerez-routes-map .leaflet-overlay-pane path.leaflet-interactive'),
+    ).toHaveCount(2);
+  });
+
   test('shows four accommodation cards and the shared Jerez/Rota wedding bus notice', async ({
     page,
   }) => {

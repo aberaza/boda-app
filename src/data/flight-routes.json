@@ -1,6 +1,6 @@
 {
-  "generated": "2026-08-30T20:31:16.523Z",
-  "searchDate": "2027-05-08",
+  "generated": "2026-10-23T22:28:22.296Z",
+  "searchDate": "2027-05-07",
   "destinations": [
     {
       "city": "Jerez de la Frontera",
@@ -15,6 +15,8 @@
       "lng": -5.8931
     }
   ],
+  "partial": false,
+  "failedQueries": 0,
   "origins": [
     {
       "city": "Barcelona",
@@ -25,10 +27,12 @@
         {
           "type": "direct",
           "airline": "Vueling",
-          "totalDuration": 135,
-          "price": 89,
+          "totalDuration": 105,
+          "price": 143,
+          "priceScope": "total",
           "segments": [
             {
+              "mode": "flight",
               "from": {
                 "code": "BCN",
                 "city": "Barcelona",
@@ -37,24 +41,72 @@
               },
               "to": {
                 "code": "XRY",
-                "city": "Jerez de la Frontera",
+                "city": "Aeropuerto de Jerez (XRY)",
                 "lat": 36.7446,
                 "lng": -6.0601
               },
               "airline": "Vueling",
               "logo": "https://www.gstatic.com/flights/airline_logos/70px/VY.png",
-              "duration": 135
+              "duration": 105,
+              "flightNumber": "VY 1282",
+              "departureTime": "2027-05-07 18:30",
+              "arrivalTime": "2027-05-07 20:15"
             }
           ],
-          "layovers": []
+          "layovers": [],
+          "links": [
+            {
+              "mode": "flight",
+              "url": "https://www.google.com/travel/flights?hl=es&curr=EUR&q=Flights%20from%20BCN%20to%20XRY%20on%202027-05-07"
+            }
+          ]
+        },
+        {
+          "type": "direct",
+          "airline": "Vueling",
+          "totalDuration": 110,
+          "price": 156,
+          "priceScope": "total",
+          "segments": [
+            {
+              "mode": "flight",
+              "from": {
+                "code": "BCN",
+                "city": "Barcelona",
+                "lat": 41.2971,
+                "lng": 2.0785
+              },
+              "to": {
+                "code": "XRY",
+                "city": "Aeropuerto de Jerez (XRY)",
+                "lat": 36.7446,
+                "lng": -6.0601
+              },
+              "airline": "Vueling",
+              "logo": "https://www.gstatic.com/flights/airline_logos/70px/VY.png",
+              "duration": 110,
+              "flightNumber": "VY 1278",
+              "departureTime": "2027-05-07 11:35",
+              "arrivalTime": "2027-05-07 13:25"
+            }
+          ],
+          "layovers": [],
+          "links": [
+            {
+              "mode": "flight",
+              "url": "https://www.google.com/travel/flights?hl=es&curr=EUR&q=Flights%20from%20BCN%20to%20XRY%20on%202027-05-07"
+            }
+          ]
         },
         {
           "type": "connecting",
           "airline": "Iberia",
-          "totalDuration": 230,
-          "price": 65,
+          "totalDuration": 210,
+          "price": 278,
+          "priceScope": "total",
           "segments": [
             {
+              "mode": "flight",
               "from": {
                 "code": "BCN",
                 "city": "Barcelona",
@@ -69,9 +121,13 @@
               },
               "airline": "Iberia",
               "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
-              "duration": 75
+              "duration": 85,
+              "flightNumber": "IB 412",
+              "departureTime": "2027-05-07 13:35",
+              "arrivalTime": "2027-05-07 15:00"
             },
             {
+              "mode": "flight",
               "from": {
                 "code": "MAD",
                 "city": "Madrid",
@@ -80,13 +136,16 @@
               },
               "to": {
                 "code": "XRY",
-                "city": "Jerez de la Frontera",
+                "city": "Aeropuerto de Jerez (XRY)",
                 "lat": 36.7446,
                 "lng": -6.0601
               },
               "airline": "Iberia",
               "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
-              "duration": 65
+              "duration": 80,
+              "flightNumber": "IB 1093",
+              "departureTime": "2027-05-07 15:45",
+              "arrivalTime": "2027-05-07 17:05"
             }
           ],
           "layovers": [
@@ -95,7 +154,14 @@
               "city": "Madrid",
               "lat": 40.4983,
               "lng": -3.5676,
-              "duration": 90
+              "duration": 45,
+              "overnight": false
+            }
+          ],
+          "links": [
+            {
+              "mode": "flight",
+              "url": "https://www.google.com/travel/flights?hl=es&curr=EUR&q=Flights%20from%20BCN%20to%20XRY%20on%202027-05-07"
             }
           ]
         }
@@ -108,12 +174,148 @@
       "lng": 2.352,
       "routes": [
         {
-          "type": "direct",
-          "airline": "Air France",
-          "totalDuration": 165,
-          "price": 120,
+          "type": "connecting",
+          "airline": "Iberia",
+          "totalDuration": 430,
+          "price": 386,
+          "priceScope": "total",
           "segments": [
             {
+              "mode": "flight",
+              "from": {
+                "code": "CDG",
+                "city": "París (CDG)",
+                "lat": 49.0097,
+                "lng": 2.5479
+              },
+              "to": {
+                "code": "MAD",
+                "city": "Madrid",
+                "lat": 40.4983,
+                "lng": -3.5676
+              },
+              "airline": "Iberia",
+              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
+              "duration": 130,
+              "flightNumber": "IB 592",
+              "departureTime": "2027-05-07 06:00",
+              "arrivalTime": "2027-05-07 08:10"
+            },
+            {
+              "mode": "flight",
+              "from": {
+                "code": "MAD",
+                "city": "Madrid",
+                "lat": 40.4983,
+                "lng": -3.5676
+              },
+              "to": {
+                "code": "XRY",
+                "city": "Aeropuerto de Jerez (XRY)",
+                "lat": 36.7446,
+                "lng": -6.0601
+              },
+              "airline": "Iberia",
+              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
+              "duration": 80,
+              "flightNumber": "IB 1091",
+              "departureTime": "2027-05-07 11:50",
+              "arrivalTime": "2027-05-07 13:10"
+            }
+          ],
+          "layovers": [
+            {
+              "code": "MAD",
+              "city": "Madrid",
+              "lat": 40.4983,
+              "lng": -3.5676,
+              "duration": 220,
+              "overnight": false
+            }
+          ],
+          "links": [
+            {
+              "mode": "flight",
+              "url": "https://www.google.com/travel/flights?hl=es&curr=EUR&q=Flights%20from%20CDG%20to%20XRY%20on%202027-05-07"
+            }
+          ]
+        },
+        {
+          "type": "connecting",
+          "airline": "Iberia",
+          "totalDuration": 260,
+          "price": 463,
+          "priceScope": "total",
+          "segments": [
+            {
+              "mode": "flight",
+              "from": {
+                "code": "CDG",
+                "city": "París (CDG)",
+                "lat": 49.0097,
+                "lng": 2.5479
+              },
+              "to": {
+                "code": "MAD",
+                "city": "Madrid",
+                "lat": 40.4983,
+                "lng": -3.5676
+              },
+              "airline": "Iberia",
+              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
+              "duration": 135,
+              "flightNumber": "IB 586",
+              "departureTime": "2027-05-07 12:45",
+              "arrivalTime": "2027-05-07 15:00"
+            },
+            {
+              "mode": "flight",
+              "from": {
+                "code": "MAD",
+                "city": "Madrid",
+                "lat": 40.4983,
+                "lng": -3.5676
+              },
+              "to": {
+                "code": "XRY",
+                "city": "Aeropuerto de Jerez (XRY)",
+                "lat": 36.7446,
+                "lng": -6.0601
+              },
+              "airline": "Iberia",
+              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
+              "duration": 80,
+              "flightNumber": "IB 1093",
+              "departureTime": "2027-05-07 15:45",
+              "arrivalTime": "2027-05-07 17:05"
+            }
+          ],
+          "layovers": [
+            {
+              "code": "MAD",
+              "city": "Madrid",
+              "lat": 40.4983,
+              "lng": -3.5676,
+              "duration": 45,
+              "overnight": false
+            }
+          ],
+          "links": [
+            {
+              "mode": "flight",
+              "url": "https://www.google.com/travel/flights?hl=es&curr=EUR&q=Flights%20from%20CDG%20to%20XRY%20on%202027-05-07"
+            }
+          ]
+        },
+        {
+          "type": "multimodal",
+          "airline": "Air France",
+          "totalDuration": null,
+          "price": 240,
+          "priceScope": "flight-only",
+          "segments": [
+            {
+              "mode": "flight",
               "from": {
                 "code": "CDG",
                 "city": "París (CDG)",
@@ -122,16 +324,168 @@
               },
               "to": {
                 "code": "SVQ",
-                "city": "Sevilla",
+                "city": "Aeropuerto de Sevilla (SVQ)",
                 "lat": 37.418,
                 "lng": -5.8931
               },
               "airline": "Air France",
               "logo": "https://www.gstatic.com/flights/airline_logos/70px/AF.png",
-              "duration": 165
+              "duration": 155,
+              "flightNumber": "AF 1546",
+              "departureTime": "2027-05-07 13:55",
+              "arrivalTime": "2027-05-07 16:30"
+            },
+            {
+              "mode": "transfer",
+              "from": {
+                "code": "SVQ",
+                "city": "Aeropuerto de Sevilla (SVQ)",
+                "lat": 37.418,
+                "lng": -5.8931
+              },
+              "to": {
+                "code": "SVQ-STA",
+                "city": "Sevilla-Santa Justa",
+                "lat": 37.3924,
+                "lng": -5.9752
+              },
+              "duration": null
+            },
+            {
+              "mode": "train",
+              "from": {
+                "code": "SVQ-STA",
+                "city": "Sevilla-Santa Justa",
+                "lat": 37.3924,
+                "lng": -5.9752
+              },
+              "to": {
+                "code": "XRY-RENFE",
+                "city": "Estación de Jerez",
+                "lat": 36.6815,
+                "lng": -6.1262
+              },
+              "operator": "Renfe",
+              "duration": null
             }
           ],
-          "layovers": []
+          "layovers": [],
+          "bookingUrl": "https://www.renfe.com/es/es/viajar/informacion-util/horarios",
+          "links": [
+            {
+              "mode": "flight",
+              "url": "https://www.google.com/travel/flights?hl=es&curr=EUR&q=Flights%20from%20CDG%20to%20SVQ%20on%202027-05-07"
+            },
+            {
+              "mode": "train",
+              "url": "https://www.renfe.com/es/es/viajar/informacion-util/horarios"
+            }
+          ]
+        },
+        {
+          "type": "multimodal",
+          "airline": "Vueling",
+          "totalDuration": null,
+          "price": 209,
+          "priceScope": "flight-only",
+          "segments": [
+            {
+              "mode": "flight",
+              "from": {
+                "code": "CDG",
+                "city": "París (CDG)",
+                "lat": 49.0097,
+                "lng": 2.5479
+              },
+              "to": {
+                "code": "BCN",
+                "city": "Barcelona",
+                "lat": 41.2971,
+                "lng": 2.0785
+              },
+              "airline": "Vueling",
+              "logo": "https://www.gstatic.com/flights/airline_logos/70px/VY.png",
+              "duration": 115,
+              "flightNumber": "VY 8061",
+              "departureTime": "2027-05-07 10:10",
+              "arrivalTime": "2027-05-07 12:05"
+            },
+            {
+              "mode": "flight",
+              "from": {
+                "code": "BCN",
+                "city": "Barcelona",
+                "lat": 41.2971,
+                "lng": 2.0785
+              },
+              "to": {
+                "code": "SVQ",
+                "city": "Aeropuerto de Sevilla (SVQ)",
+                "lat": 37.418,
+                "lng": -5.8931
+              },
+              "airline": "Vueling",
+              "logo": "https://www.gstatic.com/flights/airline_logos/70px/VY.png",
+              "duration": 105,
+              "flightNumber": "VY 1390",
+              "departureTime": "2027-05-07 13:50",
+              "arrivalTime": "2027-05-07 15:35"
+            },
+            {
+              "mode": "transfer",
+              "from": {
+                "code": "SVQ",
+                "city": "Aeropuerto de Sevilla (SVQ)",
+                "lat": 37.418,
+                "lng": -5.8931
+              },
+              "to": {
+                "code": "SVQ-STA",
+                "city": "Sevilla-Santa Justa",
+                "lat": 37.3924,
+                "lng": -5.9752
+              },
+              "duration": null
+            },
+            {
+              "mode": "train",
+              "from": {
+                "code": "SVQ-STA",
+                "city": "Sevilla-Santa Justa",
+                "lat": 37.3924,
+                "lng": -5.9752
+              },
+              "to": {
+                "code": "XRY-RENFE",
+                "city": "Estación de Jerez",
+                "lat": 36.6815,
+                "lng": -6.1262
+              },
+              "operator": "Renfe",
+              "duration": null
+            }
+          ],
+          "layovers": [
+            {
+              "code": "BCN",
+              "city": "Barcelona",
+              "lat": 41.2971,
+              "lng": 2.0785,
+              "duration": 105,
+              "overnight": false
+            }
+          ],
+          "bookingUrl": "https://www.renfe.com/es/es/viajar/informacion-util/horarios",
+          "links": [
+            {
+              "mode": "flight",
+              "url": "https://www.google.com/travel/flights?hl=es&curr=EUR&q=Flights%20from%20CDG%20to%20SVQ%20on%202027-05-07"
+            },
+            {
+              "mode": "train",
+              "url": "https://www.renfe.com/es/es/viajar/informacion-util/horarios"
+            }
+          ]
         }
       ]
     },
@@ -142,12 +496,35 @@
       "lng": -1.644,
       "routes": [
         {
-          "type": "direct",
+          "type": "connecting",
           "airline": "Iberia",
-          "totalDuration": 70,
-          "price": 55,
+          "totalDuration": 200,
+          "price": 236,
+          "priceScope": "total",
           "segments": [
             {
+              "mode": "flight",
+              "from": {
+                "code": "PNA",
+                "city": "Pamplona",
+                "lat": 42.7701,
+                "lng": -1.6464
+              },
+              "to": {
+                "code": "MAD",
+                "city": "Madrid",
+                "lat": 40.4983,
+                "lng": -3.5676
+              },
+              "airline": "Iberia",
+              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
+              "duration": 65,
+              "flightNumber": "IB 1050",
+              "departureTime": "2027-05-07 09:50",
+              "arrivalTime": "2027-05-07 10:55"
+            },
+            {
+              "mode": "flight",
               "from": {
                 "code": "MAD",
                 "city": "Madrid",
@@ -156,16 +533,386 @@
               },
               "to": {
                 "code": "XRY",
-                "city": "Jerez de la Frontera",
+                "city": "Aeropuerto de Jerez (XRY)",
                 "lat": 36.7446,
                 "lng": -6.0601
               },
               "airline": "Iberia",
               "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
-              "duration": 70
+              "duration": 80,
+              "flightNumber": "IB 1091",
+              "departureTime": "2027-05-07 11:50",
+              "arrivalTime": "2027-05-07 13:10"
             }
           ],
-          "layovers": []
+          "layovers": [
+            {
+              "code": "MAD",
+              "city": "Madrid",
+              "lat": 40.4983,
+              "lng": -3.5676,
+              "duration": 55,
+              "overnight": false
+            }
+          ],
+          "links": [
+            {
+              "mode": "flight",
+              "url": "https://www.google.com/travel/flights?hl=es&curr=EUR&q=Flights%20from%20PNA%20to%20XRY%20on%202027-05-07"
+            }
+          ]
+        },
+        {
+          "type": "connecting",
+          "airline": "Iberia",
+          "totalDuration": 190,
+          "price": 371,
+          "priceScope": "total",
+          "segments": [
+            {
+              "mode": "flight",
+              "from": {
+                "code": "PNA",
+                "city": "Pamplona",
+                "lat": 42.7701,
+                "lng": -1.6464
+              },
+              "to": {
+                "code": "MAD",
+                "city": "Madrid",
+                "lat": 40.4983,
+                "lng": -3.5676
+              },
+              "airline": "Iberia",
+              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
+              "duration": 65,
+              "flightNumber": "IB 1052",
+              "departureTime": "2027-05-07 13:55",
+              "arrivalTime": "2027-05-07 15:00"
+            },
+            {
+              "mode": "flight",
+              "from": {
+                "code": "MAD",
+                "city": "Madrid",
+                "lat": 40.4983,
+                "lng": -3.5676
+              },
+              "to": {
+                "code": "XRY",
+                "city": "Aeropuerto de Jerez (XRY)",
+                "lat": 36.7446,
+                "lng": -6.0601
+              },
+              "airline": "Iberia",
+              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
+              "duration": 80,
+              "flightNumber": "IB 1093",
+              "departureTime": "2027-05-07 15:45",
+              "arrivalTime": "2027-05-07 17:05"
+            }
+          ],
+          "layovers": [
+            {
+              "code": "MAD",
+              "city": "Madrid",
+              "lat": 40.4983,
+              "lng": -3.5676,
+              "duration": 45,
+              "overnight": false
+            }
+          ],
+          "links": [
+            {
+              "mode": "flight",
+              "url": "https://www.google.com/travel/flights?hl=es&curr=EUR&q=Flights%20from%20PNA%20to%20XRY%20on%202027-05-07"
+            }
+          ]
+        },
+        {
+          "type": "multimodal",
+          "airline": "Iberia",
+          "totalDuration": null,
+          "price": 98,
+          "priceScope": "flight-only",
+          "segments": [
+            {
+              "mode": "flight",
+              "from": {
+                "code": "PNA",
+                "city": "Pamplona",
+                "lat": 42.7701,
+                "lng": -1.6464
+              },
+              "to": {
+                "code": "MAD",
+                "city": "Madrid",
+                "lat": 40.4983,
+                "lng": -3.5676
+              },
+              "airline": "Iberia",
+              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
+              "duration": 65,
+              "flightNumber": "IB 1050",
+              "departureTime": "2027-05-07 09:50",
+              "arrivalTime": "2027-05-07 10:55"
+            },
+            {
+              "mode": "flight",
+              "from": {
+                "code": "MAD",
+                "city": "Madrid",
+                "lat": 40.4983,
+                "lng": -3.5676
+              },
+              "to": {
+                "code": "SVQ",
+                "city": "Aeropuerto de Sevilla (SVQ)",
+                "lat": 37.418,
+                "lng": -5.8931
+              },
+              "airline": "Iberia",
+              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
+              "duration": 75,
+              "flightNumber": "IB 1073",
+              "departureTime": "2027-05-07 15:45",
+              "arrivalTime": "2027-05-07 17:00"
+            },
+            {
+              "mode": "transfer",
+              "from": {
+                "code": "SVQ",
+                "city": "Aeropuerto de Sevilla (SVQ)",
+                "lat": 37.418,
+                "lng": -5.8931
+              },
+              "to": {
+                "code": "SVQ-STA",
+                "city": "Sevilla-Santa Justa",
+                "lat": 37.3924,
+                "lng": -5.9752
+              },
+              "duration": null
+            },
+            {
+              "mode": "train",
+              "from": {
+                "code": "SVQ-STA",
+                "city": "Sevilla-Santa Justa",
+                "lat": 37.3924,
+                "lng": -5.9752
+              },
+              "to": {
+                "code": "XRY-RENFE",
+                "city": "Estación de Jerez",
+                "lat": 36.6815,
+                "lng": -6.1262
+              },
+              "operator": "Renfe",
+              "duration": null
+            }
+          ],
+          "layovers": [
+            {
+              "code": "MAD",
+              "city": "Madrid",
+              "lat": 40.4983,
+              "lng": -3.5676,
+              "duration": 290,
+              "overnight": false
+            }
+          ],
+          "bookingUrl": "https://www.renfe.com/es/es/viajar/informacion-util/horarios",
+          "links": [
+            {
+              "mode": "flight",
+              "url": "https://www.google.com/travel/flights?hl=es&curr=EUR&q=Flights%20from%20PNA%20to%20SVQ%20on%202027-05-07"
+            },
+            {
+              "mode": "train",
+              "url": "https://www.renfe.com/es/es/inspirate/rutas/pamplona-iruna-madrid"
+            }
+          ]
+        },
+        {
+          "type": "multimodal",
+          "airline": "Iberia",
+          "totalDuration": null,
+          "price": 121,
+          "priceScope": "flight-only",
+          "segments": [
+            {
+              "mode": "flight",
+              "from": {
+                "code": "PNA",
+                "city": "Pamplona",
+                "lat": 42.7701,
+                "lng": -1.6464
+              },
+              "to": {
+                "code": "MAD",
+                "city": "Madrid",
+                "lat": 40.4983,
+                "lng": -3.5676
+              },
+              "airline": "Iberia",
+              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
+              "duration": 65,
+              "flightNumber": "IB 1058",
+              "departureTime": "2027-05-07 06:45",
+              "arrivalTime": "2027-05-07 07:50"
+            },
+            {
+              "mode": "flight",
+              "from": {
+                "code": "MAD",
+                "city": "Madrid",
+                "lat": 40.4983,
+                "lng": -3.5676
+              },
+              "to": {
+                "code": "SVQ",
+                "city": "Aeropuerto de Sevilla (SVQ)",
+                "lat": 37.418,
+                "lng": -5.8931
+              },
+              "airline": "Iberia",
+              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
+              "duration": 75,
+              "flightNumber": "IB 1071",
+              "departureTime": "2027-05-07 11:35",
+              "arrivalTime": "2027-05-07 12:50"
+            },
+            {
+              "mode": "transfer",
+              "from": {
+                "code": "SVQ",
+                "city": "Aeropuerto de Sevilla (SVQ)",
+                "lat": 37.418,
+                "lng": -5.8931
+              },
+              "to": {
+                "code": "SVQ-STA",
+                "city": "Sevilla-Santa Justa",
+                "lat": 37.3924,
+                "lng": -5.9752
+              },
+              "duration": null
+            },
+            {
+              "mode": "train",
+              "from": {
+                "code": "SVQ-STA",
+                "city": "Sevilla-Santa Justa",
+                "lat": 37.3924,
+                "lng": -5.9752
+              },
+              "to": {
+                "code": "XRY-RENFE",
+                "city": "Estación de Jerez",
+                "lat": 36.6815,
+                "lng": -6.1262
+              },
+              "operator": "Renfe",
+              "duration": null
+            }
+          ],
+          "layovers": [
+            {
+              "code": "MAD",
+              "city": "Madrid",
+              "lat": 40.4983,
+              "lng": -3.5676,
+              "duration": 225,
+              "overnight": false
+            }
+          ],
+          "bookingUrl": "https://www.renfe.com/es/es/viajar/informacion-util/horarios",
+          "links": [
+            {
+              "mode": "flight",
+              "url": "https://www.google.com/travel/flights?hl=es&curr=EUR&q=Flights%20from%20PNA%20to%20SVQ%20on%202027-05-07"
+            },
+            {
+              "mode": "train",
+              "url": "https://www.renfe.com/es/es/inspirate/rutas/pamplona-iruna-madrid"
+            }
+          ]
+        },
+        {
+          "type": "multimodal",
+          "airline": "Renfe + Iberia",
+          "totalDuration": null,
+          "price": 266,
+          "priceScope": "flight-only",
+          "bookingUrl": "https://www.renfe.com/es/es/inspirate/rutas/pamplona-iruna-madrid",
+          "segments": [
+            {
+              "mode": "train",
+              "from": {
+                "code": "PNA-RENFE",
+                "city": "Estación Pamplona-Iruña",
+                "lat": 42.8168,
+                "lng": -1.6432
+              },
+              "to": {
+                "code": "MAD-CH",
+                "city": "Madrid-Chamartín",
+                "lat": 40.4721,
+                "lng": -3.6822
+              },
+              "operator": "Renfe",
+              "duration": null
+            },
+            {
+              "mode": "transfer",
+              "from": {
+                "code": "MAD-CH",
+                "city": "Madrid-Chamartín",
+                "lat": 40.4721,
+                "lng": -3.6822
+              },
+              "to": {
+                "code": "MAD",
+                "city": "Madrid",
+                "lat": 40.4983,
+                "lng": -3.5676
+              },
+              "duration": null
+            },
+            {
+              "mode": "flight",
+              "from": {
+                "code": "MAD",
+                "city": "Madrid",
+                "lat": 40.4983,
+                "lng": -3.5676
+              },
+              "to": {
+                "code": "XRY",
+                "city": "Aeropuerto de Jerez (XRY)",
+                "lat": 36.7446,
+                "lng": -6.0601
+              },
+              "airline": "Iberia",
+              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
+              "duration": 80,
+              "flightNumber": "IB 1095",
+              "departureTime": "2027-05-07 19:40",
+              "arrivalTime": "2027-05-07 21:00"
+            }
+          ],
+          "layovers": [],
+          "links": [
+            {
+              "mode": "flight",
+              "url": "https://www.google.com/travel/flights?hl=es&curr=EUR&q=Flights%20from%20MAD%20to%20XRY%20on%202027-05-07"
+            },
+            {
+              "mode": "train",
+              "url": "https://www.renfe.com/es/es/inspirate/rutas/pamplona-iruna-madrid"
+            }
+          ]
         }
       ]
     },
@@ -178,10 +925,12 @@
         {
           "type": "direct",
           "airline": "Iberia",
-          "totalDuration": 70,
-          "price": 55,
+          "totalDuration": 80,
+          "price": 266,
+          "priceScope": "total",
           "segments": [
             {
+              "mode": "flight",
               "from": {
                 "code": "MAD",
                 "city": "Madrid",
@@ -190,16 +939,158 @@
               },
               "to": {
                 "code": "XRY",
-                "city": "Jerez de la Frontera",
+                "city": "Aeropuerto de Jerez (XRY)",
                 "lat": 36.7446,
                 "lng": -6.0601
               },
               "airline": "Iberia",
               "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
-              "duration": 70
+              "duration": 80,
+              "flightNumber": "IB 1095",
+              "departureTime": "2027-05-07 19:40",
+              "arrivalTime": "2027-05-07 21:00"
             }
           ],
-          "layovers": []
+          "layovers": [],
+          "links": [
+            {
+              "mode": "flight",
+              "url": "https://www.google.com/travel/flights?hl=es&curr=EUR&q=Flights%20from%20MAD%20to%20XRY%20on%202027-05-07"
+            }
+          ]
+        },
+        {
+          "type": "direct",
+          "airline": "Iberia",
+          "totalDuration": 80,
+          "price": 266,
+          "priceScope": "total",
+          "segments": [
+            {
+              "mode": "flight",
+              "from": {
+                "code": "MAD",
+                "city": "Madrid",
+                "lat": 40.4983,
+                "lng": -3.5676
+              },
+              "to": {
+                "code": "XRY",
+                "city": "Aeropuerto de Jerez (XRY)",
+                "lat": 36.7446,
+                "lng": -6.0601
+              },
+              "airline": "Iberia",
+              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
+              "duration": 80,
+              "flightNumber": "IB 1089",
+              "departureTime": "2027-05-07 07:25",
+              "arrivalTime": "2027-05-07 08:45"
+            }
+          ],
+          "layovers": [],
+          "links": [
+            {
+              "mode": "flight",
+              "url": "https://www.google.com/travel/flights?hl=es&curr=EUR&q=Flights%20from%20MAD%20to%20XRY%20on%202027-05-07"
+            }
+          ]
+        },
+        {
+          "type": "direct",
+          "airline": "Iberia",
+          "totalDuration": 80,
+          "price": 266,
+          "priceScope": "total",
+          "segments": [
+            {
+              "mode": "flight",
+              "from": {
+                "code": "MAD",
+                "city": "Madrid",
+                "lat": 40.4983,
+                "lng": -3.5676
+              },
+              "to": {
+                "code": "XRY",
+                "city": "Aeropuerto de Jerez (XRY)",
+                "lat": 36.7446,
+                "lng": -6.0601
+              },
+              "airline": "Iberia",
+              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
+              "duration": 80,
+              "flightNumber": "IB 1091",
+              "departureTime": "2027-05-07 11:50",
+              "arrivalTime": "2027-05-07 13:10"
+            }
+          ],
+          "layovers": [],
+          "links": [
+            {
+              "mode": "flight",
+              "url": "https://www.google.com/travel/flights?hl=es&curr=EUR&q=Flights%20from%20MAD%20to%20XRY%20on%202027-05-07"
+            }
+          ]
+        },
+        {
+          "type": "multimodal",
+          "airline": "Renfe",
+          "totalDuration": null,
+          "price": null,
+          "priceScope": "unknown",
+          "bookingUrl": "https://www.renfe.com/es/es/inspirate/rutas/madrid-jerez",
+          "segments": [
+            {
+              "mode": "train",
+              "from": {
+                "code": "MAD-ATO",
+                "city": "Madrid-Atocha",
+                "lat": 40.4066,
+                "lng": -3.6894
+              },
+              "to": {
+                "code": "SVQ-STA",
+                "city": "Sevilla-Santa Justa",
+                "lat": 37.3924,
+                "lng": -5.9752
+              },
+              "operator": "Renfe",
+              "duration": null
+            },
+            {
+              "mode": "train",
+              "from": {
+                "code": "SVQ-STA",
+                "city": "Sevilla-Santa Justa",
+                "lat": 37.3924,
+                "lng": -5.9752
+              },
+              "to": {
+                "code": "XRY-RENFE",
+                "city": "Estación de Jerez",
+                "lat": 36.6815,
+                "lng": -6.1262
+              },
+              "operator": "Renfe",
+              "duration": null
+            }
+          ],
+          "layovers": [
+            {
+              "code": "SVQ-STA",
+              "city": "Sevilla-Santa Justa",
+              "lat": 37.3924,
+              "lng": -5.9752,
+              "duration": null
+            }
+          ],
+          "links": [
+            {
+              "mode": "train",
+              "url": "https://www.renfe.com/es/es/inspirate/rutas/madrid-jerez"
+            }
+          ]
         }
       ]
     },
@@ -208,14 +1099,1003 @@
       "airport": "VLC",
       "lat": 39.4893,
       "lng": -0.4816,
-      "routes": []
+      "routes": [
+        {
+          "type": "connecting",
+          "airline": "Iberia",
+          "totalDuration": 205,
+          "price": 269,
+          "priceScope": "total",
+          "segments": [
+            {
+              "mode": "flight",
+              "from": {
+                "code": "VLC",
+                "city": "Valencia",
+                "lat": 39.4893,
+                "lng": -0.4816
+              },
+              "to": {
+                "code": "MAD",
+                "city": "Madrid",
+                "lat": 40.4983,
+                "lng": -3.5676
+              },
+              "airline": "Iberia",
+              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
+              "duration": 65,
+              "flightNumber": "IB 1080",
+              "departureTime": "2027-05-07 09:45",
+              "arrivalTime": "2027-05-07 10:50"
+            },
+            {
+              "mode": "flight",
+              "from": {
+                "code": "MAD",
+                "city": "Madrid",
+                "lat": 40.4983,
+                "lng": -3.5676
+              },
+              "to": {
+                "code": "XRY",
+                "city": "Aeropuerto de Jerez (XRY)",
+                "lat": 36.7446,
+                "lng": -6.0601
+              },
+              "airline": "Iberia",
+              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
+              "duration": 80,
+              "flightNumber": "IB 1091",
+              "departureTime": "2027-05-07 11:50",
+              "arrivalTime": "2027-05-07 13:10"
+            }
+          ],
+          "layovers": [
+            {
+              "code": "MAD",
+              "city": "Madrid",
+              "lat": 40.4983,
+              "lng": -3.5676,
+              "duration": 60,
+              "overnight": false
+            }
+          ],
+          "links": [
+            {
+              "mode": "flight",
+              "url": "https://www.google.com/travel/flights?hl=es&curr=EUR&q=Flights%20from%20VLC%20to%20XRY%20on%202027-05-07"
+            }
+          ]
+        },
+        {
+          "type": "connecting",
+          "airline": "Iberia",
+          "totalDuration": 200,
+          "price": 312,
+          "priceScope": "total",
+          "segments": [
+            {
+              "mode": "flight",
+              "from": {
+                "code": "VLC",
+                "city": "Valencia",
+                "lat": 39.4893,
+                "lng": -0.4816
+              },
+              "to": {
+                "code": "MAD",
+                "city": "Madrid",
+                "lat": 40.4983,
+                "lng": -3.5676
+              },
+              "airline": "Iberia",
+              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
+              "duration": 65,
+              "flightNumber": "IB 1082",
+              "departureTime": "2027-05-07 17:40",
+              "arrivalTime": "2027-05-07 18:45"
+            },
+            {
+              "mode": "flight",
+              "from": {
+                "code": "MAD",
+                "city": "Madrid",
+                "lat": 40.4983,
+                "lng": -3.5676
+              },
+              "to": {
+                "code": "XRY",
+                "city": "Aeropuerto de Jerez (XRY)",
+                "lat": 36.7446,
+                "lng": -6.0601
+              },
+              "airline": "Iberia",
+              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
+              "duration": 80,
+              "flightNumber": "IB 1095",
+              "departureTime": "2027-05-07 19:40",
+              "arrivalTime": "2027-05-07 21:00"
+            }
+          ],
+          "layovers": [
+            {
+              "code": "MAD",
+              "city": "Madrid",
+              "lat": 40.4983,
+              "lng": -3.5676,
+              "duration": 55,
+              "overnight": false
+            }
+          ],
+          "links": [
+            {
+              "mode": "flight",
+              "url": "https://www.google.com/travel/flights?hl=es&curr=EUR&q=Flights%20from%20VLC%20to%20XRY%20on%202027-05-07"
+            }
+          ]
+        },
+        {
+          "type": "connecting",
+          "airline": "Iberia",
+          "totalDuration": 365,
+          "price": 349,
+          "priceScope": "total",
+          "segments": [
+            {
+              "mode": "flight",
+              "from": {
+                "code": "VLC",
+                "city": "Valencia",
+                "lat": 39.4893,
+                "lng": -0.4816
+              },
+              "to": {
+                "code": "BCN",
+                "city": "Barcelona",
+                "lat": 41.2971,
+                "lng": 2.0785
+              },
+              "airline": "Iberia",
+              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
+              "duration": 70,
+              "flightNumber": "IB 2377",
+              "departureTime": "2027-05-07 07:20",
+              "arrivalTime": "2027-05-07 08:30"
+            },
+            {
+              "mode": "flight",
+              "from": {
+                "code": "BCN",
+                "city": "Barcelona",
+                "lat": 41.2971,
+                "lng": 2.0785
+              },
+              "to": {
+                "code": "XRY",
+                "city": "Aeropuerto de Jerez (XRY)",
+                "lat": 36.7446,
+                "lng": -6.0601
+              },
+              "airline": "Vueling",
+              "logo": "https://www.gstatic.com/flights/airline_logos/70px/VY.png",
+              "duration": 110,
+              "flightNumber": "VY 1278",
+              "departureTime": "2027-05-07 11:35",
+              "arrivalTime": "2027-05-07 13:25"
+            }
+          ],
+          "layovers": [
+            {
+              "code": "BCN",
+              "city": "Barcelona",
+              "lat": 41.2971,
+              "lng": 2.0785,
+              "duration": 185,
+              "overnight": false
+            }
+          ],
+          "links": [
+            {
+              "mode": "flight",
+              "url": "https://www.google.com/travel/flights?hl=es&curr=EUR&q=Flights%20from%20VLC%20to%20XRY%20on%202027-05-07"
+            }
+          ]
+        },
+        {
+          "type": "multimodal",
+          "airline": "Vueling",
+          "totalDuration": null,
+          "price": 48,
+          "priceScope": "flight-only",
+          "segments": [
+            {
+              "mode": "flight",
+              "from": {
+                "code": "VLC",
+                "city": "Valencia",
+                "lat": 39.4893,
+                "lng": -0.4816
+              },
+              "to": {
+                "code": "SVQ",
+                "city": "Aeropuerto de Sevilla (SVQ)",
+                "lat": 37.418,
+                "lng": -5.8931
+              },
+              "airline": "Vueling",
+              "logo": "https://www.gstatic.com/flights/airline_logos/70px/VY.png",
+              "duration": 75,
+              "flightNumber": "VY 1751",
+              "departureTime": "2027-05-07 14:10",
+              "arrivalTime": "2027-05-07 15:25"
+            },
+            {
+              "mode": "transfer",
+              "from": {
+                "code": "SVQ",
+                "city": "Aeropuerto de Sevilla (SVQ)",
+                "lat": 37.418,
+                "lng": -5.8931
+              },
+              "to": {
+                "code": "SVQ-STA",
+                "city": "Sevilla-Santa Justa",
+                "lat": 37.3924,
+                "lng": -5.9752
+              },
+              "duration": null
+            },
+            {
+              "mode": "train",
+              "from": {
+                "code": "SVQ-STA",
+                "city": "Sevilla-Santa Justa",
+                "lat": 37.3924,
+                "lng": -5.9752
+              },
+              "to": {
+                "code": "XRY-RENFE",
+                "city": "Estación de Jerez",
+                "lat": 36.6815,
+                "lng": -6.1262
+              },
+              "operator": "Renfe",
+              "duration": null
+            }
+          ],
+          "layovers": [],
+          "bookingUrl": "https://www.renfe.com/es/es/viajar/informacion-util/horarios",
+          "links": [
+            {
+              "mode": "flight",
+              "url": "https://www.google.com/travel/flights?hl=es&curr=EUR&q=Flights%20from%20VLC%20to%20SVQ%20on%202027-05-07"
+            },
+            {
+              "mode": "train",
+              "url": "https://www.renfe.com/es/es/viajar/informacion-util/horarios"
+            }
+          ]
+        },
+        {
+          "type": "multimodal",
+          "airline": "Iberia",
+          "totalDuration": null,
+          "price": 60,
+          "priceScope": "flight-only",
+          "segments": [
+            {
+              "mode": "flight",
+              "from": {
+                "code": "VLC",
+                "city": "Valencia",
+                "lat": 39.4893,
+                "lng": -0.4816
+              },
+              "to": {
+                "code": "SVQ",
+                "city": "Aeropuerto de Sevilla (SVQ)",
+                "lat": 37.418,
+                "lng": -5.8931
+              },
+              "airline": "Iberia",
+              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
+              "duration": 80,
+              "flightNumber": "IB 2390",
+              "departureTime": "2027-05-07 07:00",
+              "arrivalTime": "2027-05-07 08:20"
+            },
+            {
+              "mode": "transfer",
+              "from": {
+                "code": "SVQ",
+                "city": "Aeropuerto de Sevilla (SVQ)",
+                "lat": 37.418,
+                "lng": -5.8931
+              },
+              "to": {
+                "code": "SVQ-STA",
+                "city": "Sevilla-Santa Justa",
+                "lat": 37.3924,
+                "lng": -5.9752
+              },
+              "duration": null
+            },
+            {
+              "mode": "train",
+              "from": {
+                "code": "SVQ-STA",
+                "city": "Sevilla-Santa Justa",
+                "lat": 37.3924,
+                "lng": -5.9752
+              },
+              "to": {
+                "code": "XRY-RENFE",
+                "city": "Estación de Jerez",
+                "lat": 36.6815,
+                "lng": -6.1262
+              },
+              "operator": "Renfe",
+              "duration": null
+            }
+          ],
+          "layovers": [],
+          "bookingUrl": "https://www.renfe.com/es/es/viajar/informacion-util/horarios",
+          "links": [
+            {
+              "mode": "flight",
+              "url": "https://www.google.com/travel/flights?hl=es&curr=EUR&q=Flights%20from%20VLC%20to%20SVQ%20on%202027-05-07"
+            },
+            {
+              "mode": "train",
+              "url": "https://www.renfe.com/es/es/viajar/informacion-util/horarios"
+            }
+          ]
+        },
+        {
+          "type": "multimodal",
+          "airline": "Ryanair",
+          "totalDuration": null,
+          "price": 84,
+          "priceScope": "flight-only",
+          "segments": [
+            {
+              "mode": "flight",
+              "from": {
+                "code": "VLC",
+                "city": "Valencia",
+                "lat": 39.4893,
+                "lng": -0.4816
+              },
+              "to": {
+                "code": "SVQ",
+                "city": "Aeropuerto de Sevilla (SVQ)",
+                "lat": 37.418,
+                "lng": -5.8931
+              },
+              "airline": "Ryanair",
+              "logo": "https://www.gstatic.com/flights/airline_logos/70px/FR.png",
+              "duration": 75,
+              "flightNumber": "FR 2205",
+              "departureTime": "2027-05-07 13:25",
+              "arrivalTime": "2027-05-07 14:40"
+            },
+            {
+              "mode": "transfer",
+              "from": {
+                "code": "SVQ",
+                "city": "Aeropuerto de Sevilla (SVQ)",
+                "lat": 37.418,
+                "lng": -5.8931
+              },
+              "to": {
+                "code": "SVQ-STA",
+                "city": "Sevilla-Santa Justa",
+                "lat": 37.3924,
+                "lng": -5.9752
+              },
+              "duration": null
+            },
+            {
+              "mode": "train",
+              "from": {
+                "code": "SVQ-STA",
+                "city": "Sevilla-Santa Justa",
+                "lat": 37.3924,
+                "lng": -5.9752
+              },
+              "to": {
+                "code": "XRY-RENFE",
+                "city": "Estación de Jerez",
+                "lat": 36.6815,
+                "lng": -6.1262
+              },
+              "operator": "Renfe",
+              "duration": null
+            }
+          ],
+          "layovers": [],
+          "bookingUrl": "https://www.renfe.com/es/es/viajar/informacion-util/horarios",
+          "links": [
+            {
+              "mode": "flight",
+              "url": "https://www.google.com/travel/flights?hl=es&curr=EUR&q=Flights%20from%20VLC%20to%20SVQ%20on%202027-05-07"
+            },
+            {
+              "mode": "train",
+              "url": "https://www.renfe.com/es/es/viajar/informacion-util/horarios"
+            }
+          ]
+        }
+      ]
     },
     {
       "city": "Granada",
       "airport": "GRX",
       "lat": 37.1887,
       "lng": -3.7774,
-      "routes": []
+      "routes": [
+        {
+          "type": "connecting",
+          "airline": "Iberia",
+          "totalDuration": 205,
+          "price": 280,
+          "priceScope": "total",
+          "segments": [
+            {
+              "mode": "flight",
+              "from": {
+                "code": "GRX",
+                "city": "Granada",
+                "lat": 37.1887,
+                "lng": -3.7774
+              },
+              "to": {
+                "code": "MAD",
+                "city": "Madrid",
+                "lat": 40.4983,
+                "lng": -3.5676
+              },
+              "airline": "Iberia",
+              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
+              "duration": 70,
+              "flightNumber": "IB 1022",
+              "departureTime": "2027-05-07 13:40",
+              "arrivalTime": "2027-05-07 14:50"
+            },
+            {
+              "mode": "flight",
+              "from": {
+                "code": "MAD",
+                "city": "Madrid",
+                "lat": 40.4983,
+                "lng": -3.5676
+              },
+              "to": {
+                "code": "XRY",
+                "city": "Aeropuerto de Jerez (XRY)",
+                "lat": 36.7446,
+                "lng": -6.0601
+              },
+              "airline": "Iberia",
+              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
+              "duration": 80,
+              "flightNumber": "IB 1093",
+              "departureTime": "2027-05-07 15:45",
+              "arrivalTime": "2027-05-07 17:05"
+            }
+          ],
+          "layovers": [
+            {
+              "code": "MAD",
+              "city": "Madrid",
+              "lat": 40.4983,
+              "lng": -3.5676,
+              "duration": 55,
+              "overnight": false
+            }
+          ],
+          "links": [
+            {
+              "mode": "flight",
+              "url": "https://www.google.com/travel/flights?hl=es&curr=EUR&q=Flights%20from%20GRX%20to%20XRY%20on%202027-05-07"
+            }
+          ]
+        },
+        {
+          "type": "multimodal",
+          "airline": "Iberia",
+          "totalDuration": null,
+          "price": 275,
+          "priceScope": "flight-only",
+          "segments": [
+            {
+              "mode": "flight",
+              "from": {
+                "code": "GRX",
+                "city": "Granada",
+                "lat": 37.1887,
+                "lng": -3.7774
+              },
+              "to": {
+                "code": "MAD",
+                "city": "Madrid",
+                "lat": 40.4983,
+                "lng": -3.5676
+              },
+              "airline": "Iberia",
+              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
+              "duration": 70,
+              "flightNumber": "IB 1022",
+              "departureTime": "2027-05-07 13:40",
+              "arrivalTime": "2027-05-07 14:50"
+            },
+            {
+              "mode": "flight",
+              "from": {
+                "code": "MAD",
+                "city": "Madrid",
+                "lat": 40.4983,
+                "lng": -3.5676
+              },
+              "to": {
+                "code": "SVQ",
+                "city": "Aeropuerto de Sevilla (SVQ)",
+                "lat": 37.418,
+                "lng": -5.8931
+              },
+              "airline": "Iberia",
+              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
+              "duration": 75,
+              "flightNumber": "IB 1073",
+              "departureTime": "2027-05-07 15:45",
+              "arrivalTime": "2027-05-07 17:00"
+            },
+            {
+              "mode": "transfer",
+              "from": {
+                "code": "SVQ",
+                "city": "Aeropuerto de Sevilla (SVQ)",
+                "lat": 37.418,
+                "lng": -5.8931
+              },
+              "to": {
+                "code": "SVQ-STA",
+                "city": "Sevilla-Santa Justa",
+                "lat": 37.3924,
+                "lng": -5.9752
+              },
+              "duration": null
+            },
+            {
+              "mode": "train",
+              "from": {
+                "code": "SVQ-STA",
+                "city": "Sevilla-Santa Justa",
+                "lat": 37.3924,
+                "lng": -5.9752
+              },
+              "to": {
+                "code": "XRY-RENFE",
+                "city": "Estación de Jerez",
+                "lat": 36.6815,
+                "lng": -6.1262
+              },
+              "operator": "Renfe",
+              "duration": null
+            }
+          ],
+          "layovers": [
+            {
+              "code": "MAD",
+              "city": "Madrid",
+              "lat": 40.4983,
+              "lng": -3.5676,
+              "duration": 55,
+              "overnight": false
+            }
+          ],
+          "bookingUrl": "https://www.renfe.com/es/es/viajar/informacion-util/horarios",
+          "links": [
+            {
+              "mode": "flight",
+              "url": "https://www.google.com/travel/flights?hl=es&curr=EUR&q=Flights%20from%20GRX%20to%20SVQ%20on%202027-05-07"
+            },
+            {
+              "mode": "train",
+              "url": "https://www.renfe.com/es/es/viajar/informacion-util/horarios"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "city": "Avilés",
+      "airport": "OVD",
+      "lat": 43.5563,
+      "lng": -5.9248,
+      "routes": [
+        {
+          "type": "connecting",
+          "airline": "Vueling",
+          "totalDuration": 245,
+          "price": 239,
+          "priceScope": "total",
+          "segments": [
+            {
+              "mode": "flight",
+              "from": {
+                "code": "OVD",
+                "city": "Aeropuerto de Asturias",
+                "lat": 43.5632,
+                "lng": -6.0346
+              },
+              "to": {
+                "code": "BCN",
+                "city": "Barcelona",
+                "lat": 41.2971,
+                "lng": 2.0785
+              },
+              "airline": "Vueling",
+              "logo": "https://www.gstatic.com/flights/airline_logos/70px/VY.png",
+              "duration": 90,
+              "flightNumber": "VY 1223",
+              "departureTime": "2027-05-07 09:20",
+              "arrivalTime": "2027-05-07 10:50"
+            },
+            {
+              "mode": "flight",
+              "from": {
+                "code": "BCN",
+                "city": "Barcelona",
+                "lat": 41.2971,
+                "lng": 2.0785
+              },
+              "to": {
+                "code": "XRY",
+                "city": "Aeropuerto de Jerez (XRY)",
+                "lat": 36.7446,
+                "lng": -6.0601
+              },
+              "airline": "Vueling",
+              "logo": "https://www.gstatic.com/flights/airline_logos/70px/VY.png",
+              "duration": 110,
+              "flightNumber": "VY 1278",
+              "departureTime": "2027-05-07 11:35",
+              "arrivalTime": "2027-05-07 13:25"
+            }
+          ],
+          "layovers": [
+            {
+              "code": "BCN",
+              "city": "Barcelona",
+              "lat": 41.2971,
+              "lng": 2.0785,
+              "duration": 45,
+              "overnight": false
+            }
+          ],
+          "links": [
+            {
+              "mode": "flight",
+              "url": "https://www.google.com/travel/flights?hl=es&curr=EUR&q=Flights%20from%20OVD%20to%20XRY%20on%202027-05-07"
+            }
+          ]
+        },
+        {
+          "type": "connecting",
+          "airline": "Iberia",
+          "totalDuration": 230,
+          "price": 267,
+          "priceScope": "total",
+          "segments": [
+            {
+              "mode": "flight",
+              "from": {
+                "code": "OVD",
+                "city": "Aeropuerto de Asturias",
+                "lat": 43.5632,
+                "lng": -6.0346
+              },
+              "to": {
+                "code": "MAD",
+                "city": "Madrid",
+                "lat": 40.4983,
+                "lng": -3.5676
+              },
+              "airline": "Iberia",
+              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
+              "duration": 75,
+              "flightNumber": "IB 1120",
+              "departureTime": "2027-05-07 09:20",
+              "arrivalTime": "2027-05-07 10:35"
+            },
+            {
+              "mode": "flight",
+              "from": {
+                "code": "MAD",
+                "city": "Madrid",
+                "lat": 40.4983,
+                "lng": -3.5676
+              },
+              "to": {
+                "code": "XRY",
+                "city": "Aeropuerto de Jerez (XRY)",
+                "lat": 36.7446,
+                "lng": -6.0601
+              },
+              "airline": "Iberia",
+              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
+              "duration": 80,
+              "flightNumber": "IB 1091",
+              "departureTime": "2027-05-07 11:50",
+              "arrivalTime": "2027-05-07 13:10"
+            }
+          ],
+          "layovers": [
+            {
+              "code": "MAD",
+              "city": "Madrid",
+              "lat": 40.4983,
+              "lng": -3.5676,
+              "duration": 75,
+              "overnight": false
+            }
+          ],
+          "links": [
+            {
+              "mode": "flight",
+              "url": "https://www.google.com/travel/flights?hl=es&curr=EUR&q=Flights%20from%20OVD%20to%20XRY%20on%202027-05-07"
+            }
+          ]
+        },
+        {
+          "type": "connecting",
+          "airline": "Iberia",
+          "totalDuration": 200,
+          "price": 363,
+          "priceScope": "total",
+          "segments": [
+            {
+              "mode": "flight",
+              "from": {
+                "code": "OVD",
+                "city": "Aeropuerto de Asturias",
+                "lat": 43.5632,
+                "lng": -6.0346
+              },
+              "to": {
+                "code": "MAD",
+                "city": "Madrid",
+                "lat": 40.4983,
+                "lng": -3.5676
+              },
+              "airline": "Iberia",
+              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
+              "duration": 75,
+              "flightNumber": "IB 1124",
+              "departureTime": "2027-05-07 17:40",
+              "arrivalTime": "2027-05-07 18:55"
+            },
+            {
+              "mode": "flight",
+              "from": {
+                "code": "MAD",
+                "city": "Madrid",
+                "lat": 40.4983,
+                "lng": -3.5676
+              },
+              "to": {
+                "code": "XRY",
+                "city": "Aeropuerto de Jerez (XRY)",
+                "lat": 36.7446,
+                "lng": -6.0601
+              },
+              "airline": "Iberia",
+              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
+              "duration": 80,
+              "flightNumber": "IB 1095",
+              "departureTime": "2027-05-07 19:40",
+              "arrivalTime": "2027-05-07 21:00"
+            }
+          ],
+          "layovers": [
+            {
+              "code": "MAD",
+              "city": "Madrid",
+              "lat": 40.4983,
+              "lng": -3.5676,
+              "duration": 45,
+              "overnight": false
+            }
+          ],
+          "links": [
+            {
+              "mode": "flight",
+              "url": "https://www.google.com/travel/flights?hl=es&curr=EUR&q=Flights%20from%20OVD%20to%20XRY%20on%202027-05-07"
+            }
+          ]
+        },
+        {
+          "type": "multimodal",
+          "airline": "Volotea",
+          "totalDuration": null,
+          "price": 31,
+          "priceScope": "flight-only",
+          "segments": [
+            {
+              "mode": "flight",
+              "from": {
+                "code": "OVD",
+                "city": "Aeropuerto de Asturias",
+                "lat": 43.5632,
+                "lng": -6.0346
+              },
+              "to": {
+                "code": "SVQ",
+                "city": "Aeropuerto de Sevilla (SVQ)",
+                "lat": 37.418,
+                "lng": -5.8931
+              },
+              "airline": "Volotea",
+              "logo": "https://www.gstatic.com/flights/airline_logos/70px/V7.png",
+              "duration": 85,
+              "flightNumber": "V7 3861",
+              "departureTime": "2027-05-07 07:05",
+              "arrivalTime": "2027-05-07 08:30"
+            },
+            {
+              "mode": "transfer",
+              "from": {
+                "code": "SVQ",
+                "city": "Aeropuerto de Sevilla (SVQ)",
+                "lat": 37.418,
+                "lng": -5.8931
+              },
+              "to": {
+                "code": "SVQ-STA",
+                "city": "Sevilla-Santa Justa",
+                "lat": 37.3924,
+                "lng": -5.9752
+              },
+              "duration": null
+            },
+            {
+              "mode": "train",
+              "from": {
+                "code": "SVQ-STA",
+                "city": "Sevilla-Santa Justa",
+                "lat": 37.3924,
+                "lng": -5.9752
+              },
+              "to": {
+                "code": "XRY-RENFE",
+                "city": "Estación de Jerez",
+                "lat": 36.6815,
+                "lng": -6.1262
+              },
+              "operator": "Renfe",
+              "duration": null
+            }
+          ],
+          "layovers": [],
+          "bookingUrl": "https://www.renfe.com/es/es/viajar/informacion-util/horarios",
+          "links": [
+            {
+              "mode": "flight",
+              "url": "https://www.google.com/travel/flights?hl=es&curr=EUR&q=Flights%20from%20OVD%20to%20SVQ%20on%202027-05-07"
+            },
+            {
+              "mode": "train",
+              "url": "https://www.renfe.com/es/es/viajar/informacion-util/horarios"
+            }
+          ]
+        },
+        {
+          "type": "multimodal",
+          "airline": "Iberia",
+          "totalDuration": null,
+          "price": 142,
+          "priceScope": "flight-only",
+          "segments": [
+            {
+              "mode": "flight",
+              "from": {
+                "code": "OVD",
+                "city": "Aeropuerto de Asturias",
+                "lat": 43.5632,
+                "lng": -6.0346
+              },
+              "to": {
+                "code": "MAD",
+                "city": "Madrid",
+                "lat": 40.4983,
+                "lng": -3.5676
+              },
+              "airline": "Iberia",
+              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
+              "duration": 75,
+              "flightNumber": "IB 1120",
+              "departureTime": "2027-05-07 09:20",
+              "arrivalTime": "2027-05-07 10:35"
+            },
+            {
+              "mode": "flight",
+              "from": {
+                "code": "MAD",
+                "city": "Madrid",
+                "lat": 40.4983,
+                "lng": -3.5676
+              },
+              "to": {
+                "code": "SVQ",
+                "city": "Aeropuerto de Sevilla (SVQ)",
+                "lat": 37.418,
+                "lng": -5.8931
+              },
+              "airline": "Iberia",
+              "logo": "https://www.gstatic.com/flights/airline_logos/70px/IB.png",
+              "duration": 75,
+              "flightNumber": "IB 1071",
+              "departureTime": "2027-05-07 11:35",
+              "arrivalTime": "2027-05-07 12:50"
+            },
+            {
+              "mode": "transfer",
+              "from": {
+                "code": "SVQ",
+                "city": "Aeropuerto de Sevilla (SVQ)",
+                "lat": 37.418,
+                "lng": -5.8931
+              },
+              "to": {
+                "code": "SVQ-STA",
+                "city": "Sevilla-Santa Justa",
+                "lat": 37.3924,
+                "lng": -5.9752
+              },
+              "duration": null
+            },
+            {
+              "mode": "train",
+              "from": {
+                "code": "SVQ-STA",
+                "city": "Sevilla-Santa Justa",
+                "lat": 37.3924,
+                "lng": -5.9752
+              },
+              "to": {
+                "code": "XRY-RENFE",
+                "city": "Estación de Jerez",
+                "lat": 36.6815,
+                "lng": -6.1262
+              },
+              "operator": "Renfe",
+              "duration": null
+            }
+          ],
+          "layovers": [
+            {
+              "code": "MAD",
+              "city": "Madrid",
+              "lat": 40.4983,
+              "lng": -3.5676,
+              "duration": 60,
+              "overnight": false
+            }
+          ],
+          "bookingUrl": "https://www.renfe.com/es/es/viajar/informacion-util/horarios",
+          "links": [
+            {
+              "mode": "flight",
+              "url": "https://www.google.com/travel/flights?hl=es&curr=EUR&q=Flights%20from%20OVD%20to%20SVQ%20on%202027-05-07"
+            },
+            {
+              "mode": "train",
+              "url": "https://www.renfe.com/es/es/viajar/informacion-util/horarios"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

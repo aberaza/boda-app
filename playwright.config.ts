@@ -1,6 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
-const port = process.env.PLAYWRIGHT_PORT ?? '4321';
+const port = process.env.PLAYWRIGHT_PORT ?? '4320';
+const targetPort = process.env.PLAYWRIGHT_TARGET_PORT ?? '4321';
 
 export default defineConfig({
   testDir: './tests/e2e',
@@ -20,7 +21,7 @@ export default defineConfig({
     { name: 'mobile-safari', use: { ...devices['iPhone 13'] } },
   ],
   webServer: {
-    command: `npm run dev -- --host 127.0.0.1 --port ${port}`,
+    command: `npm run dev -- --port ${port} --target-port ${targetPort}`,
     url: `http://127.0.0.1:${port}`,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,

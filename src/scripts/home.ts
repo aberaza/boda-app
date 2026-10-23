@@ -6,7 +6,7 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import 'leaflet-providers';
 import flightRoutes from '../data/flight-routes.json';
-import type { FlightRoute, FlightRouteData } from '../components/home/types';
+import type { FlightRouteData } from '../components/home/types';
 
 // ── URL state helpers ─────────────────────────────────────────────
 // ?slide=<name> restores scroll position (stable by slide key)
@@ -444,6 +444,8 @@ function initJerezMaps() {
   const GRXLNG = parseFloat(routesEl.dataset.granadaLng!);
   const VLCLAT = parseFloat(routesEl.dataset.valenciaLat!);
   const VLCLNG = parseFloat(routesEl.dataset.valenciaLng!);
+  const AVILAT = parseFloat(routesEl.dataset.avilesLat!);
+  const AVILNG = parseFloat(routesEl.dataset.avilesLng!);
 
   jerezRoutesMap = L.map('jerez-routes-map', {
     center: [JLAT, JLNG],
@@ -468,6 +470,7 @@ function initJerezMaps() {
     { name: 'Madrid', lat: MADLAT, lng: MADLNG, icon: routePin },
     { name: 'Granada', lat: GRXLAT, lng: GRXLNG, icon: routePin },
     { name: 'Valencia', lat: VLCLAT, lng: VLCLNG, icon: routePin },
+    { name: 'Avilés', lat: AVILAT, lng: AVILNG, icon: routePin },
   ];
 
   let activePolylines: L.Polyline[] = [];
@@ -479,7 +482,7 @@ function initJerezMaps() {
     const marker = L.marker([city.lat, city.lng], { icon: city.icon }).addTo(jerezRoutesMap!);
 
     // Tooltip minimalista: fondo transparente, sin borde, solo texto
-    marker.bindTooltip(`${city.name}`, {
+    marker.bindTooltip(city.name === 'Avilés' ? 'Avilés (OVD)' : city.name, {
       permanent: false,
       direction: 'top',
       className: 'minimal-tooltip',
@@ -492,7 +495,13 @@ function initJerezMaps() {
   });
 
   document.querySelectorAll<HTMLButtonElement>('[data-route-city]').forEach((button) => {
-    button.addEventListener('click', () => showRoute(button.dataset.routeCity ?? ''));
+    button.addEventListener('click', () => {
+      if (button.hasAttribute('data-route-card-trigger')) {
+        const details = button.closest<HTMLElement>('[data-route-card]')?.querySelector('details');
+        if (details) details.open = true;
+      }
+      showRoute(button.dataset.routeCity ?? '', Number(button.dataset.routeIndex ?? 0));
+    });
   });
 
   jerezRoutesMap.fitBounds(L.latLngBounds(routeCities.map((c) => [c.lat, c.lng])), {
@@ -500,7 +509,7 @@ function initJerezMaps() {
   });
 
   // --- Interactive Routes Logic ---
-  function showRoute(cityName: string) {
+  function showRoute(cityName: string, routeIndex = 0) {
     if (!jerezRoutesMap) return;
 
     // Clear previous polylines and markers
@@ -522,10 +531,7 @@ function initJerezMaps() {
     );
     if (!origin || !origin.routes.length) return;
 
-    const shortest = origin.routes.reduce(
-      (min: FlightRoute, r: FlightRoute) => (r.segments.length < min.segments.length ? r : min),
-      origin.routes[0],
-    );
+    const selectedRoute = origin.routes[routeIndex] ?? origin.routes[0];
 
     function getParabolicPoints(start: L.LatLng, end: L.LatLng, pointsCount = 50) {
       const pts = [];
@@ -539,45 +545,41 @@ function initJerezMaps() {
       return pts;
     }
 
-    // Draw each segment as a parabolic arc with different colors
-    shortest.segments.forEach((segment, index: number) => {
-      const arcPoints = getParabolicPoints(
-        L.latLng(segment.from.lat, segment.from.lng),
-        L.latLng(segment.to.lat, segment.to.lng),
-      );
-
-      // Generate different colors or shades for each segment
-      const colors = [
-        '#bc6c4d', // original clay
-        '#d4845e', // lighter
-        '#a55840', // darker
-        '#c97d5f', // medium-light
-        '#9d4f38', // dark
-      ];
-      const color = colors[index % colors.length];
-      const opacity = 1 - index * 0.1; // slightly decrease opacity for later segments
-
-      const polyline = L.polyline(arcPoints, {
-        color: color,
-        weight: 2.5 + index * 0.3, // slightly increase weight for each segment
-        opacity: Math.max(0.6, opacity),
-        smoothFactor: 1,
-        lineCap: 'round',
-        dashArray: index > 0 ? '5, 5' : undefined, // dashed lines for segments after first
-      }).addTo(jerezRoutesMap!);
-
-      activePolylines.push(polyline);
-    });
-
-    // Add markers for layovers if any
-    if (shortest.segments.length > 1) {
-      shortest.segments.slice(0, -1).forEach((seg) => {
-        const m = L.marker([seg.to.lat, seg.to.lng], { icon: routePin })
-          .addTo(jerezRoutesMap!)
-          .bindTooltip(seg.to.city, { direction: 'top' });
-        activeMarkers.push(m);
+    // Flights keep their curved arcs; train and ground links are drawn as straight,
+    // dashed lines so each transport mode can be distinguished at a glance.
+    selectedRoute.segments.forEach((segment, index) => {
+      const from = L.latLng(segment.from.lat, segment.from.lng);
+      const to = L.latLng(segment.to.lat, segment.to.lng);
+      const line =
+        segment.mode === 'flight'
+          ? L.polyline(getParabolicPoints(from, to), {
+              color: ['#bc6c4d', '#d4845e', '#a55840', '#c97d5f'][index % 4],
+              weight: 3,
+              opacity: 0.9,
+              smoothFactor: 1,
+              lineCap: 'round',
+            })
+          : L.polyline([from, to], {
+              color: segment.mode === 'train' ? '#497567' : '#7b7063',
+              weight: segment.mode === 'train' ? 3 : 2,
+              opacity: 0.9,
+              dashArray: segment.mode === 'train' ? '8, 5' : '2, 5',
+              lineCap: 'round',
+            });
+      line.addTo(jerezRoutesMap!);
+      line.bindTooltip(`${segment.from.city} → ${segment.to.city}`, {
+        sticky: true,
+        className: 'minimal-tooltip',
       });
-    }
+      activePolylines.push(line);
+
+      if (index < selectedRoute.segments.length - 1) {
+        const marker = L.marker([segment.to.lat, segment.to.lng], { icon: routePin })
+          .addTo(jerezRoutesMap!)
+          .bindTooltip(segment.to.city, { direction: 'top' });
+        activeMarkers.push(marker);
+      }
+    });
   }
 
   const SJLAT = parseFloat(surroundingsEl.dataset.jerezLat!);

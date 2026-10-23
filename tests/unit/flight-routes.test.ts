@@ -3,6 +3,7 @@ import { summarizeOrigin } from '../../src/lib/flight-routes';
 import type { FlightRoute } from '../../src/components/home/types';
 
 const segment = (from: string, to: string, airline: string, duration: number) => ({
+  mode: 'flight' as const,
   from: { code: from, city: from, lat: 0, lng: 0 },
   to: { code: to, city: to, lat: 0, lng: 0 },
   airline,
@@ -29,7 +30,7 @@ const connection: FlightRoute = {
 };
 
 describe('summarizeOrigin', () => {
-  it('selects shortest, fastest, cheapest and calculates the short-route average', () => {
+  it('summarizes flight routes without treating connections as stops in the origin city', () => {
     const summary = summarizeOrigin('Test city', {
       city: 'Test city',
       airport: 'AAA',
@@ -40,13 +41,42 @@ describe('summarizeOrigin', () => {
 
     expect(summary).toMatchObject({
       city: 'Test city',
-      steps: 1,
+      steps: 0,
       isDirect: true,
       fastestDuration: 120,
       cheapestPrice: 60,
-      avgPriceShortest: 90,
+      hasGroundConnection: false,
     });
     expect(summary?.airlines.map(({ name }) => name)).toEqual(['Direct Air', 'Connect Air']);
+  });
+
+  it('does not include a flight-only fare in the total-route price summary', () => {
+    const multimodal: FlightRoute = {
+      type: 'multimodal',
+      totalDuration: null,
+      price: 20,
+      priceScope: 'flight-only',
+      segments: [
+        segment('AAA', 'SVQ', 'Budget Air', 90),
+        {
+          mode: 'train',
+          from: { code: 'SVQ-STA', city: 'Sevilla', lat: 37.39, lng: -5.97 },
+          to: { code: 'XRY-RENFE', city: 'Jerez', lat: 36.68, lng: -6.12 },
+          operator: 'Renfe',
+          duration: null,
+        },
+      ],
+      layovers: [],
+    };
+    const summary = summarizeOrigin('Test city', {
+      city: 'Test city',
+      airport: 'AAA',
+      lat: 0,
+      lng: 0,
+      routes: [direct, multimodal],
+    });
+
+    expect(summary?.cheapestPrice).toBe(90);
   });
 
   it('returns null when an origin has no routes', () => {

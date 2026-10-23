@@ -1,42 +1,81 @@
 import flightRoutes from '../data/flight-routes.json';
 import type { FlightRouteData, ProcessedRoute } from '../components/home/types';
 
-export const suggestedCities = ['Barcelona', 'París', 'Pamplona', 'Madrid', 'Granada', 'Valencia'];
+export const suggestedCities = [
+  'Barcelona',
+  'París',
+  'Pamplona',
+  'Madrid',
+  'Granada',
+  'Avilés',
+  'Valencia',
+];
 
 export function summarizeOrigin(
   city: string,
   origin: FlightRouteData['origins'][number],
+  metadata?: Pick<FlightRouteData, 'generated' | 'searchDate'>,
 ): ProcessedRoute | null {
   if (origin.routes.length === 0) return null;
 
-  const shortest = origin.routes.reduce((best, route) =>
-    route.segments.length < best.segments.length ? route : best,
+  const comparableRoutes = origin.routes.filter(
+    (route) =>
+      route.priceScope !== 'flight-only' &&
+      typeof route.price === 'number' &&
+      typeof route.totalDuration === 'number' &&
+      route.segments.every((segment) => segment.mode === 'flight'),
   );
-  const fastest = origin.routes.reduce((best, route) =>
-    route.totalDuration < best.totalDuration ? route : best,
+  const flightRoutes = origin.routes.filter((route) =>
+    route.segments.some((segment) => segment.mode === 'flight'),
   );
-  const cheapest = origin.routes.reduce((best, route) => (route.price < best.price ? route : best));
-  const routesWithSameSteps = origin.routes.filter(
-    (route) => route.segments.length === shortest.segments.length,
-  );
-  const avgPriceShortest = Math.round(
-    routesWithSameSteps.reduce((sum, route) => sum + route.price, 0) / routesWithSameSteps.length,
-  );
+  const shortestPool = comparableRoutes.length ? comparableRoutes : flightRoutes;
+  const shortest = shortestPool.length
+    ? shortestPool.reduce((best, route) =>
+        route.segments.filter((segment) => segment.mode === 'flight').length <
+        best.segments.filter((segment) => segment.mode === 'flight').length
+          ? route
+          : best,
+      )
+    : origin.routes[0];
+  const timedRoutes = comparableRoutes.filter((route) => typeof route.totalDuration === 'number');
+  const pricedRoutes = comparableRoutes.filter((route) => typeof route.price === 'number');
+  const fastest = timedRoutes.length
+    ? timedRoutes.reduce((best, route) =>
+        (route.totalDuration ?? Infinity) < (best.totalDuration ?? Infinity) ? route : best,
+      )
+    : null;
+  const cheapest = pricedRoutes.length
+    ? pricedRoutes.reduce((best, route) =>
+        (route.price ?? Infinity) < (best.price ?? Infinity) ? route : best,
+      )
+    : null;
+  const shortestFlightCount = shortest.segments.filter(
+    (segment) => segment.mode === 'flight',
+  ).length;
   const airlines = Array.from(
     new Map(
       origin.routes.flatMap((route) =>
-        route.segments.map((segment) => [segment.airline, segment.logo] as const),
+        route.segments
+          .filter((segment) => segment.mode === 'flight' && segment.airline)
+          .map((segment) => [segment.airline!, segment.logo ?? null] as const),
       ),
     ).entries(),
   ).map(([name, logo]) => ({ name, logo: logo ?? '' }));
 
   return {
     city,
-    steps: shortest.segments.length,
-    isDirect: shortest.type === 'direct',
-    fastestDuration: fastest.totalDuration,
-    cheapestPrice: cheapest.price,
-    avgPriceShortest,
+    airport: origin.airport,
+    lat: origin.lat,
+    lng: origin.lng,
+    routes: origin.routes,
+    generated: metadata?.generated,
+    searchDate: metadata?.searchDate,
+    steps: Math.max(0, shortestFlightCount - 1),
+    isDirect:
+      shortest.type === 'direct' && shortest.segments.every((segment) => segment.mode === 'flight'),
+    hasGroundConnection: shortest.segments.some((segment) => segment.mode !== 'flight'),
+    fastestDuration: fastest?.totalDuration ?? null,
+    cheapestPrice: cheapest?.price ?? null,
     airlines,
   };
 }
@@ -46,7 +85,7 @@ export function getSuggestedRoutes(): ProcessedRoute[] {
   return suggestedCities
     .map((city) => {
       const origin = data.origins.find((candidate) => candidate.city === city);
-      return origin ? summarizeOrigin(city, origin) : null;
+      return origin ? summarizeOrigin(city, origin, data) : null;
     })
     .filter((route): route is ProcessedRoute => route !== null);
 }

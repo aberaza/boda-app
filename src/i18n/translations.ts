@@ -82,11 +82,30 @@ export type Translation = Widen<{
       airports: string;
       routesTitle: string;
       direct: string;
+      connectionLabel: string;
       steps: string;
       fastest: string;
       cheapest: string;
-      avgShortest: string;
-      routes: readonly string[];
+      totalDurationLabel: string;
+      durationPending: string;
+      flightMode: string;
+      trainMode: string;
+      transferMode: string;
+      groundConnection: string;
+      combinationsLabel: string;
+      layoversLabel: string;
+      stopSingular: string;
+      showOnMapLabel: string;
+      openSearchLabel: string;
+      flightSearchLabel: string;
+      trainSearchLabel: string;
+      pricePending: string;
+      flightPriceOnlyNote: string;
+      trainPricePending: string;
+      trainConnectionNote: string;
+      priceDisclaimer: string;
+      departureDateLabel: string;
+      originAirportLabel: string;
     };
     stay: {
       eyebrow: string;
@@ -142,6 +161,8 @@ export type Translation = Widen<{
       granadaLng: number;
       valenciaLat: number;
       valenciaLng: number;
+      avilesLat: number;
+      avilesLng: number;
     };
   };
 }>;
@@ -252,23 +273,40 @@ const es = {
     gettingThere: {
       eyebrow: 'Cómo llegar',
       title: 'Llegar a Jerez',
-      airports: 'Aeropuerto más cercano: Jerez (XRY). Alternativas: Sevilla (SVQ) y Málaga (AGP). ',
+      airports:
+        'El aeropuerto más cercano es Jerez (XRY). También puedes volar a Sevilla (SVQ) y continuar hasta Jerez en tren desde Sevilla-Santa Justa.',
       routesTitle: 'Rutas sugeridas',
       direct: 'Directo',
+      connectionLabel: 'Con conexión',
       steps: 'escalas',
-      fastest: 'Más rápido',
-      cheapest: 'Más barato',
-      avgShortest: 'Precio medio (ruta corta)',
-      routes: [
-        'Barcelona → Jerez (vuelo directo o vía Madrid).',
-        'París → Jerez (vuelo directo o vía Sevilla).',
-        'Pamplona → Jerez (vuelo a Sevilla y tren/bus).',
-        'Madrid → Jerez (tren AVE + Media Distancia).',
-      ],
+      fastest: 'Vuelo más rápido',
+      cheapest: 'Vuelo más barato',
+      totalDurationLabel: 'Duración total',
+      durationPending: 'Duración por confirmar',
+      flightMode: 'Avión',
+      trainMode: 'Tren',
+      transferMode: 'Traslado',
+      groundConnection: 'Conexión terrestre',
+      combinationsLabel: 'Combinaciones y escalas',
+      layoversLabel: 'Escalas',
+      stopSingular: 'escala',
+      showOnMapLabel: 'Ver en el mapa',
+      openSearchLabel: 'Buscar este trayecto',
+      flightSearchLabel: 'Buscar vuelos',
+      trainSearchLabel: 'Consultar trenes',
+      pricePending: 'Consultar tarifa',
+      flightPriceOnlyNote:
+        'El importe indicado corresponde solo al vuelo; trenes y traslados no incluidos.',
+      trainPricePending: 'Consulta horarios y tarifas ferroviarias en Renfe.',
+      trainConnectionNote:
+        'Las conexiones ferroviarias son orientativas: confirma horarios, estaciones y enlaces con el vuelo para la fecha elegida.',
+      priceDisclaimer: 'Precios orientativos de vuelos, consultados el',
+      departureDateLabel: 'para viajar el',
+      originAirportLabel: 'Aeropuerto de referencia',
     },
     routesMap: {
       label: 'Mapa de rutas a Jerez',
-      caption: 'Rutas desde Barcelona, París, Pamplona y Madrid.',
+      caption: 'Selecciona una ciudad para ver sus opciones de viaje.',
       jerezLat: 36.685,
       jerezLng: -6.126,
       barcelonaLat: 41.385,
@@ -283,6 +321,8 @@ const es = {
       granadaLng: -3.7774,
       valenciaLat: 39.4893,
       valenciaLng: -0.4816,
+      avilesLat: 43.5632,
+      avilesLng: -6.0346,
     },
     stay: {
       eyebrow: 'Dónde dormir',
@@ -511,23 +551,39 @@ const fr = {
       eyebrow: 'Comment venir',
       title: 'Aller à Jerez',
       airports:
-        'Aéroport le plus proche : Jerez (XRY). Alternatives : Séville (SVQ) et Malaga (AGP).',
+        'L’aéroport le plus proche est Jerez (XRY). Vous pouvez aussi atterrir à Séville (SVQ), puis rejoindre Jerez en train depuis Sevilla-Santa Justa.',
       routesTitle: 'Itinéraires suggérés',
       direct: 'Direct',
+      connectionLabel: 'Avec correspondance',
       steps: 'escales',
-      fastest: 'Le plus rapide',
-      cheapest: 'Le moins cher',
-      avgShortest: 'Prix moyen (route courte)',
-      routes: [
-        'Barcelone → Jerez (vol direct ou via Madrid).',
-        'Paris → Jerez (vol direct ou via Séville).',
-        'Pampelune → Jerez (vol vers Séville puis train/bus).',
-        'Madrid → Jerez (train AVE + Media Distancia).',
-      ],
+      fastest: 'Vol le plus rapide',
+      cheapest: 'Vol le moins cher',
+      totalDurationLabel: 'Durée totale',
+      durationPending: 'Durée à confirmer',
+      flightMode: 'Avion',
+      trainMode: 'Train',
+      transferMode: 'Transfert',
+      groundConnection: 'Correspondance terrestre',
+      combinationsLabel: 'Itinéraires et escales',
+      layoversLabel: 'Escale(s)',
+      stopSingular: 'escale',
+      showOnMapLabel: 'Voir sur la carte',
+      openSearchLabel: 'Rechercher ce trajet',
+      flightSearchLabel: 'Rechercher des vols',
+      trainSearchLabel: 'Consulter les trains',
+      pricePending: 'Tarif à consulter',
+      flightPriceOnlyNote:
+        'Le prix indiqué concerne uniquement le vol ; train et transferts non inclus.',
+      trainPricePending: 'Consultez les horaires et tarifs ferroviaires auprès de Renfe.',
+      trainConnectionNote:
+        'Les liaisons ferroviaires sont indicatives : vérifiez les horaires, les gares et la correspondance avec le vol à la date choisie.',
+      priceDisclaimer: 'Prix indicatifs des vols, consultés le',
+      departureDateLabel: 'pour un départ le',
+      originAirportLabel: 'Aéroport de référence',
     },
     routesMap: {
       label: 'Carte des routes vers Jerez',
-      caption: 'Routes depuis Barcelone, Paris, Pampelune et Madrid.',
+      caption: 'Sélectionnez une ville pour afficher ses options de trajet.',
       jerezLat: 36.685,
       jerezLng: -6.126,
       barcelonaLat: 41.385,
@@ -542,6 +598,8 @@ const fr = {
       granadaLng: -3.7774,
       valenciaLat: 39.4893,
       valenciaLng: -0.4816,
+      avilesLat: 43.5632,
+      avilesLng: -6.0346,
     },
     stay: {
       eyebrow: 'Où dormir',
@@ -770,26 +828,42 @@ const en = {
       cadizLng: -6.292,
     },
     gettingThere: {
-      eyebrow: 'Cómo llegar',
-      title: 'Llegar a Jerez',
+      eyebrow: 'Getting there',
+      title: 'Getting to Jerez',
       airports:
-        'Nearest airport: Jerez (XRY). Alternatives include Sevilla (SVQ) and Málaga (AGP).',
+        'The nearest airport is Jerez (XRY). You can also fly to Sevilla (SVQ) and continue by train from Sevilla-Santa Justa.',
       routesTitle: 'Suggested routes',
       direct: 'Direct',
-      steps: 'steps',
-      fastest: 'Fastest',
-      cheapest: 'Cheapest',
-      avgShortest: 'Avg price (short route)',
-      routes: [
-        'Barcelona → Jerez (vuelo directo o vía Madrid).',
-        'Paris → Jerez (vuelo directo o vía Sevilla).',
-        'Pamplona → Jerez (vuelo a Sevilla y tren/bus).',
-        'Madrid → Jerez (tren AVE + Media Distancia).',
-      ],
+      connectionLabel: 'Connecting flight',
+      steps: 'stopovers',
+      fastest: 'Fastest flight',
+      cheapest: 'Cheapest flight',
+      totalDurationLabel: 'Total duration',
+      durationPending: 'Duration to be confirmed',
+      flightMode: 'Flight',
+      trainMode: 'Train',
+      transferMode: 'Transfer',
+      groundConnection: 'Ground connection',
+      combinationsLabel: 'Routes and stopovers',
+      layoversLabel: 'Stopover(s)',
+      stopSingular: 'stopover',
+      showOnMapLabel: 'Show on map',
+      openSearchLabel: 'Search this route',
+      flightSearchLabel: 'Search flights',
+      trainSearchLabel: 'Check trains',
+      pricePending: 'Check price',
+      flightPriceOnlyNote:
+        'The listed amount is for the flight only; train and transfers are not included.',
+      trainPricePending: 'Check train times and fares with Renfe.',
+      trainConnectionNote:
+        'Rail connections are indicative: check schedules, stations and the connection with your flight for your travel date.',
+      priceDisclaimer: 'Indicative flight prices, checked on',
+      departureDateLabel: 'for travel on',
+      originAirportLabel: 'Primary airport',
     },
     routesMap: {
-      label: 'Mapa de rutas a Jerez',
-      caption: 'Rutas desde Barcelona, Párís, Pamplona y Madrid.',
+      label: 'Routes to Jerez',
+      caption: 'Select a city to see its travel options.',
       jerezLat: 36.685,
       jerezLng: -6.126,
       barcelonaLat: 41.385,
@@ -804,6 +878,8 @@ const en = {
       granadaLng: -3.7774,
       valenciaLat: 39.4893,
       valenciaLng: -0.4816,
+      avilesLat: 43.5632,
+      avilesLng: -6.0346,
     },
     stay: {
       eyebrow: 'Where to stay',

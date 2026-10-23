@@ -36,13 +36,13 @@ The development server is available at `http://localhost:4321` by default.
 | `npm run invites:import`   | Preview or apply an idempotent Netlify Database import.       |
 | `npm run invites:qr`       | Generate private invitation QR files locally.                 |
 
-The generator queries the wedding date (`2027-05-08`) by default. Pass `--date YYYY-MM-DD` to query another date. Use `--output /tmp/flight-routes.json` to inspect a run without modifying the tracked file. A real run requires `SERPAPI_KEY`; `routes:dry` never calls SerpApi.
+The generator searches for arrivals the day before the wedding (`2027-05-07`) by default. Pass `--date YYYY-MM-DD` to query another date. Use `--output /path/to/flight-routes.json` to inspect a run without modifying the tracked file. A real run requires `SERPAPI_KEY`; `routes:dry` never calls SerpAPI. The site serves this generated JSON and does not call SerpAPI on visits. Flight prices are an indicative snapshot; train connections are curated and schedules/fares must be confirmed with Renfe. Each itinerary also includes an external search link: Google Flights for air legs and Renfe for rail legs.
 
 Examples:
 
 ```sh
 npm run routes:dry -- --output /tmp/flight-routes.json
-SERPAPI_KEY=... npm run routes -- --date 2027-05-08
+SERPAPI_KEY=... npm run routes -- --date 2027-05-07
 ```
 
 `src/data/flight-routes.json` is generated data; inspect it before committing it.
