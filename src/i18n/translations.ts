@@ -64,7 +64,6 @@ export type Translation = Widen<{
     overview: string;
     history: string;
     highlights: string;
-    festivals: string;
     openLabel: string;
     nav: readonly string[];
     map: {
@@ -93,17 +92,23 @@ export type Translation = Widen<{
       eyebrow: string;
       title: string;
       intro: string;
-      hotels: readonly { name: string; details: string; url: string }[];
-      linkLabel: string;
-      bookingTitle: string;
-      bookingInfo: string;
-      bookingNote: string;
+      accommodations: readonly {
+        id: string;
+        name: string;
+        location: string;
+        details: readonly string[];
+        links: readonly { label: string; url: string }[];
+      }[];
+      transportTitle: string;
+      transportNote: string;
     };
     surroundings: {
       eyebrow: string;
       title: string;
-      alternativesTitle: string;
-      alternatives: readonly string[];
+      eventsTitle: string;
+      events: readonly { name: string; date: string; details: string }[];
+      placesTitle: string;
+      places: readonly { name: string; details: string }[];
       map: {
         label: string;
         caption: string;
@@ -222,20 +227,18 @@ const es = {
     mapsLabel: 'Abrir en Google Maps',
     parkingNote: 'Aparcamiento disponible en la finca.',
     transportNote:
-      'Estamos valorando ofrecer transporte entre Jerez y la finca — más detalles próximamente.',
+      'El día de la boda habrá autobuses de ida y vuelta desde Jerez y desde Rota hasta la finca.',
   },
   jerez: {
     eyebrow: 'Jerez de la Frontera',
     title: 'La ciudad',
     titleSub: 'entre viñedos y arte',
     overview:
-      'Jerez de la Frontera es una ciudad andaluza luminosa, con bodegas de jerez, tradición ecuestre y plazas animadas. Este texto es provisional y debe sustituirse por el resumen definitivo.',
+      'Jerez se descubre a través de tres tradiciones vivas: el vino, el flamenco y el caballo andaluz.',
     history:
-      'Su historia está marcada por el comercio del vino, la herencia andalusí y la cultura contemporánea. Sustituye este párrafo por la versión final.',
+      'En el casco histórico, el Alcázar almohade del siglo XII conserva la mezquita y los baños árabes. Cerca, la Catedral de San Salvador combina los estilos gótico, barroco y neoclásico.',
     highlights:
-      'Incluye bodegas, flamenco, el Alcázar y mercados locales. Texto provisional pendiente de reemplazo.',
-    festivals:
-      'MotoGP Jerez se celebra en la segunda mitad de abril y la Feria de Jerez alrededor del 8 de mayo, fechas cercanas a la boda.',
+      'Visita una bodega del Marco de Jerez, recorre los barrios flamencos de Santiago y San Miguel o descubre el espectáculo ecuestre «Cómo bailan los caballos andaluces» de la Real Escuela.',
     map: {
       label: 'Mapa de Jerez',
       caption: 'Jerez con Sevilla y Cádiz en contexto.',
@@ -283,42 +286,98 @@ const es = {
     },
     stay: {
       eyebrow: 'Dónde dormir',
-      title: 'Alojamiento en Jerez',
+      title: 'Dónde alojarse',
       intro:
-        'Pronto compartiremos acuerdos y tarifas especiales. Sustituye este texto por las recomendaciones definitivas.',
-      linkLabel: 'Ver hotel',
-      hotels: [
+        'Opciones en Jerez de la Frontera y Rota. Consulta las tarifas y condiciones de reserva de cada alojamiento.',
+      accommodations: [
         {
-          name: 'Hotel Placeholder 01',
-          details: 'Tarifa especial disponible. Sustituye por detalles y código.',
-          url: 'https://example.com',
+          id: 'maquinilla',
+          name: 'AT La Maquinilla',
+          location: 'Jerez de la Frontera',
+          details: [
+            'Tarifa para invitados: solicítala por correo e indica que eres invitado/a de la boda de Sandra y Aritz.',
+          ],
+          links: [
+            { label: 'Web oficial', url: 'https://www.atlamaquinilla.com/' },
+            { label: 'direccion@atlamaquinilla.com', url: 'mailto:direccion@atlamaquinilla.com' },
+          ],
         },
         {
-          name: 'Hotel Placeholder 02',
-          details: 'Tarifa especial disponible. Sustituye por detalles y código.',
-          url: 'https://example.com',
+          id: 'gitanilla',
+          name: 'Apartamentos La Gitanilla',
+          location: 'Jerez de la Frontera',
+          details: [
+            '329 € por noche y habitación doble. Al reservar, indica que eres invitado/a de la boda de Sandra y Aritz.',
+          ],
+          links: [
+            { label: 'Web oficial', url: 'https://www.lagitanilla.com/' },
+            { label: 'Llamar a Virginia · 680 795 288', url: 'tel:+34680795288' },
+          ],
         },
         {
-          name: 'Hotel Placeholder 03',
-          details: 'Tarifa especial disponible. Sustituye por detalles y código.',
-          url: 'https://example.com',
+          id: 'aladro',
+          name: 'Apartamentos Aladro',
+          location: 'Jerez de la Frontera',
+          details: [
+            'Cama doble y sofá cama: 720 € en total · 6–9 de mayo de 2027 (3 noches).',
+            'Dos habitaciones dobles y sofá cama en el salón: 1.100 € en total · 6–9 de mayo de 2027 (3 noches).',
+          ],
+          links: [{ label: 'Web oficial', url: 'https://aladroapartamentos.com/' }],
+        },
+        {
+          id: 'playa-de-la-luz',
+          name: 'Hotel Playa de la Luz',
+          location: 'Rota',
+          details: ['No hay tarifa negociada: se aplica el precio público del hotel.'],
+          links: [
+            { label: 'Web oficial', url: 'https://www.hace.es/hotel-playa-de-la-luz/' },
+            {
+              label: 'Reservar · 7–9 mayo 2027 · 2 adultos',
+              url: 'https://www.hace.es/bookingstep1/?chainSelectorValue=21440&checkin=07%2F05%2F2027&idtokenprovider=100121951&currency=EUR&idchain=500151&clientCode=&hsri=02080&lang=es&nights=2&parties=W3siYWR1bHRzIjoyLCJjaGlsZHJlbiI6W119XQ%3D%3D&type=chain&step=1',
+            },
+          ],
         },
       ],
-      bookingTitle: 'Reservas',
-      bookingInfo:
-        'Instrucciones provisionales para reservas con tarifa acordada. Sustituye por email, ventanas de reserva y cómo aplicar el descuento.',
-      bookingNote: 'Si necesitas ayuda, avísanos y te ayudaremos.',
+      transportTitle: 'Autobuses para el día de la boda',
+      transportNote:
+        'Habrá autobuses de ida y vuelta desde Jerez y desde Rota hasta la finca el día de la boda.',
     },
     surroundings: {
       eyebrow: 'Alrededores',
       title: 'Alargar la estancia',
-      alternativesTitle:
-        'Si te interesa quedarte más días, estas ciudades también son una gran alternativa:',
-      alternatives: [
-        'Jerez de la Frontera',
-        'Sanlúcar de Barrameda',
-        'El Puerto de Santa María',
-        'Sevilla',
+      eventsTitle: 'Fechas destacadas',
+      events: [
+        {
+          name: 'Feria del Caballo',
+          date: '24 de abril – 1 de mayo de 2027',
+          details: 'Se celebra la semana anterior a la boda.',
+        },
+        {
+          name: 'Gran Premio de España de MotoGP',
+          date: '7–9 de mayo de 2027',
+          details:
+            'Coincide con el fin de semana de la boda; la carrera principal está prevista para el domingo 9.',
+        },
+      ],
+      placesTitle: 'Escapadas para descubrir la zona',
+      places: [
+        {
+          name: 'Cádiz',
+          details: 'Casco histórico, Catedral, Torre Tavira y la playa de La Caleta.',
+        },
+        {
+          name: 'El Puerto de Santa María',
+          details: 'Castillo de San Marcos, bodegas y playas.',
+        },
+        {
+          name: 'Sanlúcar de Barrameda',
+          details: 'Bajo de Guía, playas y excursiones por Doñana desde el Guadalquivir.',
+        },
+        {
+          name: 'Arcos de la Frontera',
+          details:
+            'Casco histórico, miradores y puerta de entrada a la Ruta de los Pueblos Blancos.',
+        },
       ],
       map: {
         label: 'Mapa de alrededores',
@@ -426,19 +485,18 @@ const fr = {
     mapsLabel: 'Ouvrir dans Google Maps',
     parkingNote: 'Parking disponible sur place.',
     transportNote:
-      "Nous étudions la mise en place d'un transport entre Jerez et la finca — plus de détails bientôt.",
+      'Le jour du mariage, des autobus assureront l’aller-retour depuis Jerez et Rota jusqu’à la finca.',
   },
   jerez: {
     eyebrow: 'Jerez de la Frontera',
     title: 'La ville',
     titleSub: 'entre vignes et art',
     overview:
-      'Jerez de la Frontera est une ville andalouse lumineuse, réputée pour ses bodegas, son héritage équestre et ses places animées. Texte provisoire à remplacer.',
+      'Jerez se découvre à travers trois traditions vivantes : le vin, le flamenco et le cheval andalou.',
     history:
-      'Son histoire est marquée par le commerce du xérès, les racines mauresques et la culture contemporaine. Remplacez ce paragraphe par la version finale.',
-    highlights: 'Inclure bodegas, flamenco, l’Alcázar et les marchés locaux. Texte provisoire.',
-    festivals:
-      'Le MotoGP de Jerez a lieu dans la seconde moitié d’avril et la Feria de Jerez autour du 8 mai, des dates proches du mariage.',
+      'Dans le centre historique, l’Alcázar almohade du XIIe siècle conserve sa mosquée et ses bains arabes. À proximité, la cathédrale San Salvador réunit les styles gothique, baroque et néoclassique.',
+    highlights:
+      'Visitez une cave du Marco de Jerez, parcourez les quartiers flamencos de Santiago et San Miguel ou découvrez le spectacle équestre « Cómo bailan los caballos andaluces » de la Real Escuela.',
     map: {
       label: 'Carte de Jerez',
       caption: 'Jerez avec Séville et Cadix en contexte.',
@@ -487,41 +545,101 @@ const fr = {
     },
     stay: {
       eyebrow: 'Où dormir',
-      title: 'Hébergement à Jerez',
+      title: 'Où séjourner',
       intro:
-        'Nous partagerons bientôt les accords et tarifs spéciaux. Texte provisoire à remplacer.',
-      linkLabel: 'Voir l’hôtel',
-      hotels: [
+        'Options à Jerez de la Frontera et à Rota. Consultez les tarifs et les conditions de réservation de chaque établissement.',
+      accommodations: [
         {
-          name: 'Hotel Placeholder 01',
-          details: 'Tarif spécial disponible. Remplacer par les détails et code.',
-          url: 'https://example.com',
+          id: 'maquinilla',
+          name: 'AT La Maquinilla',
+          location: 'Jerez de la Frontera',
+          details: [
+            'Tarif invité : demandez-le par e-mail en précisant que vous assistez au mariage de Sandra et Aritz.',
+          ],
+          links: [
+            { label: 'Site officiel', url: 'https://www.atlamaquinilla.com/' },
+            {
+              label: 'direccion@atlamaquinilla.com',
+              url: 'mailto:direccion@atlamaquinilla.com',
+            },
+          ],
         },
         {
-          name: 'Hotel Placeholder 02',
-          details: 'Tarif spécial disponible. Remplacer par les détails et code.',
-          url: 'https://example.com',
+          id: 'gitanilla',
+          name: 'Apartamentos La Gitanilla',
+          location: 'Jerez de la Frontera',
+          details: [
+            '329 € par nuit et par chambre double. Lors de la réservation, précisez que vous assistez au mariage de Sandra et Aritz.',
+          ],
+          links: [
+            { label: 'Site officiel', url: 'https://www.lagitanilla.com/' },
+            { label: 'Appeler Virginia · 680 795 288', url: 'tel:+34680795288' },
+          ],
         },
         {
-          name: 'Hotel Placeholder 03',
-          details: 'Tarif spécial disponible. Remplacer par les détails et code.',
-          url: 'https://example.com',
+          id: 'aladro',
+          name: 'Apartamentos Aladro',
+          location: 'Jerez de la Frontera',
+          details: [
+            'Lit double et canapé-lit : 720 € au total · 6–9 mai 2027 (3 nuits).',
+            'Deux chambres doubles et canapé-lit dans le salon : 1 100 € au total · 6–9 mai 2027 (3 nuits).',
+          ],
+          links: [{ label: 'Site officiel', url: 'https://aladroapartamentos.com/' }],
+        },
+        {
+          id: 'playa-de-la-luz',
+          name: 'Hotel Playa de la Luz',
+          location: 'Rota',
+          details: ['Aucun tarif négocié : le tarif public de l’hôtel s’applique.'],
+          links: [
+            { label: 'Site officiel', url: 'https://www.hace.es/hotel-playa-de-la-luz/' },
+            {
+              label: 'Réserver · 7–9 mai 2027 · 2 adultes',
+              url: 'https://www.hace.es/bookingstep1/?chainSelectorValue=21440&checkin=07%2F05%2F2027&idtokenprovider=100121951&currency=EUR&idchain=500151&clientCode=&hsri=02080&lang=es&nights=2&parties=W3siYWR1bHRzIjoyLCJjaGlsZHJlbiI6W119XQ%3D%3D&type=chain&step=1',
+            },
+          ],
         },
       ],
-      bookingTitle: 'Réservations',
-      bookingInfo:
-        'Instructions provisoires pour réserver au tarif négocié. Remplacer par l’email, les dates et la marche à suivre.',
-      bookingNote: 'Si vous avez besoin d’aide, dites-le-nous.',
+      transportTitle: 'Autobus le jour du mariage',
+      transportNote:
+        'Le jour du mariage, des autobus assureront l’aller-retour depuis Jerez et Rota jusqu’à la finca.',
     },
     surroundings: {
       eyebrow: 'Alentours',
       title: 'Prolonger le séjour',
-      alternativesTitle: 'Si vous souhaitez rester plus longtemps, vous pouvez aussi envisager :',
-      alternatives: [
-        'Jerez de la Frontera',
-        'Sanlúcar de Barrameda',
-        'El Puerto de Santa María',
-        'Séville',
+      eventsTitle: 'Dates à retenir',
+      events: [
+        {
+          name: 'Feria del Caballo',
+          date: 'Du 24 avril au 1er mai 2027',
+          details: 'Elle a lieu la semaine précédant le mariage.',
+        },
+        {
+          name: 'Grand Prix d’Espagne MotoGP',
+          date: 'Du 7 au 9 mai 2027',
+          details:
+            'Il coïncide avec le week-end du mariage ; la course principale est prévue le dimanche 9.',
+        },
+      ],
+      placesTitle: 'Escapades pour découvrir la région',
+      places: [
+        {
+          name: 'Cadix',
+          details: 'Centre historique, cathédrale, Torre Tavira et plage de La Caleta.',
+        },
+        {
+          name: 'El Puerto de Santa María',
+          details: 'Château de San Marcos, caves et plages.',
+        },
+        {
+          name: 'Sanlúcar de Barrameda',
+          details: 'Bajo de Guía, plages et excursions vers Doñana depuis le Guadalquivir.',
+        },
+        {
+          name: 'Arcos de la Frontera',
+          details:
+            'Centre historique, belvédères et porte d’entrée de la Route des villages blancs.',
+        },
       ],
       map: {
         label: 'Carte des alentours',
@@ -629,23 +747,21 @@ const en = {
     mapsLabel: 'Open in Google Maps',
     parkingNote: 'Parking available at the venue.',
     transportNote:
-      'We are looking into providing transport between Jerez and the venue — details to follow.',
+      'There will be return buses from both Jerez and Rota to the venue on the wedding day.',
   },
   jerez: {
     eyebrow: 'Jerez de la Frontera',
     title: 'La ciudad',
-    titleSub: 'entre viñedos y arte',
+    titleSub: 'among vineyards and art',
     overview:
-      'Jerez de la Frontera is a sunlit Andalusian city known for its sherry bodegas, equestrian heritage, and lively plazas. This is placeholder copy; replace it with the final summary of the city’s identity, architecture, and pace of life.',
+      'Discover Jerez through three living traditions: sherry, flamenco and the Andalusian horse.',
     history:
-      'Historically shaped by the sherry trade, Moorish roots, and modern winemaking, Jerez blends centuries-old traditions with contemporary culture. Replace this paragraph with your preferred historical overview.',
+      'In the historic centre, the 12th-century Almohad Alcázar preserves its mosque and Arab baths. Nearby, San Salvador Cathedral brings together Gothic, Baroque and Neoclassical styles.',
     highlights:
-      'Add highlights such as bodegas, flamenco, the Alcázar, and local food markets. This is placeholder text that should be replaced once the final highlights are chosen.',
-    festivals:
-      'MotoGP Jerez takes place in the second half of April, and Feria de Jerez is around 8 May — both surround our wedding dates.',
+      'Visit a sherry bodega, explore the flamenco neighbourhoods of Santiago and San Miguel, or see the Royal Andalusian School of Equestrian Art’s “How the Andalusian Horses Dance” show.',
     map: {
-      label: 'Mapa de Jerez',
-      caption: 'Jerez con Sevilla y Cádiz en contexto.',
+      label: 'Map of Jerez',
+      caption: 'Jerez shown in context with Seville and Cádiz.',
       cityLat: 36.685,
       cityLng: -6.126,
       sevillaLat: 37.389,
@@ -691,42 +807,100 @@ const en = {
     },
     stay: {
       eyebrow: 'Where to stay',
-      title: 'Staying in Jerez',
+      title: 'Where to stay',
       intro:
-        'We will share hotel agreements and special rates soon. This placeholder text should be replaced with specific recommendations and booking notes.',
-      linkLabel: 'View hotel',
-      hotels: [
+        'Options in Jerez de la Frontera and Rota. Check each listing for rates and booking terms.',
+      accommodations: [
         {
-          name: 'Hotel Placeholder 01',
-          details: 'Special rate available. Replace with final details and booking code.',
-          url: 'https://example.com',
+          id: 'maquinilla',
+          name: 'AT La Maquinilla',
+          location: 'Jerez de la Frontera',
+          details: [
+            'Guest rate: ask by email and mention that you are attending Sandra and Aritz’s wedding.',
+          ],
+          links: [
+            { label: 'Official website', url: 'https://www.atlamaquinilla.com/' },
+            {
+              label: 'direccion@atlamaquinilla.com',
+              url: 'mailto:direccion@atlamaquinilla.com',
+            },
+          ],
         },
         {
-          name: 'Hotel Placeholder 02',
-          details: 'Special rate available. Replace with final details and booking code.',
-          url: 'https://example.com',
+          id: 'gitanilla',
+          name: 'Apartamentos La Gitanilla',
+          location: 'Jerez de la Frontera',
+          details: [
+            '€329 per night for a double room. When booking, mention that you are attending Sandra and Aritz’s wedding.',
+          ],
+          links: [
+            { label: 'Official website', url: 'https://www.lagitanilla.com/' },
+            { label: 'Call Virginia · 680 795 288', url: 'tel:+34680795288' },
+          ],
         },
         {
-          name: 'Hotel Placeholder 03',
-          details: 'Special rate available. Replace with final details and booking code.',
-          url: 'https://example.com',
+          id: 'aladro',
+          name: 'Apartamentos Aladro',
+          location: 'Jerez de la Frontera',
+          details: [
+            'Double bed and sofa bed: €720 total · 6–9 May 2027 (3 nights).',
+            'Two double bedrooms and a sofa bed in the living room: €1,100 total · 6–9 May 2027 (3 nights).',
+          ],
+          links: [{ label: 'Official website', url: 'https://aladroapartamentos.com/' }],
+        },
+        {
+          id: 'playa-de-la-luz',
+          name: 'Hotel Playa de la Luz',
+          location: 'Rota',
+          details: ['There is no negotiated rate; the hotel’s public rate applies.'],
+          links: [
+            { label: 'Official website', url: 'https://www.hace.es/hotel-playa-de-la-luz/' },
+            {
+              label: 'Book · 7–9 May 2027 · 2 adults',
+              url: 'https://www.hace.es/bookingstep1/?chainSelectorValue=21440&checkin=07%2F05%2F2027&idtokenprovider=100121951&currency=EUR&idchain=500151&clientCode=&hsri=02080&lang=es&nights=2&parties=W3siYWR1bHRzIjoyLCJjaGlsZHJlbiI6W119XQ%3D%3D&type=chain&step=1',
+            },
+          ],
         },
       ],
-      bookingTitle: 'Reservations',
-      bookingInfo:
-        'Placeholder instructions for booking with negotiated rates. Replace with contact emails, booking windows, and how to claim the discount.',
-      bookingNote: 'If you need help, let us know and we will assist.',
+      transportTitle: 'Wedding-day buses',
+      transportNote:
+        'There will be return buses from both Jerez and Rota to the venue on the wedding day.',
     },
     surroundings: {
       eyebrow: 'Surroundings',
       title: 'Extending your stay',
-      alternativesTitle:
-        'If you are interested in staying longer, these cities are also a great option:',
-      alternatives: [
-        'Jerez de la Frontera',
-        'Sanlúcar de Barrameda',
-        'El Puerto de Santa María',
-        'Seville',
+      eventsTitle: 'Dates to note',
+      events: [
+        {
+          name: 'Feria del Caballo',
+          date: '24 April–1 May 2027',
+          details: 'It takes place in the week before the wedding.',
+        },
+        {
+          name: 'Spanish MotoGP Grand Prix',
+          date: '7–9 May 2027',
+          details:
+            'It overlaps with the wedding weekend; the main race is scheduled for Sunday 9 May.',
+        },
+      ],
+      placesTitle: 'Places to explore nearby',
+      places: [
+        {
+          name: 'Cádiz',
+          details: 'Historic centre, cathedral, Torre Tavira and La Caleta beach.',
+        },
+        {
+          name: 'El Puerto de Santa María',
+          details: 'San Marcos Castle, sherry bodegas and beaches.',
+        },
+        {
+          name: 'Sanlúcar de Barrameda',
+          details: 'Bajo de Guía, beaches and Doñana excursions across the Guadalquivir.',
+        },
+        {
+          name: 'Arcos de la Frontera',
+          details: 'Historic centre, viewpoints and a gateway to the White Villages route.',
+        },
       ],
       map: {
         label: 'Surroundings map',

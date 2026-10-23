@@ -8,7 +8,7 @@ const { t } = Astro.props;
 
 <!-- Slide 4: Surroundings -->
 <section
-  class="swiper-slide jerez-slide flex h-full w-full shrink-0 flex-col justify-center px-8 py-24 md:px-16"
+  class="swiper-slide jerez-slide flex h-full w-full shrink-0 flex-col justify-start px-8 py-8 md:px-16"
   data-horizontal-panel
   aria-label={t.jerez.surroundings.eyebrow}
 >
@@ -21,21 +21,42 @@ const { t } = Astro.props;
     >
       {t.jerez.surroundings.title}
     </h2>
-    <div class="mt-10 grid gap-10 md:grid-cols-[0.95fr_1.05fr]">
-      <div class="rounded-2xl border border-clay/15 bg-white/60 p-6 shadow-soft">
+    <div class="mt-7 grid gap-8 md:grid-cols-[0.95fr_1.05fr]">
+      <div class="rounded-2xl border border-clay/15 bg-white/60 p-5 shadow-soft">
         <p class="font-sans text-[0.6rem] uppercase tracking-[0.4em] text-ink/90">
-          {t.jerez.surroundings.alternativesTitle}
+          {t.jerez.surroundings.eventsTitle}
         </p>
-        <ul class="mt-5 space-y-3">
+        <ul class="mt-3 space-y-3">
           {
-            t.jerez.surroundings.alternatives.map((city) => (
-              <li class="flex items-center gap-3 font-sans text-base text-ink/85">
-                <span class="inline-block h-1.5 w-1.5 rounded-full bg-clay/60" />
-                <span>{city}</span>
+            t.jerez.surroundings.events.map((event) => (
+              <li class="border-l-2 border-clay/50 pl-3">
+                <p class="font-sans text-sm font-medium text-ink">{event.name}</p>
+                <p class="mt-0.5 font-sans text-xs font-semibold uppercase tracking-[0.12em] text-clay">
+                  {event.date}
+                </p>
+                <p class="mt-1 font-sans text-sm leading-5 text-ink/85">{event.details}</p>
               </li>
             ))
           }
         </ul>
+
+        <div class="mt-5 border-t border-clay/15 pt-4">
+          <p class="font-sans text-[0.6rem] uppercase tracking-[0.4em] text-ink/90">
+            {t.jerez.surroundings.placesTitle}
+          </p>
+          <ul class="mt-3 space-y-2">
+            {
+              t.jerez.surroundings.places.map((place) => (
+                <li class="flex items-start gap-3 font-sans text-sm leading-5 text-ink/85">
+                  <span class="mt-1.5 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-clay/60" />
+                  <span>
+                    <strong class="font-medium text-ink">{place.name}:</strong> {place.details}
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
       </div>
       <div class="flex flex-col gap-4">
         <div class="w-full overflow-hidden rounded-2xl shadow-soft" style="height: 320px;">

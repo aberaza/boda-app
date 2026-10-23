@@ -137,7 +137,7 @@ test.describe('home experience', () => {
       'Finca La Carreña',
       'La ciudad',
       'Llegar a Jerez',
-      'Alojamiento en Jerez',
+      'Dónde alojarse',
       'Alargar la estancia',
     ];
     for (let index = 1; index < expectedHeadings.length; index++) {
@@ -154,13 +154,67 @@ test.describe('home experience', () => {
     await expect(page).toHaveURL(/slide=donde/);
   });
 
+  test('shows four accommodation cards and the shared Jerez/Rota wedding bus notice', async ({
+    page,
+  }) => {
+    await page.goto('/');
+    await navigate(page, 'donde');
+    await expectPanel(page, 0);
+    await page.locator('[data-horizontal-dot="3"]').click();
+    await expectPanel(page, 3);
+
+    const cards = page.locator('#venue-carousel [data-stay-card]');
+    await expect(cards).toHaveCount(4);
+    await expect(cards.nth(0)).toContainText('AT La Maquinilla');
+    await expect(cards.nth(0).locator('a[href="mailto:direccion@atlamaquinilla.com"]')).toHaveCount(
+      1,
+    );
+    await expect(cards.nth(1)).toContainText('329 € por noche');
+    await expect(cards.nth(2)).toContainText('720 € en total');
+    await expect(cards.nth(2)).toContainText('1.100 € en total');
+    await expect(cards.nth(3)).toContainText('Rota');
+    await expect(cards.nth(3).locator('a[href^="https://www.hace.es/bookingstep1/"]')).toHaveCount(
+      1,
+    );
+    await expect(page.locator('#stay-transport-note')).toContainText(
+      'desde Jerez y desde Rota hasta la finca',
+    );
+  });
+
+  test('keeps city highlights separate from wedding-week events and adds nearby sights', async ({
+    page,
+  }) => {
+    await page.goto('/');
+    await navigate(page, 'donde');
+    await page.locator('[data-horizontal-dot="1"]').click();
+    await expectPanel(page, 1);
+
+    const cityPanel = page.locator('#venue-carousel [data-horizontal-panel]').nth(1);
+    await expect(cityPanel).toContainText('Alcázar almohade del siglo XII');
+    await expect(cityPanel).toContainText('Marco de Jerez');
+    await expect(cityPanel).not.toContainText('Feria del Caballo');
+    await expect(cityPanel).not.toContainText('MotoGP');
+
+    await page.locator('[data-horizontal-dot="4"]').click();
+    await expectPanel(page, 4);
+    const surroundings = page.locator('#venue-carousel [data-horizontal-panel]').nth(4);
+    await expect(surroundings).toContainText('24 de abril – 1 de mayo de 2027');
+    await expect(surroundings).toContainText('7–9 de mayo de 2027');
+    await expect(surroundings).toContainText('Torre Tavira');
+    await expect(surroundings).toContainText('Doñana');
+    await expect(surroundings).toContainText('Arcos de la Frontera');
+  });
+
   test('CARTO basemap tile requests include the key parameter', async ({ page }) => {
     const tileRequests: string[] = [];
     page.on('request', (request) => {
       if (request.url().includes('.basemaps.cartocdn.com/')) tileRequests.push(request.url());
     });
-    await page.goto('/?slide=donde');
+    await page.goto('/');
+    await navigate(page, 'donde');
+    await expectPanel(page, 0);
     await page.locator('[data-horizontal-dot="1"]').click();
+    await expectPanel(page, 1);
     await expect(page.locator('#jerez-city-map .leaflet-tile').first()).toHaveAttribute(
       'src',
       /\?key=/,
