@@ -202,13 +202,45 @@ test.describe('home experience', () => {
 
     const cards = page.locator('#venue-carousel [data-stay-card]');
     await expect(cards).toHaveCount(4);
+    const maquinillaRates = cards.nth(0).locator('details[data-stay-rates="maquinilla"]');
+    const gitanillaRates = cards.nth(1).locator('details[data-stay-rates="gitanilla"]');
+    const aladroRates = cards.nth(2).locator('details[data-stay-rates="aladro"]');
+    await expect(maquinillaRates).toHaveCount(1);
+    await expect(gitanillaRates).toHaveCount(1);
+    await expect(aladroRates).toHaveCount(1);
+    await expect(maquinillaRates).not.toHaveAttribute('open', '');
+    await maquinillaRates.locator('summary').click();
+    await expect(maquinillaRates).toHaveAttribute('open', '');
     await expect(cards.nth(0)).toContainText('AT La Maquinilla');
+    await expect(cards.nth(0)).toContainText('Cómo reservar');
+    await expect(cards.nth(0)).toContainText('invitado/a de la boda de Aritz y Sandra');
+    await expect(cards.nth(0)).toContainText(
+      'Apartamento estándar para 2 personas: 160 € por noche',
+    );
+    await expect(cards.nth(0)).toContainText(
+      'Apartamento superior para 2 personas: 195 € por noche',
+    );
+    await expect(cards.nth(0)).toContainText(
+      'Apartamento estándar para 4 personas: 280 € por noche',
+    );
+    await expect(cards.nth(0)).toContainText(
+      'Apartamento superior para 4 personas: 330 € por noche',
+    );
+    await expect(cards.nth(0)).toContainText('6 disponibles');
+    await expect(cards.nth(0)).toContainText('1 disponible');
+    await expect(cards.nth(0).locator('[data-stay-notice="maquinilla"]')).toContainText(
+      '31 de octubre',
+    );
     await expect(cards.nth(0).locator('a[href="mailto:direccion@atlamaquinilla.com"]')).toHaveCount(
       1,
     );
     await expect(cards.nth(1)).toContainText('329 € por noche');
+    await expect(cards.nth(1)).toContainText('Llama a Virginia al 680 795 288');
     await expect(cards.nth(2)).toContainText('720 € en total');
     await expect(cards.nth(2)).toContainText('1.100 € en total');
+    await expect(cards.nth(2)).toContainText('Dos habitaciones dobles: 1.100 € en total');
+    await expect(cards.nth(2)).not.toContainText('Dos habitaciones dobles y sofá cama');
+    await expect(cards.nth(2)).toContainText('Reserva directamente a través de la web oficial');
     await expect(cards.nth(3)).toContainText('Rota');
     await expect(cards.nth(3).locator('a[href^="https://www.hace.es/bookingstep1/"]')).toHaveCount(
       1,

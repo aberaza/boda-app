@@ -111,11 +111,16 @@ export type Translation = Widen<{
       eyebrow: string;
       title: string;
       intro: string;
+      roomsAndRatesLabel: string;
+      reservationLabel: string;
       accommodations: readonly {
         id: string;
         name: string;
         location: string;
+        notice?: string;
+        ratesDisclosure?: boolean;
         details: readonly string[];
+        reservationNote?: string;
         links: readonly { label: string; url: string }[];
       }[];
       transportTitle: string;
@@ -329,14 +334,23 @@ const es = {
       title: 'Dónde alojarse',
       intro:
         'Opciones en Jerez de la Frontera y Rota. Consulta las tarifas y condiciones de reserva de cada alojamiento.',
+      roomsAndRatesLabel: 'Habitaciones y tarifas especiales',
+      reservationLabel: 'Cómo reservar',
       accommodations: [
         {
           id: 'maquinilla',
           name: 'AT La Maquinilla',
           location: 'Jerez de la Frontera',
+          notice: '¡Atención! Estas tarifas son válidas hasta el 31 de octubre.',
+          ratesDisclosure: true,
           details: [
-            'Tarifa para invitados: solicítala por correo e indica que eres invitado/a de la boda de Sandra y Aritz.',
+            'Apartamento estándar para 2 personas: 160 € por noche · 6 disponibles.',
+            'Apartamento superior para 2 personas: 195 € por noche · 1 disponible.',
+            'Apartamento estándar para 4 personas: 280 € por noche · 1 disponible.',
+            'Apartamento superior para 4 personas: 330 € por noche · 1 disponible.',
           ],
+          reservationNote:
+            'Escribe por correo electrónico e indica que eres invitado/a de la boda de Aritz y Sandra.',
           links: [
             { label: 'Web oficial', url: 'https://www.atlamaquinilla.com/' },
             { label: 'direccion@atlamaquinilla.com', url: 'mailto:direccion@atlamaquinilla.com' },
@@ -346,9 +360,10 @@ const es = {
           id: 'gitanilla',
           name: 'Apartamentos La Gitanilla',
           location: 'Jerez de la Frontera',
-          details: [
-            '329 € por noche y habitación doble. Al reservar, indica que eres invitado/a de la boda de Sandra y Aritz.',
-          ],
+          ratesDisclosure: true,
+          details: ['329 € por noche y habitación doble.'],
+          reservationNote:
+            'Llama a Virginia al 680 795 288 e indica que eres invitado/a de la boda de Aritz y Sandra.',
           links: [
             { label: 'Web oficial', url: 'https://www.lagitanilla.com/' },
             { label: 'Llamar a Virginia · 680 795 288', url: 'tel:+34680795288' },
@@ -358,10 +373,12 @@ const es = {
           id: 'aladro',
           name: 'Apartamentos Aladro',
           location: 'Jerez de la Frontera',
+          ratesDisclosure: true,
           details: [
             'Cama doble y sofá cama: 720 € en total · 6–9 de mayo de 2027 (3 noches).',
-            'Dos habitaciones dobles y sofá cama en el salón: 1.100 € en total · 6–9 de mayo de 2027 (3 noches).',
+            'Dos habitaciones dobles: 1.100 € en total · 6–9 de mayo de 2027 (3 noches).',
           ],
+          reservationNote: 'Reserva directamente a través de la web oficial.',
           links: [{ label: 'Web oficial', url: 'https://aladroapartamentos.com/' }],
         },
         {
@@ -606,14 +623,23 @@ const fr = {
       title: 'Où séjourner',
       intro:
         'Options à Jerez de la Frontera et à Rota. Consultez les tarifs et les conditions de réservation de chaque établissement.',
+      roomsAndRatesLabel: 'Chambres et tarifs spéciaux',
+      reservationLabel: 'Comment réserver',
       accommodations: [
         {
           id: 'maquinilla',
           name: 'AT La Maquinilla',
           location: 'Jerez de la Frontera',
+          notice: 'Attention ! Ces tarifs sont valables jusqu’au 31 octobre.',
+          ratesDisclosure: true,
           details: [
-            'Tarif invité : demandez-le par e-mail en précisant que vous assistez au mariage de Sandra et Aritz.',
+            'Appartement standard pour 2 personnes : 160 € par nuit · 6 disponibles.',
+            'Appartement supérieur pour 2 personnes : 195 € par nuit · 1 disponible.',
+            'Appartement standard pour 4 personnes : 280 € par nuit · 1 disponible.',
+            'Appartement supérieur pour 4 personnes : 330 € par nuit · 1 disponible.',
           ],
+          reservationNote:
+            'Écrivez par e-mail en précisant que vous assistez au mariage d’Aritz et Sandra.',
           links: [
             { label: 'Site officiel', url: 'https://www.atlamaquinilla.com/' },
             {
@@ -626,9 +652,10 @@ const fr = {
           id: 'gitanilla',
           name: 'Apartamentos La Gitanilla',
           location: 'Jerez de la Frontera',
-          details: [
-            '329 € par nuit et par chambre double. Lors de la réservation, précisez que vous assistez au mariage de Sandra et Aritz.',
-          ],
+          ratesDisclosure: true,
+          details: ['329 € par nuit et par chambre double.'],
+          reservationNote:
+            'Appelez Virginia au 680 795 288 en précisant que vous assistez au mariage d’Aritz et Sandra.',
           links: [
             { label: 'Site officiel', url: 'https://www.lagitanilla.com/' },
             { label: 'Appeler Virginia · 680 795 288', url: 'tel:+34680795288' },
@@ -638,10 +665,12 @@ const fr = {
           id: 'aladro',
           name: 'Apartamentos Aladro',
           location: 'Jerez de la Frontera',
+          ratesDisclosure: true,
           details: [
             'Lit double et canapé-lit : 720 € au total · 6–9 mai 2027 (3 nuits).',
-            'Deux chambres doubles et canapé-lit dans le salon : 1 100 € au total · 6–9 mai 2027 (3 nuits).',
+            'Deux chambres doubles : 1 100 € au total · 6–9 mai 2027 (3 nuits).',
           ],
+          reservationNote: 'Réservez directement sur le site officiel.',
           links: [{ label: 'Site officiel', url: 'https://aladroapartamentos.com/' }],
         },
         {
@@ -886,14 +915,23 @@ const en = {
       title: 'Where to stay',
       intro:
         'Options in Jerez de la Frontera and Rota. Check each listing for rates and booking terms.',
+      roomsAndRatesLabel: 'Rooms and special rates',
+      reservationLabel: 'How to book',
       accommodations: [
         {
           id: 'maquinilla',
           name: 'AT La Maquinilla',
           location: 'Jerez de la Frontera',
+          notice: 'Important! These rates are valid until 31 October.',
+          ratesDisclosure: true,
           details: [
-            'Guest rate: ask by email and mention that you are attending Sandra and Aritz’s wedding.',
+            'Standard apartment for 2 people: €160 per night · 6 available.',
+            'Superior apartment for 2 people: €195 per night · 1 available.',
+            'Standard apartment for 4 people: €280 per night · 1 available.',
+            'Superior apartment for 4 people: €330 per night · 1 available.',
           ],
+          reservationNote:
+            'Email them and mention that you are attending Aritz and Sandra’s wedding.',
           links: [
             { label: 'Official website', url: 'https://www.atlamaquinilla.com/' },
             {
@@ -906,9 +944,10 @@ const en = {
           id: 'gitanilla',
           name: 'Apartamentos La Gitanilla',
           location: 'Jerez de la Frontera',
-          details: [
-            '€329 per night for a double room. When booking, mention that you are attending Sandra and Aritz’s wedding.',
-          ],
+          ratesDisclosure: true,
+          details: ['€329 per night for a double room.'],
+          reservationNote:
+            'Call Virginia on 680 795 288 and mention that you are attending Aritz and Sandra’s wedding.',
           links: [
             { label: 'Official website', url: 'https://www.lagitanilla.com/' },
             { label: 'Call Virginia · 680 795 288', url: 'tel:+34680795288' },
@@ -918,10 +957,12 @@ const en = {
           id: 'aladro',
           name: 'Apartamentos Aladro',
           location: 'Jerez de la Frontera',
+          ratesDisclosure: true,
           details: [
             'Double bed and sofa bed: €720 total · 6–9 May 2027 (3 nights).',
-            'Two double bedrooms and a sofa bed in the living room: €1,100 total · 6–9 May 2027 (3 nights).',
+            'Two double bedrooms: €1,100 total · 6–9 May 2027 (3 nights).',
           ],
+          reservationNote: 'Book directly through the official website.',
           links: [{ label: 'Official website', url: 'https://aladroapartamentos.com/' }],
         },
         {
